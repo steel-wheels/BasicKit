@@ -7,51 +7,56 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		05A086912D7C31C600A3DEA5 /* BSBasicEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A0868F2D7C31C600A3DEA5 /* BSBasicEngine.h */; };
+		0510FBA72D7C533600AEE906 /* BasicKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 0510FBA42D7C533600AEE906 /* BasicKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0510FBB22D7C680500AEE906 /* BasicKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 0510FBA42D7C533600AEE906 /* BasicKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05A086912D7C31C600A3DEA5 /* BSBasicEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A0868F2D7C31C600A3DEA5 /* BSBasicEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05A086922D7C31C600A3DEA5 /* BSBasicEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A086902D7C31C600A3DEA5 /* BSBasicEngine.m */; };
 		05A086932D7C31C600A3DEA5 /* BSBasicEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A086902D7C31C600A3DEA5 /* BSBasicEngine.m */; };
-		05A086942D7C31C600A3DEA5 /* BSBasicEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A0868F2D7C31C600A3DEA5 /* BSBasicEngine.h */; };
+		05A086942D7C31C600A3DEA5 /* BSBasicEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A0868F2D7C31C600A3DEA5 /* BSBasicEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05C62FED2D7C520C00C42DB7 /* BasicKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C62FEC2D7C520C00C42DB7 /* BasicKit.xcframework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		05C62FD12D7C4F8D00C42DB7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 050070D52D7C2DF700C9449B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 05A086832D7C30CD00A3DEA5;
+			remoteInfo = BasicKit_iOS;
+		};
+		05C62FD32D7C4F8D00C42DB7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 050070D52D7C2DF700C9449B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 050070DD2D7C2DF700C9449B;
+			remoteInfo = BasicKit_macOS;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		050070DE2D7C2DF700C9449B /* BasicKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BasicKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0510FBA42D7C533600AEE906 /* BasicKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BasicKit.h; sourceTree = "<group>"; };
 		05A086842D7C30CD00A3DEA5 /* BasicKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BasicKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05A0868F2D7C31C600A3DEA5 /* BSBasicEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BSBasicEngine.h; sourceTree = "<group>"; };
 		05A086902D7C31C600A3DEA5 /* BSBasicEngine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BSBasicEngine.m; sourceTree = "<group>"; };
+		05C62FD92D7C50EA00C42DB7 /* UnitTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UnitTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		05C62FEC2D7C520C00C42DB7 /* BasicKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = BasicKit.xcframework; path = ../../../Library/Frameworks/BasicKit.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		050070E52D7C2DF700C9449B /* Exceptions for "BasicKit_macOS" folder in "BasicKit_macOS" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			publicHeaders = (
-				BasicKit.h,
-			);
-			target = 050070DD2D7C2DF700C9449B /* BasicKit_macOS */;
-		};
-		05A0868A2D7C30CD00A3DEA5 /* Exceptions for "BasicKit_iOS" folder in "BasicKit_iOS" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			publicHeaders = (
-				BasicKit.h,
-			);
-			target = 05A086832D7C30CD00A3DEA5 /* BasicKit_iOS */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		050070E02D7C2DF700C9449B /* BasicKit_macOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				050070E52D7C2DF700C9449B /* Exceptions for "BasicKit_macOS" folder in "BasicKit_macOS" target */,
-			);
 			path = BasicKit_macOS;
 			sourceTree = "<group>";
 		};
 		05A086852D7C30CD00A3DEA5 /* BasicKit_iOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				05A0868A2D7C30CD00A3DEA5 /* Exceptions for "BasicKit_iOS" folder in "BasicKit_iOS" target */,
-			);
 			path = BasicKit_iOS;
+			sourceTree = "<group>";
+		};
+		05C62FDA2D7C50EA00C42DB7 /* UnitTest */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = UnitTest;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -71,6 +76,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		05C62FD62D7C50EA00C42DB7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05C62FED2D7C520C00C42DB7 /* BasicKit.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -80,6 +93,8 @@
 				050070E02D7C2DF700C9449B /* BasicKit_macOS */,
 				05A086852D7C30CD00A3DEA5 /* BasicKit_iOS */,
 				05A0868E2D7C316400A3DEA5 /* Source */,
+				05C62FE82D7C50F800C42DB7 /* Test */,
+				05C62FEB2D7C520C00C42DB7 /* Frameworks */,
 				050070DF2D7C2DF700C9449B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -89,6 +104,7 @@
 			children = (
 				050070DE2D7C2DF700C9449B /* BasicKit.framework */,
 				05A086842D7C30CD00A3DEA5 /* BasicKit.framework */,
+				05C62FD92D7C50EA00C42DB7 /* UnitTest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -96,11 +112,29 @@
 		05A0868E2D7C316400A3DEA5 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				0510FBA42D7C533600AEE906 /* BasicKit.h */,
 				05A0868F2D7C31C600A3DEA5 /* BSBasicEngine.h */,
 				05A086902D7C31C600A3DEA5 /* BSBasicEngine.m */,
 			);
 			name = Source;
 			path = ../Source;
+			sourceTree = "<group>";
+		};
+		05C62FE82D7C50F800C42DB7 /* Test */ = {
+			isa = PBXGroup;
+			children = (
+				05C62FDA2D7C50EA00C42DB7 /* UnitTest */,
+			);
+			name = Test;
+			path = ../Test;
+			sourceTree = "<group>";
+		};
+		05C62FEB2D7C520C00C42DB7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				05C62FEC2D7C520C00C42DB7 /* BasicKit.xcframework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -110,6 +144,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0510FBB22D7C680500AEE906 /* BasicKit.h in Headers */,
 				05A086912D7C31C600A3DEA5 /* BSBasicEngine.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -118,11 +153,33 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0510FBA72D7C533600AEE906 /* BasicKit.h in Headers */,
 				05A086942D7C31C600A3DEA5 /* BSBasicEngine.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
+
+/* Begin PBXLegacyTarget section */
+		05C62FCD2D7C4F7400C42DB7 /* Install */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "-f ../Script/install.mk";
+			buildConfigurationList = 05C62FCE2D7C4F7400C42DB7 /* Build configuration list for PBXLegacyTarget "Install" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = "";
+			dependencies = (
+				05C62FD22D7C4F8D00C42DB7 /* PBXTargetDependency */,
+				05C62FD42D7C4F8D00C42DB7 /* PBXTargetDependency */,
+			);
+			name = Install;
+			packageProductDependencies = (
+			);
+			passBuildSettingsInEnvironment = 1;
+			productName = Install;
+		};
+/* End PBXLegacyTarget section */
 
 /* Begin PBXNativeTarget section */
 		050070DD2D7C2DF700C9449B /* BasicKit_macOS */ = {
@@ -171,6 +228,28 @@
 			productReference = 05A086842D7C30CD00A3DEA5 /* BasicKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		05C62FD82D7C50EA00C42DB7 /* UnitTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 05C62FE52D7C50EC00C42DB7 /* Build configuration list for PBXNativeTarget "UnitTest" */;
+			buildPhases = (
+				05C62FD52D7C50EA00C42DB7 /* Sources */,
+				05C62FD62D7C50EA00C42DB7 /* Frameworks */,
+				05C62FD72D7C50EA00C42DB7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				05C62FDA2D7C50EA00C42DB7 /* UnitTest */,
+			);
+			name = UnitTest;
+			packageProductDependencies = (
+			);
+			productName = UnitTest;
+			productReference = 05C62FD92D7C50EA00C42DB7 /* UnitTest.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -178,6 +257,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					050070DD2D7C2DF700C9449B = {
@@ -187,6 +267,12 @@
 					05A086832D7C30CD00A3DEA5 = {
 						CreatedOnToolsVersion = 16.2;
 						LastSwiftMigration = 1620;
+					};
+					05C62FCD2D7C4F7400C42DB7 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					05C62FD82D7C50EA00C42DB7 = {
+						CreatedOnToolsVersion = 16.2;
 					};
 				};
 			};
@@ -206,6 +292,8 @@
 			targets = (
 				050070DD2D7C2DF700C9449B /* BasicKit_macOS */,
 				05A086832D7C30CD00A3DEA5 /* BasicKit_iOS */,
+				05C62FCD2D7C4F7400C42DB7 /* Install */,
+				05C62FD82D7C50EA00C42DB7 /* UnitTest */,
 			);
 		};
 /* End PBXProject section */
@@ -219,6 +307,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		05A086822D7C30CD00A3DEA5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05C62FD72D7C50EA00C42DB7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -244,7 +339,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		05C62FD52D7C50EA00C42DB7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		05C62FD22D7C4F8D00C42DB7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 05A086832D7C30CD00A3DEA5 /* BasicKit_iOS */;
+			targetProxy = 05C62FD12D7C4F8D00C42DB7 /* PBXContainerItemProxy */;
+		};
+		05C62FD42D7C4F8D00C42DB7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 050070DD2D7C2DF700C9449B /* BasicKit_macOS */;
+			targetProxy = 05C62FD32D7C4F8D00C42DB7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		050070E72D7C2DF700C9449B /* Debug */ = {
@@ -263,6 +378,7 @@
 				ENABLE_MODULE_VERIFIER = YES;
 				GCC_OPTIMIZATION_LEVEL = 2;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$HOME)/Library/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -300,6 +416,7 @@
 				ENABLE_MODULE_VERIFIER = YES;
 				GCC_OPTIMIZATION_LEVEL = 2;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$HOME)/Library/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -521,6 +638,87 @@
 			};
 			name = Release;
 		};
+		05C62FCF2D7C4F7400C42DB7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		05C62FD02D7C4F7400C42DB7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		05C62FE62D7C50EC00C42DB7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ../Test/UnitTest/UnitTest.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.steel-wheels.BasicKit.UnitTest";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		05C62FE72D7C50EC00C42DB7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ../Test/UnitTest/UnitTest.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.steel-wheels.BasicKit.UnitTest";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -547,6 +745,24 @@
 			buildConfigurations = (
 				05A0868C2D7C30CD00A3DEA5 /* Debug */,
 				05A0868D2D7C30CD00A3DEA5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		05C62FCE2D7C4F7400C42DB7 /* Build configuration list for PBXLegacyTarget "Install" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05C62FCF2D7C4F7400C42DB7 /* Debug */,
+				05C62FD02D7C4F7400C42DB7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		05C62FE52D7C50EC00C42DB7 /* Build configuration list for PBXNativeTarget "UnitTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05C62FE62D7C50EC00C42DB7 /* Debug */,
+				05C62FE72D7C50EC00C42DB7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
