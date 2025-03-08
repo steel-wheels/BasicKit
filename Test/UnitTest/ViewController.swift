@@ -15,7 +15,7 @@ class ViewController: NSViewController {
 
                 // Do any additional setup after loading the view.
                 if let engine = BSBasicEngine() {
-                        NSLog("BasicKit: version = \(engine.version)")
+                        NSLog("BasicKit: version = \(engine.version())")
                 }
         }
 

@@ -9,11 +9,11 @@
 
 @interface BSBasicEngine : NSObject
 {
-        unsigned int    mVersion ;
+        NSInteger mVersion ;
 }
 
 - (id) init ;
-- (int) version ;
+- (NSInteger) version ;
 
 @end
 

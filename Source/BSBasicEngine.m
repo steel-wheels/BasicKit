@@ -12,13 +12,13 @@
 - (id) init
 {
         self = [super init] ;
-        self->mVersion = 0 ;
+        mVersion = 1;
         return self ;
 }
 
-- (int) version
+- (NSInteger) version
 {
-        return self->mVersion ;
+        return mVersion ;
 }
 
 @end
