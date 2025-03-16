@@ -1,9 +1,9 @@
-//
-//  BSBasicEngine.h
-//  BasicKit
-//
-//  Created by Tomoo Hamada on 2025/03/08.
-//
+/*
+ * @file BSBasicEngine.h
+ * @description Define BSBasicEngine class
+ * @par Copyright
+ *   Copyright (C) 2025 Steel Wheels Project
+ */
 
 #import <Foundation/Foundation.h>
 
@@ -13,6 +13,7 @@
 }
 
 - (id) init ;
+- (void) dealloc ;
 - (NSInteger) version ;
 
 @end

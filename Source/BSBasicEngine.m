@@ -1,9 +1,9 @@
-//
-//  BSBasicEngine.m
-//  BasicKit
-//
-//  Created by Tomoo Hamada on 2025/03/08.
-//
+/*
+ * @file BSBasicEngine.m
+ * @description Define BSBasicEngine class
+ * @par Copyright
+ *   Copyright (C) 2025 Steel Wheels Project
+ */
 
 #import "BSBasicEngine.h"
 
@@ -14,6 +14,10 @@
         self = [super init] ;
         mVersion = 1;
         return self ;
+}
+
+- (void) dealloc ;
+{
 }
 
 - (NSInteger) version

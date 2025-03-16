@@ -1,9 +1,9 @@
-//
-//  BasicKit.h
-//  BasicKit
-//
-//  Created by Tomoo Hamada on 2025/03/08.
-//
+/*
+ * @file BaseKit.h
+ * @description Bridge header for BasicKit
+ * @par Copyright
+ *   Copyright (C) 2025 Steel Wheels Project
+ */
 
 #import <Foundation/Foundation.h>
 
