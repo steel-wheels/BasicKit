@@ -7,11 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		050BCEF82D867E0C00C05DE3 /* CNHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 050BCEF72D867E0C00C05DE3 /* CNHeader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		050BCEF92D867E0C00C05DE3 /* CNHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 050BCEF72D867E0C00C05DE3 /* CNHeader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		050BCEFD2D867F8800C05DE3 /* CNType.h in Headers */ = {isa = PBXBuildFile; fileRef = 050BCEFC2D867F8800C05DE3 /* CNType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		050BCEFE2D867F8800C05DE3 /* CNType.h in Headers */ = {isa = PBXBuildFile; fileRef = 050BCEFC2D867F8800C05DE3 /* CNType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		050BCEFF2D86C70300C05DE3 /* BasicKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C62FEC2D7C520C00C42DB7 /* BasicKit.xcframework */; };
 		0510FBA72D7C533600AEE906 /* BasicKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 0510FBA42D7C533600AEE906 /* BasicKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0510FBB22D7C680500AEE906 /* BasicKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 0510FBA42D7C533600AEE906 /* BasicKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		051697DF2D86664700628DF6 /* CNList.h in Headers */ = {isa = PBXBuildFile; fileRef = 051697DD2D86664700628DF6 /* CNList.h */; };
+		051697DF2D86664700628DF6 /* CNList.h in Headers */ = {isa = PBXBuildFile; fileRef = 051697DD2D86664700628DF6 /* CNList.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		051697E02D86664700628DF6 /* CNList.c in Sources */ = {isa = PBXBuildFile; fileRef = 051697DE2D86664700628DF6 /* CNList.c */; };
-		051697E12D86664800628DF6 /* CNList.h in Headers */ = {isa = PBXBuildFile; fileRef = 051697DD2D86664700628DF6 /* CNList.h */; };
+		051697E12D86664800628DF6 /* CNList.h in Headers */ = {isa = PBXBuildFile; fileRef = 051697DD2D86664700628DF6 /* CNList.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		051697E22D86664800628DF6 /* CNList.c in Sources */ = {isa = PBXBuildFile; fileRef = 051697DE2D86664700628DF6 /* CNList.c */; };
 		05A086912D7C31C600A3DEA5 /* BSBasicEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A0868F2D7C31C600A3DEA5 /* BSBasicEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05A086922D7C31C600A3DEA5 /* BSBasicEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A086902D7C31C600A3DEA5 /* BSBasicEngine.m */; };
@@ -50,6 +55,8 @@
 
 /* Begin PBXFileReference section */
 		050070DE2D7C2DF700C9449B /* BasicKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BasicKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		050BCEF72D867E0C00C05DE3 /* CNHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNHeader.h; sourceTree = "<group>"; };
+		050BCEFC2D867F8800C05DE3 /* CNType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNType.h; sourceTree = "<group>"; };
 		0510FBA42D7C533600AEE906 /* BasicKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BasicKit.h; sourceTree = "<group>"; };
 		051697DD2D86664700628DF6 /* CNList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNList.h; sourceTree = "<group>"; };
 		051697DE2D86664700628DF6 /* CNList.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNList.c; sourceTree = "<group>"; };
@@ -66,9 +73,9 @@
 			path = BasicKit_macOS;
 			sourceTree = "<group>";
 		};
-		051697E82D86705800628DF6 /* UnitTest 2 */ = {
+		051697E82D86705800628DF6 /* UnitTest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "UnitTest 2";
+			path = UnitTest;
 			sourceTree = "<group>";
 		};
 		05A086852D7C30CD00A3DEA5 /* BasicKit_iOS */ = {
@@ -90,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				050BCEFF2D86C70300C05DE3 /* BasicKit.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,6 +136,7 @@
 		051697D92D86657D00628DF6 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				050BCEFC2D867F8800C05DE3 /* CNType.h */,
 				051697DD2D86664700628DF6 /* CNList.h */,
 				051697DE2D86664700628DF6 /* CNList.c */,
 			);
@@ -140,6 +149,7 @@
 				0510FBA42D7C533600AEE906 /* BasicKit.h */,
 				05A0868F2D7C31C600A3DEA5 /* BSBasicEngine.h */,
 				05A086902D7C31C600A3DEA5 /* BSBasicEngine.m */,
+				050BCEF72D867E0C00C05DE3 /* CNHeader.h */,
 				051697D92D86657D00628DF6 /* Data */,
 			);
 			name = Source;
@@ -149,7 +159,7 @@
 		05C62FE82D7C50F800C42DB7 /* Test */ = {
 			isa = PBXGroup;
 			children = (
-				051697E82D86705800628DF6 /* UnitTest 2 */,
+				051697E82D86705800628DF6 /* UnitTest */,
 			);
 			name = Test;
 			path = ../Test;
@@ -170,7 +180,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				050BCEF82D867E0C00C05DE3 /* CNHeader.h in Headers */,
 				051697DF2D86664700628DF6 /* CNList.h in Headers */,
+				050BCEFE2D867F8800C05DE3 /* CNType.h in Headers */,
 				0510FBB22D7C680500AEE906 /* BasicKit.h in Headers */,
 				05A086912D7C31C600A3DEA5 /* BSBasicEngine.h in Headers */,
 			);
@@ -180,9 +192,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				051697E12D86664800628DF6 /* CNList.h in Headers */,
+				050BCEF92D867E0C00C05DE3 /* CNHeader.h in Headers */,
 				0510FBA72D7C533600AEE906 /* BasicKit.h in Headers */,
 				05A086942D7C31C600A3DEA5 /* BSBasicEngine.h in Headers */,
+				051697E12D86664800628DF6 /* CNList.h in Headers */,
+				050BCEFD2D867F8800C05DE3 /* CNType.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,7 +260,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				051697E82D86705800628DF6 /* UnitTest 2 */,
+				051697E82D86705800628DF6 /* UnitTest */,
 			);
 			name = UnitTest;
 			packageProductDependencies = (
@@ -294,6 +308,7 @@
 					};
 					051697E62D86705800628DF6 = {
 						CreatedOnToolsVersion = 16.2;
+						LastSwiftMigration = 1620;
 					};
 					05A086832D7C30CD00A3DEA5 = {
 						CreatedOnToolsVersion = 16.2;
@@ -587,10 +602,12 @@
 		051697EC2D86705800628DF6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TR2DNF3P93;
 				ENABLE_HARDENED_RUNTIME = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -598,6 +615,7 @@
 		051697ED2D86705800628DF6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TR2DNF3P93;
 				ENABLE_HARDENED_RUNTIME = YES;

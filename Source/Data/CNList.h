@@ -8,7 +8,7 @@
 #ifndef CNLIST_H
 #define CNLIST_H
 
-#include <unistd.h>
+#import <BasicKit/CNType.h>
 
 struct CNList {
         struct CNList *         next ;
@@ -34,5 +34,8 @@ CNListAllocate(struct CNListPool * pool) ;
 
 void
 CNListFree(struct CNListPool * pool, struct CNList * dst) ;
+
+unsigned int
+CNListCountOfFreeItems(const struct CNListPool * pool) ;
 
 #endif /* CNLIST_H */

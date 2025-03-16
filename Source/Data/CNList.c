@@ -82,3 +82,14 @@ CNListFree(struct CNListPool * pool, struct CNList * dst)
         dst->next        = pool->free_items ;
         pool->free_items = dst ;
 }
+
+unsigned int
+CNListCountOfFreeItems(const struct CNListPool * pool)
+{
+        unsigned int    result = 0 ;
+        struct CNList * item ;
+        for(item = pool->free_items ; item != NULL ; item = item->next) {
+                result++ ;
+        }
+        return result ;
+}
