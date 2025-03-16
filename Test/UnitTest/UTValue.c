@@ -30,10 +30,20 @@ bool UTValue(void)
         struct CNValue * val0 = CNValueAllocate(&valpool) ;
         struct CNValue * val1 = CNValueAllocate(&valpool) ;
 
-        CNValueFree(&valpool, val0) ;
-        CNValueFree(&valpool, val1) ;
+        val0->int64Value = 1234 ;
+        val1->floatValue = 12.34 ;
+
+        char valname[CNVALUE_DESCRIPTION_MAX_LEN] ;
+        CNValueToDescription(valname, CNIntValueType, val0) ;
+        printf("val0 = %s\n", valname) ;
+
+        CNValueToDescription(valname, CNFloatValueType, val1) ;
+        printf("val1 = %s\n", valname) ;
 
         /*  */
+
+        CNValueFree(&valpool, val0) ;
+        CNValueFree(&valpool, val1) ;
 
         unsigned int lastvalcnt = CNValueCountOfFreeItems(&valpool) ;
         CNValuePoolFree(&valpool) ;

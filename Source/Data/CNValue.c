@@ -7,6 +7,7 @@
 
 #include "CNValue.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 #define CNALUE_PAGE_NUM         512
 
@@ -118,3 +119,26 @@ CNValueCountOfFreeItems(const struct CNValuePool * pool)
         }
         return result ;
 }
+
+#define CNVALUE_DESCRIPTION_MAX_LEN     64
+
+void
+CNValueToDescription(char * dst, CNValueType vtype, const struct CNValue * src)
+{
+        char str[CNVALUE_DESCRIPTION_MAX_LEN] ;
+        switch(vtype) {
+          case CNCharValueType:
+                str[0] = src->charValue ;
+                str[1] = '\0' ;
+          break ;
+          case CNIntValueType: {
+                snprintf(dst, CNVALUE_DESCRIPTION_MAX_LEN-1, "%lld", src->int64Value) ;
+                dst[CNVALUE_DESCRIPTION_MAX_LEN-1] = '\0' ;
+          } break ;
+          case CNFloatValueType: {
+                snprintf(dst, CNVALUE_DESCRIPTION_MAX_LEN-1, "%lf", src->floatValue) ;
+                dst[CNVALUE_DESCRIPTION_MAX_LEN-1] = '\0' ;
+          } break ;
+        }
+}
+
