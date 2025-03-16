@@ -33,22 +33,22 @@ void
 CNListPoolInit(struct CNListPool * dst)
 {
         struct CNListPage * newpage = CNListPageAllocate() ;
-        dst->used_items = NULL ;
-        dst->free_items = NULL ;
-        dst->first_page = newpage ;
+        dst->usedList  = NULL ;
+        dst->freeList  = NULL ;
+        dst->firstPage = newpage ;
 
         unsigned int i ;
         for(i=0 ; i<CNLIST_PAGE_NUM ; i++) {
                 struct CNList * newitem = &(newpage->page[i]) ;
-                newitem->next = dst->free_items ;
-                dst->free_items = newitem ;
+                newitem->next = dst->freeList ;
+                dst->freeList = newitem ;
         }
 }
 
 void
 CNListPoolFree(struct CNListPool * dst)
 {
-        struct CNListPage * page = dst->first_page ;
+        struct CNListPage * page = dst->firstPage ;
         while(page != NULL) {
                 struct CNListPage * target = page ;
                 page = target->next ;
@@ -61,26 +61,34 @@ CNListAllocate(struct CNListPool * pool)
 {
         struct CNList * result ;
         struct CNList * fitem ;
-        if((fitem = pool->free_items) != NULL) {
+        if((fitem = pool->freeList) != NULL) {
                 result = fitem ;
-                pool->free_items = fitem->next ;
-                result->next     = pool->used_items ;
-                pool->used_items = result ;
+                pool->freeList = fitem->next ;
         } else {
                 struct CNListPage * newpage = CNListPageAllocate() ;
-                newpage->next    = pool->first_page ;
-                pool->first_page = newpage ;
+                newpage->next   = pool->firstPage ;
+                pool->firstPage = newpage ;
+
+                unsigned int i ;
+                for(i=0 ; i<CNLIST_PAGE_NUM ; i++){
+                        struct CNList * newlist = &(newpage->page[i]) ;
+                        newlist->next  = pool->freeList ;
+                        pool->freeList = newlist ;
+                }
+
                 result = CNListAllocate(pool) ;
         }
+        result->next = NULL ;
+        result->data = NULL ;
         return result ;
 }
 
 void
 CNListFree(struct CNListPool * pool, struct CNList * dst)
 {
-        dst->data        = NULL ;
-        dst->next        = pool->free_items ;
-        pool->free_items = dst ;
+        dst->data      = NULL ;
+        dst->next      = pool->freeList ;
+        pool->freeList = dst ;
 }
 
 unsigned int
@@ -88,7 +96,7 @@ CNListCountOfFreeItems(const struct CNListPool * pool)
 {
         unsigned int    result = 0 ;
         struct CNList * item ;
-        for(item = pool->free_items ; item != NULL ; item = item->next) {
+        for(item = pool->freeList ; item != NULL ; item = item->next) {
                 result++ ;
         }
         return result ;

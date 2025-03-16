@@ -18,9 +18,9 @@ struct CNList {
 struct CNListPage ;
 
 struct CNListPool {
-        struct CNList *         free_items ;
-        struct CNList *         used_items ;
-        struct CNListPage *     first_page ;
+        struct CNList *         freeList ;
+        struct CNList *         usedList ;
+        struct CNListPage *     firstPage ;
 } ;
 
 void

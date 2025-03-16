@@ -10,5 +10,6 @@
 
 #import <BasicKit/CNType.h>
 #import <BasicKit/CNList.h>
+#import <BasicKit/CNValue.h>
 
 #endif /* CNHEADER_H */

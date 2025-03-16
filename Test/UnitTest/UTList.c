@@ -29,6 +29,6 @@ bool UTList(void)
 
         CNListPoolFree(&listpool) ;
 
-        printf("UTList: end") ;
+        printf("UTList: end\n") ;
         return true ;
 }
