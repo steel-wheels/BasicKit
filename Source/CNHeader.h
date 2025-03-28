@@ -1,15 +1,13 @@
 /*
  * @file CNHeader.h
- * @description Include all header files
+ * @description Import all Header files
  * @par Copyright
  *   Copyright (C) 2025 Steel Wheels Project
  */
 
-#ifndef CNHEADER_H
-#define CNHEADER_H
-
 #import <BasicKit/CNType.h>
 #import <BasicKit/CNList.h>
+#import <BasicKit/CNString.h>
 #import <BasicKit/CNValue.h>
+#import <BasicKit/CNValuePool.h>
 
-#endif /* CNHEADER_H */

@@ -11,4 +11,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+/* forward declaration */
+struct CNValue ;
+struct CNValuePool ;
+
 #endif /* CNTYPE_H */

@@ -15,6 +15,10 @@ bool UTValue(void)
 
         printf("UTValue: end\n") ;
 
+        printf("chaValue:      %lu\n", sizeof(char)) ;
+        printf("int64_t:       %lu\n", sizeof(int64_t)) ;
+        printf("double:        %lu\n", sizeof(double)) ;
+        printf("CNString:      %lu (%u)\n", sizeof(struct CNString), CNSTRING_ELEMENT_NUM) ;
         printf("sizeOfCNValue: %lu\n", sizeof(struct CNValue)) ;
 
         struct CNListPool       listpool ;
@@ -27,18 +31,11 @@ bool UTValue(void)
 
         /*  */
 
-        struct CNValue * val0 = CNValueAllocate(&valpool) ;
-        struct CNValue * val1 = CNValueAllocate(&valpool) ;
+        struct CNValue * val0 = CNAllocateInt64(1234, &valpool) ;
+        struct CNValue * val1 = CNAllocateInt64(12.34, &valpool) ;
 
-        val0->int64Value = 1234 ;
-        val1->floatValue = 12.34 ;
-
-        char valname[CNVALUE_DESCRIPTION_MAX_LEN] ;
-        CNValueToDescription(valname, CNIntValueType, val0) ;
-        printf("val0 = %s\n", valname) ;
-
-        CNValueToDescription(valname, CNFloatValueType, val1) ;
-        printf("val1 = %s\n", valname) ;
+        printf("val0 = ") ; CNValueDump(0, val0) ;
+        printf("val1 = ") ; CNValueDump(0, val1) ;
 
         /*  */
 

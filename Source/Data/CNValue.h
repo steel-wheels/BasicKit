@@ -13,13 +13,16 @@
 #import <BasicKit/CNString.h>
 
 typedef enum {
+        CNVoidValueType,
         CNCharValueType,
         CNIntValueType,
-        CNFloatValueType
+        CNFloatValueType,
+        CNStringValueType
 } CNValueType ;
 
 struct CNValue
 {
+        uint64_t                        attribute ;
         union {
                 char                    charValue ;
                 int64_t                 int64Value ;
@@ -29,24 +32,43 @@ struct CNValue
         } ; // no name
 } ;
 
-struct CNValuePage ;
-
-struct CNValuePool
+static inline uint64_t
+CNMakeValueAttribute(CNValueType type, uint32_t size)
 {
-        struct CNListPool *     listPool ;
-        struct CNList *         usedList ;
-        struct CNList *         freeList ;
-        struct CNValuePage *    firstPage ;
-} ;
+        uint64_t tval = type ;
+        uint64_t sval = size ;
+        return (sval << 32) | tval ;
+}
 
-void
-CNValuePoolInit(struct CNValuePool * dst, struct CNListPool * lpool) ;
+static inline CNValueType
+CNTypeOfValue(const struct CNValue * src)
+{
+        return (CNValueType) (src->attribute & 0xffffffff) ;
+}
 
-void
-CNValuePoolFree(struct CNValuePool * dst) ;
+static inline uint32_t
+CNSizeOfValue(const struct CNValue * src)
+{
+        return (src->attribute >> 32) ;
+}
 
 struct CNValue *
-CNValueAllocate(struct CNValuePool * pool) ;
+CNAllocateVoid(struct CNValuePool * pool) ;
+
+struct CNValue *
+CNAllocateChar(char c, struct CNValuePool * pool) ;
+
+struct CNValue *
+CNAllocateInt64(int64_t val, struct CNValuePool * pool) ;
+
+struct CNValue *
+CNAllocateUInt64(uint64_t val, struct CNValuePool * pool) ;
+
+struct CNValue *
+CNAllocateFloat(double val, struct CNValuePool * pool) ;
+
+struct CNValue *
+CNAllocateString(const char * str, struct CNValuePool * pool) ;
 
 void
 CNValueFree(struct CNValuePool * pool, struct CNValue * dst) ;
@@ -54,11 +76,7 @@ CNValueFree(struct CNValuePool * pool, struct CNValue * dst) ;
 unsigned int
 CNValueCountOfFreeItems(const struct CNValuePool * pool) ;
 
-/* The destination must an array of char, the size must be bigger than
- * The following macro.
- */
-#define CNVALUE_DESCRIPTION_MAX_LEN     64
 void
-CNValueToDescription(char * dst, CNValueType vtype, const struct CNValue * src) ;
+CNValueDump(unsigned int indent, const struct CNValue * src) ;
 
 #endif /* CNVALUE_H */

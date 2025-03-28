@@ -5,7 +5,7 @@
  *   Copyright (C) 2025 Steel Wheels Project
  */
 
-#include "CNList.h"
+#import <BasicKit/CNList.h>
 #include <stdlib.h>
 
 #define CNLIST_PAGE_NUM         1024
