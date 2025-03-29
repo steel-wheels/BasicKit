@@ -12,6 +12,7 @@
 
 struct CNList {
         struct CNList *         next ;
+        uint64_t                attribute ;
         void *                  data ;
 } ;
 
@@ -19,23 +20,22 @@ struct CNListPage ;
 
 struct CNListPool {
         struct CNList *         freeList ;
-        struct CNList *         usedList ;
         struct CNListPage *     firstPage ;
 } ;
 
 void
-CNListPoolInit(struct CNListPool * dst) ;
+CNInitListPool(struct CNListPool * dst) ;
 
 void
-CNListPoolFree(struct CNListPool * dst) ;
+CNFreeListPool(struct CNListPool * dst) ;
+
+void
+CNDumpListPool(unsigned int indent, const struct CNListPool * src) ;
 
 struct CNList *
-CNListAllocate(struct CNListPool * pool) ;
+CNAllocateList(struct CNListPool * pool) ;
 
 void
-CNListFree(struct CNListPool * pool, struct CNList * dst) ;
-
-unsigned int
-CNListCountOfFreeItems(const struct CNListPool * pool) ;
+CNFreeList(struct CNListPool * pool, struct CNList * dst) ;
 
 #endif /* CNLIST_H */

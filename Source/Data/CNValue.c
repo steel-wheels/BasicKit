@@ -6,9 +6,31 @@
  */
 
 #import <BasicKit/CNValue.h>
-#import <BasicKit/CNValuePool.h>
+#import <BasicKit/CNUtils.h>
 #include <string.h>
 #include <stdio.h>
+
+void
+CNInitValuePool(struct CNValuePool * dst, struct CNListPool * lpool)
+{
+        CNInitElementPool(&(dst->elementPool), sizeof(struct CNValue), 1024, lpool) ;
+        CNInitArrayPool(&(dst->arrayPool), sizeof(struct CNValue), lpool) ;
+}
+
+void
+CNFreeValuePool(struct CNValuePool * dst)
+{
+        CNFreeElementPool(&(dst->elementPool)) ;
+        CNFreeArrayPool(&(dst->arrayPool)) ;
+}
+
+static struct CNValue *
+CNValueAllocate(CNValueType vtype, uint32_t size, struct CNValuePool * vpool)
+{
+        struct CNValue * newval = CNAllocateElement(&(vpool->elementPool)) ;
+        newval->attribute       = CNMakeValueAttribute(vtype, size) ;
+        return newval ;
+}
 
 struct CNValue *
 CNAllocateVoid(struct CNValuePool * pool)
@@ -75,38 +97,64 @@ CNAllocateString(const char * str, struct CNValuePool * pool)
         }
 }
 
-static void
-dumpIndent(unsigned int indent)
+void
+CNValueFree(struct CNValuePool * pool, struct CNValue * dst)
 {
-        unsigned int i ;
-        for(i=0 ; i<indent ; i++){
-                fputs("  ", stdout) ;
+        switch(CNTypeOfValue(dst)) {
+                case CNVoidValueType:
+                case CNCharValueType:
+                case CNIntValueType:
+                case CNFloatValueType: {
+                } break ;
+                case CNStringValueType: {
+                        CNFreeString(pool, &(dst->stringValue)) ;
+                } break ;
+                case CNArrayValueType: {
+                        uint32_t count = (dst->arrayValue).count ;
+                        struct CNValue * values = (dst->arrayValue).values ;
+                        CNFreeArray(&(pool->arrayPool), count, values) ;
+                } break ;
+
         }
 }
 
 void
 CNValueDump(unsigned int indent, const struct CNValue * src)
 {
-        dumpIndent(indent) ;
         switch(CNTypeOfValue(src)){
                 case CNVoidValueType: {
-                        fputs("nil", stdout) ;
+                        CNDumpIndent(indent) ;
+                        fputs("value: nil\n", stdout) ;
                 } break ;
                 case CNCharValueType: {
-                        printf("'%c'", (src->charValue)) ;
+                        CNDumpIndent(indent) ;
+                        printf("value: '%c'\n", (src->charValue)) ;
                 } break ;
                 case CNIntValueType: {
-                        printf("%lld", (src->int64Value)) ;
+                        CNDumpIndent(indent) ;
+                        printf("value: %lld\n", (src->int64Value)) ;
                 } break ;
                 case CNFloatValueType: {
-                        printf("%lf", (src->floatValue)) ;
+                        CNDumpIndent(indent) ;
+                        printf("value: %lf\n", (src->floatValue)) ;
                 } break ;
                 case CNStringValueType: {
-                        fputs("\"", stdout) ;
-                        CNStringDump(CNSizeOfValue(src), &(src->stringValue)) ;
-                        fputs("\"", stdout) ;
+                        CNDumpIndent(indent) ;
+                        printf("value: \"") ;
+                        CNDumpString(CNSizeOfValue(src), &(src->stringValue)) ;
+                        fputs("\"\n", stdout) ;
+                } break ;
+                case CNArrayValueType: {
+                        unsigned int num = CNSizeOfValue(src) ;
+                        CNDumpIndent(indent) ;
+                        printf("value: %u [\n", num) ;
+                        struct CNValue * values = (src->arrayValue).values ;
+                        for(unsigned int i=0 ; i<num ; i++) {
+                                CNValueDump(indent+1, &(values[i])) ;
+                        }
+                        CNDumpIndent(indent) ;
+                        printf("]\n") ;
                 } break ;
         }
-        fputs("\n", stdout) ;
 }
 

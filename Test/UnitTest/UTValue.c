@@ -22,46 +22,34 @@ bool UTValue(void)
         printf("sizeOfCNValue: %lu\n", sizeof(struct CNValue)) ;
 
         struct CNListPool       listpool ;
-        CNListPoolInit(&listpool) ;
-        unsigned int orglistcnt = CNListCountOfFreeItems(&listpool);
+        CNInitListPool(&listpool) ;
+        CNDumpListPool(0, &listpool) ;
 
         struct CNValuePool      valpool ;
-        CNValuePoolInit(&valpool, &listpool) ;
-        unsigned int orgvalcnt  = CNValueCountOfFreeItems(&valpool) ;
+        CNInitValuePool(&valpool, &listpool) ;
+        CNDumpListPool(0, &listpool) ;
 
         /*  */
 
         struct CNValue * val0 = CNAllocateInt64(1234, &valpool) ;
         struct CNValue * val1 = CNAllocateInt64(12.34, &valpool) ;
+        struct CNValue * val2 = CNAllocateString("hello", &valpool) ;
 
         printf("val0 = ") ; CNValueDump(0, val0) ;
         printf("val1 = ") ; CNValueDump(0, val1) ;
+        printf("val2 = ") ; CNValueDump(0, val2) ;
 
         /*  */
 
         CNValueFree(&valpool, val0) ;
         CNValueFree(&valpool, val1) ;
+        CNValueFree(&valpool, val2) ;
 
-        unsigned int lastvalcnt = CNValueCountOfFreeItems(&valpool) ;
-        CNValuePoolFree(&valpool) ;
-
-        if(orgvalcnt != lastvalcnt) {
-                printf("[Error] Unexpected free value count: %u <-> %u\n",
-                       orgvalcnt, lastvalcnt) ;
-                result = false ;
-        }
-
-        unsigned int lastlistcnt = CNListCountOfFreeItems(&listpool);
-        CNListPoolFree(&listpool) ;
-
-        if(orglistcnt != lastlistcnt) {
-                printf("[Error] Unexpected free list count: %u <-> %u\n",
-                       orglistcnt, lastlistcnt) ;
-                result = false ;
-        }
+        CNDumpListPool(0, &listpool) ;
+        CNFreeValuePool(&valpool) ;
 
         printf("UTValue: end\n") ;
-        return true ;
+        return result ;
 }
 
 

@@ -11,23 +11,19 @@
 
 bool UTList(void)
 {
-        printf("UTList: start") ;
+        printf("UTList: start\n") ;
 
         struct CNListPool       listpool ;
-        CNListPoolInit(&listpool) ;
+        CNInitListPool(&listpool) ;
+        CNDumpListPool(0, &listpool) ;
 
-        unsigned int fcount = CNListCountOfFreeItems(&listpool) ;
-        printf("initial free items: %u\n", fcount) ;
+        struct CNList * item = CNAllocateList(&listpool) ;
+        CNDumpListPool(0, &listpool) ;
 
-        struct CNList * item = CNListAllocate(&listpool) ;
-        fcount = CNListCountOfFreeItems(&listpool) ;
-        printf("initial next free items: %u\n", fcount) ;
+        CNFreeList(&listpool, item) ;
+        CNDumpListPool(0, &listpool) ;
 
-        CNListFree(&listpool, item) ;
-        fcount = CNListCountOfFreeItems(&listpool) ;
-        printf("initial last free items: %u\n", fcount) ;
-
-        CNListPoolFree(&listpool) ;
+        CNFreeListPool(&listpool) ;
 
         printf("UTList: end\n") ;
         return true ;

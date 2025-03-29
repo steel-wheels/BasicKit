@@ -10,7 +10,7 @@
 
 #import <BasicKit/CNType.h>
 
-#define CNSTRING_ELEMENT_NUM            112
+#define CNSTRING_ELEMENT_NUM            48
 
 struct CNString {
         struct CNValue *        next ;
@@ -18,9 +18,9 @@ struct CNString {
 } ;
 
 void
-CNStringFree(struct CNValuePool * pool, struct CNString * dst) ;
+CNFreeString(struct CNValuePool * pool, struct CNString * dst) ;
 
 void
-CNStringDump(uint32_t count, const struct CNString * src) ;
+CNDumpString(uint32_t count, const struct CNString * src) ;
 
 #endif /* CNSTRING_H */

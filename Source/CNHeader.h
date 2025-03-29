@@ -9,5 +9,4 @@
 #import <BasicKit/CNList.h>
 #import <BasicKit/CNString.h>
 #import <BasicKit/CNValue.h>
-#import <BasicKit/CNValuePool.h>
 

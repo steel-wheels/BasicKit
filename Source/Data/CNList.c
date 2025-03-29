@@ -6,7 +6,9 @@
  */
 
 #import <BasicKit/CNList.h>
+#import <BasicKit/CNUtils.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #define CNLIST_PAGE_NUM         1024
 
@@ -19,7 +21,7 @@ static struct CNListPage *
 CNListPageAllocate(void)
 {
         struct CNListPage * newpage = malloc(sizeof(struct CNListPage)) ;
-        newpage->next   = NULL ;
+        newpage->next = NULL ;
         return newpage ;
 }
 
@@ -30,10 +32,9 @@ CNListPageFree(struct CNListPage * dst)
 }
 
 void
-CNListPoolInit(struct CNListPool * dst)
+CNInitListPool(struct CNListPool * dst)
 {
         struct CNListPage * newpage = CNListPageAllocate() ;
-        dst->usedList  = NULL ;
         dst->freeList  = NULL ;
         dst->firstPage = newpage ;
 
@@ -46,7 +47,7 @@ CNListPoolInit(struct CNListPool * dst)
 }
 
 void
-CNListPoolFree(struct CNListPool * dst)
+CNFreeListPool(struct CNListPool * dst)
 {
         struct CNListPage * page = dst->firstPage ;
         while(page != NULL) {
@@ -56,8 +57,19 @@ CNListPoolFree(struct CNListPool * dst)
         }
 }
 
+void
+CNDumpListPool(unsigned int indent, const struct CNListPool * src)
+{
+        unsigned int freenum = 0 ;
+        const struct CNList * list ;
+        for(list = src->freeList ; list != NULL ; list = list->next) {
+                freenum++ ;
+        }
+        CNDumpIndent(indent) ; printf("ListPool: free-num=%u\n", freenum) ;
+}
+
 struct CNList *
-CNListAllocate(struct CNListPool * pool)
+CNAllocateList(struct CNListPool * pool)
 {
         struct CNList * result ;
         struct CNList * fitem ;
@@ -76,28 +88,20 @@ CNListAllocate(struct CNListPool * pool)
                         pool->freeList = newlist ;
                 }
 
-                result = CNListAllocate(pool) ;
+                result = CNAllocateList(pool) ;
         }
-        result->next = NULL ;
-        result->data = NULL ;
+        result->next            = NULL ;
+        result->attribute       = 0 ;
+        result->data            = NULL ;
         return result ;
 }
 
 void
-CNListFree(struct CNListPool * pool, struct CNList * dst)
+CNFreeList(struct CNListPool * pool, struct CNList * dst)
 {
-        dst->data      = NULL ;
-        dst->next      = pool->freeList ;
-        pool->freeList = dst ;
+        dst->attribute  = 0 ;
+        dst->data       = NULL ;
+        dst->next       = pool->freeList ;
+        pool->freeList  = dst ;
 }
 
-unsigned int
-CNListCountOfFreeItems(const struct CNListPool * pool)
-{
-        unsigned int    result = 0 ;
-        struct CNList * item ;
-        for(item = pool->freeList ; item != NULL ; item = item->next) {
-                result++ ;
-        }
-        return result ;
-}

@@ -11,13 +11,17 @@
 #import <BasicKit/CNType.h>
 #import <BasicKit/CNList.h>
 #import <BasicKit/CNString.h>
+#import <BasicKit/CNArray.h>
+#import <BasicKit/CNElementPool.h>
+#import <BasicKit/CNArrayPool.h>
 
 typedef enum {
         CNVoidValueType,
         CNCharValueType,
         CNIntValueType,
         CNFloatValueType,
-        CNStringValueType
+        CNStringValueType,
+        CNArrayValueType
 } CNValueType ;
 
 struct CNValue
@@ -29,6 +33,7 @@ struct CNValue
                 uint64_t                uint64Value ;
                 double                  floatValue ;
                 struct CNString         stringValue ;
+                struct CNArray          arrayValue ;
         } ; // no name
 } ;
 
@@ -52,6 +57,23 @@ CNSizeOfValue(const struct CNValue * src)
         return (src->attribute >> 32) ;
 }
 
+static inline void
+CNSetVoidValue(struct CNValue * dst)
+{
+        dst->attribute = CNMakeValueAttribute(CNVoidValueType, 0) ;
+}
+
+struct CNValuePool {
+        struct CNElementPool    elementPool ;
+        struct CNArrayPool      arrayPool ;
+} ;
+
+void
+CNInitValuePool(struct CNValuePool * dst, struct CNListPool * lpool) ;
+
+void
+CNFreeValuePool(struct CNValuePool * dst) ;
+
 struct CNValue *
 CNAllocateVoid(struct CNValuePool * pool) ;
 
@@ -72,9 +94,6 @@ CNAllocateString(const char * str, struct CNValuePool * pool) ;
 
 void
 CNValueFree(struct CNValuePool * pool, struct CNValue * dst) ;
-
-unsigned int
-CNValueCountOfFreeItems(const struct CNValuePool * pool) ;
 
 void
 CNValueDump(unsigned int indent, const struct CNValue * src) ;
