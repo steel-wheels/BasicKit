@@ -13,14 +13,15 @@ bool UTValue(void)
 {
         bool result = true ;
 
-        printf("UTValue: end\n") ;
 
+        printf("(%s) Initial prologue\n", __func__) ;
         printf("chaValue:      %lu\n", sizeof(char)) ;
         printf("int64_t:       %lu\n", sizeof(int64_t)) ;
         printf("double:        %lu\n", sizeof(double)) ;
         printf("CNString:      %lu (%u)\n", sizeof(struct CNString), CNSTRING_ELEMENT_NUM) ;
         printf("sizeOfCNValue: %lu\n", sizeof(struct CNValue)) ;
 
+        printf("(%s) Initial state\n", __func__) ;
         struct CNListPool       listpool ;
         CNInitListPool(&listpool) ;
         CNDumpListPool(0, &listpool) ;
@@ -29,32 +30,20 @@ bool UTValue(void)
         CNInitValuePool(&valpool, &listpool) ;
         CNDumpListPool(0, &listpool) ;
 
-        char str[101] ;
-        for(unsigned int i=0 ; i<100 ; i++) {
-                str[i] = '0' + (i % 10) ;
-        }
-        str[100] = '\0' ;
-
+        printf("(%s) Allocate state\n", __func__) ;
         struct CNValue * val0 = CNAllocateInt64(1234, &valpool) ;
         struct CNValue * val1 = CNAllocateInt64(12.34, &valpool) ;
-        struct CNValue * val2 = CNAllocateString("hello", &valpool) ;
-        struct CNValue * val3 = CNAllocateString(str, &valpool) ;
 
-        printf("val0 = ") ; CNValueDump(0, val0) ;
-        printf("val1 = ") ; CNValueDump(0, val1) ;
-        printf("val2 = ") ; CNValueDump(0, val2) ;
-        printf("val3 = ") ; CNValueDump(0, val3) ;
+        printf("val0 = ") ; CNDumpValue(0, val0) ;
+        printf("val1 = ") ; CNDumpValue(0, val1) ;
 
-        /*  */
-
-        CNValueFree(&valpool, val0) ;
-        CNValueFree(&valpool, val1) ;
-        CNValueFree(&valpool, val2) ;
+        printf("(%s) Free state\n", __func__) ;
+        CNFreeValue(&valpool, val0) ;
+        CNFreeValue(&valpool, val1) ;
 
         CNDumpListPool(0, &listpool) ;
         CNFreeValuePool(&valpool) ;
 
-        printf("UTValue: end\n") ;
         return result ;
 }
 

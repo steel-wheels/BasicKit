@@ -38,7 +38,7 @@ struct CNValue
 } ;
 
 static inline uint64_t
-CNMakeValueAttribute(CNValueType type, uint32_t size)
+CNMakeValueAttribute(CNValueType type, size_t size)
 {
         uint64_t tval = type ;
         uint64_t sval = size ;
@@ -64,7 +64,7 @@ CNSetVoidValue(struct CNValue * dst)
 }
 
 struct CNValuePool {
-        struct CNScalarPool    ScalarPool ;
+        struct CNScalarPool     scalarPool ;
         struct CNArrayPool      arrayPool ;
 } ;
 
@@ -73,6 +73,9 @@ CNInitValuePool(struct CNValuePool * dst, struct CNListPool * lpool) ;
 
 void
 CNFreeValuePool(struct CNValuePool * dst) ;
+
+void
+CNDumpValuePool(unsigned int indent, const struct CNValuePool * src) ;
 
 struct CNValue *
 CNAllocateVoid(struct CNValuePool * pool) ;
@@ -90,12 +93,18 @@ struct CNValue *
 CNAllocateFloat(double val, struct CNValuePool * pool) ;
 
 struct CNValue *
-CNAllocateString(const char * str, struct CNValuePool * pool) ;
+CNAllocateString(const char * str, size_t len, struct CNValuePool * pool) ;
+
+static inline size_t
+CNLengthOfString(const struct CNValue * src)
+{
+        return CNSizeOfValue(src) ;
+}
 
 void
-CNValueFree(struct CNValuePool * pool, struct CNValue * dst) ;
+CNFreeValue(struct CNValuePool * pool, struct CNValue * dst) ;
 
 void
-CNValueDump(unsigned int indent, const struct CNValue * src) ;
+CNDumpValue(unsigned int indent, const struct CNValue * src) ;
 
 #endif /* CNVALUE_H */

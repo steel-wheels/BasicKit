@@ -15,6 +15,6 @@ CNArrayDump(unsigned int indent, uint32_t count, const struct CNArray * src)
         const struct CNValue * values = src->values ;
         const struct CNValue * endval = values + count ;
         for( ; values < endval ; values++){
-                CNValueDump(indent + 1, values) ;
+                CNDumpValue(indent + 1, values) ;
         }
 }

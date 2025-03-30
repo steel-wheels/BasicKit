@@ -13,21 +13,30 @@
 void
 CNInitValuePool(struct CNValuePool * dst, struct CNListPool * lpool)
 {
-        CNInitScalarPool(&(dst->ScalarPool), sizeof(struct CNValue), 1024, lpool) ;
+        CNInitScalarPool(&(dst->scalarPool), sizeof(struct CNValue), 1024, lpool) ;
         CNInitArrayPool(&(dst->arrayPool), sizeof(struct CNValue), lpool) ;
 }
 
 void
 CNFreeValuePool(struct CNValuePool * dst)
 {
-        CNFreeScalarPool(&(dst->ScalarPool)) ;
+        CNFreeScalarPool(&(dst->scalarPool)) ;
         CNFreeArrayPool(&(dst->arrayPool)) ;
 }
 
-static struct CNValue *
-CNValueAllocate(CNValueType vtype, uint32_t size, struct CNValuePool * vpool)
+void
+CNDumpValuePool(unsigned int indent, const struct CNValuePool * src)
 {
-        struct CNValue * newval = CNAllocateScalar(&(vpool->ScalarPool)) ;
+        CNDumpIndent(indent) ;
+        printf("ValuePool\n") ;
+        CNDumpScalarPool(indent + 1, &(src->scalarPool)) ;
+        CNDumpArrayPool(indent + 1,  &(src->arrayPool)) ;
+}
+
+static struct CNValue *
+CNValueAllocate(CNValueType vtype, size_t size, struct CNValuePool * vpool)
+{
+        struct CNValue * newval = CNAllocateScalar(&(vpool->scalarPool)) ;
         newval->attribute       = CNMakeValueAttribute(vtype, size) ;
         return newval ;
 }
@@ -71,22 +80,21 @@ CNAllocateFloat(double num, struct CNValuePool * pool)
 }
 
 static inline void
-initString(struct CNString * dst, struct CNValue * next, uint32_t len, const char * str)
+initString(struct CNString * dst, struct CNValue * next, size_t len, const char * str)
 {
         dst->next = next ;
         strncpy(dst->buffer, str, len) ;
 }
 
 struct CNValue *
-CNAllocateString(const char * str, struct CNValuePool * pool)
+CNAllocateString(const char * str, size_t len, struct CNValuePool * pool)
 {
-        uint32_t len = (uint32_t) strlen(str) ;
         if(len > CNSTRING_ELEMENT_NUM) {
                 struct CNValue * newval = CNValueAllocate(CNStringValueType, len,  pool) ;
                 initString(&(newval->stringValue), NULL, CNSTRING_ELEMENT_NUM, str) ;
 
                 const char * nstr = str + CNSTRING_ELEMENT_NUM ;
-                struct CNValue * next = CNAllocateString(nstr, pool) ;
+                struct CNValue * next = CNAllocateString(nstr, len - CNSTRING_ELEMENT_NUM, pool) ;
                 (newval->stringValue).next = next ;
 
                 return newval ;
@@ -98,7 +106,7 @@ CNAllocateString(const char * str, struct CNValuePool * pool)
 }
 
 void
-CNValueFree(struct CNValuePool * pool, struct CNValue * dst)
+CNFreeValue(struct CNValuePool * pool, struct CNValue * dst)
 {
         switch(CNTypeOfValue(dst)) {
                 case CNVoidValueType:
@@ -119,38 +127,38 @@ CNValueFree(struct CNValuePool * pool, struct CNValue * dst)
 }
 
 void
-CNValueDump(unsigned int indent, const struct CNValue * src)
+CNDumpValue(unsigned int indent, const struct CNValue * src)
 {
         switch(CNTypeOfValue(src)){
                 case CNVoidValueType: {
                         CNDumpIndent(indent) ;
-                        fputs("value: nil\n", stdout) ;
+                        fputs("nil\n", stdout) ;
                 } break ;
                 case CNCharValueType: {
                         CNDumpIndent(indent) ;
-                        printf("value: '%c'\n", (src->charValue)) ;
+                        printf("'%c'\n", (src->charValue)) ;
                 } break ;
                 case CNIntValueType: {
                         CNDumpIndent(indent) ;
-                        printf("value: %lld\n", (src->int64Value)) ;
+                        printf("%lld\n", (src->int64Value)) ;
                 } break ;
                 case CNFloatValueType: {
                         CNDumpIndent(indent) ;
-                        printf("value: %lf\n", (src->floatValue)) ;
+                        printf("%lf\n", (src->floatValue)) ;
                 } break ;
                 case CNStringValueType: {
                         CNDumpIndent(indent) ;
-                        printf("value: \"") ;
+                        printf("\"") ;
                         CNDumpString(CNSizeOfValue(src), &(src->stringValue)) ;
                         fputs("\"\n", stdout) ;
                 } break ;
                 case CNArrayValueType: {
                         unsigned int num = CNSizeOfValue(src) ;
                         CNDumpIndent(indent) ;
-                        printf("value: %u [\n", num) ;
+                        printf("%u [\n", num) ;
                         struct CNValue * values = (src->arrayValue).values ;
                         for(unsigned int i=0 ; i<num ; i++) {
-                                CNValueDump(indent+1, &(values[i])) ;
+                                CNDumpValue(indent+1, &(values[i])) ;
                         }
                         CNDumpIndent(indent) ;
                         printf("]\n") ;

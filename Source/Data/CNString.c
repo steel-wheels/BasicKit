@@ -14,7 +14,7 @@ CNFreeString(struct CNValuePool * pool, struct CNString * dst)
 {
         struct CNValue * next = dst->next ;
         if(next != NULL){
-                CNValueFree(pool, next) ;
+                CNFreeValue(pool, next) ;
         }
 }
 
