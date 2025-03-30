@@ -24,10 +24,10 @@
 		05A086922D7C31C600A3DEA5 /* BSBasicEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A086902D7C31C600A3DEA5 /* BSBasicEngine.m */; };
 		05A086932D7C31C600A3DEA5 /* BSBasicEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A086902D7C31C600A3DEA5 /* BSBasicEngine.m */; };
 		05A086942D7C31C600A3DEA5 /* BSBasicEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A0868F2D7C31C600A3DEA5 /* BSBasicEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05AE4AEE2D9449D20095BD66 /* CNElementPool.h in Headers */ = {isa = PBXBuildFile; fileRef = 05AE4AEC2D9449D20095BD66 /* CNElementPool.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05AE4AEF2D9449D20095BD66 /* CNElementPool.c in Sources */ = {isa = PBXBuildFile; fileRef = 05AE4AED2D9449D20095BD66 /* CNElementPool.c */; };
-		05AE4AF02D9449D20095BD66 /* CNElementPool.c in Sources */ = {isa = PBXBuildFile; fileRef = 05AE4AED2D9449D20095BD66 /* CNElementPool.c */; };
-		05AE4AF12D9449D20095BD66 /* CNElementPool.h in Headers */ = {isa = PBXBuildFile; fileRef = 05AE4AEC2D9449D20095BD66 /* CNElementPool.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05AE4AEE2D9449D20095BD66 /* CNScalarPool.h in Headers */ = {isa = PBXBuildFile; fileRef = 05AE4AEC2D9449D20095BD66 /* CNScalarPool.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05AE4AEF2D9449D20095BD66 /* CNScalarPool.c in Sources */ = {isa = PBXBuildFile; fileRef = 05AE4AED2D9449D20095BD66 /* CNScalarPool.c */; };
+		05AE4AF02D9449D20095BD66 /* CNScalarPool.c in Sources */ = {isa = PBXBuildFile; fileRef = 05AE4AED2D9449D20095BD66 /* CNScalarPool.c */; };
+		05AE4AF12D9449D20095BD66 /* CNScalarPool.h in Headers */ = {isa = PBXBuildFile; fileRef = 05AE4AEC2D9449D20095BD66 /* CNScalarPool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05AE4AF42D9453290095BD66 /* CNString.c in Sources */ = {isa = PBXBuildFile; fileRef = 05AE4AF32D9453290095BD66 /* CNString.c */; };
 		05AE4AF52D9453290095BD66 /* CNString.h in Headers */ = {isa = PBXBuildFile; fileRef = 05AE4AF22D9453290095BD66 /* CNString.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05AE4AF62D9453290095BD66 /* CNString.c in Sources */ = {isa = PBXBuildFile; fileRef = 05AE4AF32D9453290095BD66 /* CNString.c */; };
@@ -93,8 +93,8 @@
 		05A086842D7C30CD00A3DEA5 /* BasicKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BasicKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05A0868F2D7C31C600A3DEA5 /* BSBasicEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BSBasicEngine.h; sourceTree = "<group>"; };
 		05A086902D7C31C600A3DEA5 /* BSBasicEngine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BSBasicEngine.m; sourceTree = "<group>"; };
-		05AE4AEC2D9449D20095BD66 /* CNElementPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNElementPool.h; sourceTree = "<group>"; };
-		05AE4AED2D9449D20095BD66 /* CNElementPool.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNElementPool.c; sourceTree = "<group>"; };
+		05AE4AEC2D9449D20095BD66 /* CNScalarPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNScalarPool.h; sourceTree = "<group>"; };
+		05AE4AED2D9449D20095BD66 /* CNScalarPool.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNScalarPool.c; sourceTree = "<group>"; };
 		05AE4AF22D9453290095BD66 /* CNString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNString.h; sourceTree = "<group>"; };
 		05AE4AF32D9453290095BD66 /* CNString.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNString.c; sourceTree = "<group>"; };
 		05AE4B042D959E410095BD66 /* CNHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNHeader.h; sourceTree = "<group>"; };
@@ -187,8 +187,8 @@
 				050BCF012D86D07E00C05DE3 /* CNValue.c */,
 				05B2DA6A2D96D996006A75F1 /* CNArrayPool.h */,
 				05B2DA822D98BAE3006A75F1 /* CNArrayPool.c */,
-				05AE4AEC2D9449D20095BD66 /* CNElementPool.h */,
-				05AE4AED2D9449D20095BD66 /* CNElementPool.c */,
+				05AE4AEC2D9449D20095BD66 /* CNScalarPool.h */,
+				05AE4AED2D9449D20095BD66 /* CNScalarPool.c */,
 				05B2DA702D9769FF006A75F1 /* CNPagePool.h */,
 				05B2DA712D9769FF006A75F1 /* CNPagePool.c */,
 				051697DD2D86664700628DF6 /* CNList.h */,
@@ -246,7 +246,7 @@
 				05AE4B052D959E410095BD66 /* CNHeader.h in Headers */,
 				05B2DA6D2D96D996006A75F1 /* CNArrayPool.h in Headers */,
 				05B2DA732D9769FF006A75F1 /* CNPagePool.h in Headers */,
-				05AE4AEE2D9449D20095BD66 /* CNElementPool.h in Headers */,
+				05AE4AEE2D9449D20095BD66 /* CNScalarPool.h in Headers */,
 				050BCF032D86D07E00C05DE3 /* CNValue.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -264,7 +264,7 @@
 				05B2DA692D9674D9006A75F1 /* CNArray.h in Headers */,
 				05B2DA6F2D96D996006A75F1 /* CNArrayPool.h in Headers */,
 				05B2DA752D9769FF006A75F1 /* CNPagePool.h in Headers */,
-				05AE4AF12D9449D20095BD66 /* CNElementPool.h in Headers */,
+				05AE4AF12D9449D20095BD66 /* CNScalarPool.h in Headers */,
 				05AE4B062D959E410095BD66 /* CNHeader.h in Headers */,
 				050BCF042D86D07E00C05DE3 /* CNValue.h in Headers */,
 			);
@@ -433,7 +433,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05AE4AEF2D9449D20095BD66 /* CNElementPool.c in Sources */,
+				05AE4AEF2D9449D20095BD66 /* CNScalarPool.c in Sources */,
 				05AE4AF42D9453290095BD66 /* CNString.c in Sources */,
 				050BCF022D86D07E00C05DE3 /* CNValue.c in Sources */,
 				05A086922D7C31C600A3DEA5 /* BSBasicEngine.m in Sources */,
@@ -456,7 +456,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05AE4AF02D9449D20095BD66 /* CNElementPool.c in Sources */,
+				05AE4AF02D9449D20095BD66 /* CNScalarPool.c in Sources */,
 				05AE4AF62D9453290095BD66 /* CNString.c in Sources */,
 				050BCF052D86D07E00C05DE3 /* CNValue.c in Sources */,
 				05A086932D7C31C600A3DEA5 /* BSBasicEngine.m in Sources */,

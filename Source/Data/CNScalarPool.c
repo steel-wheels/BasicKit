@@ -1,28 +1,30 @@
 /*
- * @file CNElementPool.c
- * @description Define CNElementPool data structure
+ * @file CNScalarPool.c
+ * @description Define CNScalarPool data structure
  * @par Copyright
  *   Copyright (C) 2025 Steel Wheels Project
  */
 
-#import <BasicKit/CNElementPool.h>
+#import <BasicKit/CNScalarPool.h>
+#import <BasicKit/CNUtils.h>
+#include <stdio.h>
 
 static struct CNList *
-allocateElements(struct CNElementPool * dst) ;
+allocateScalars(struct CNScalarPool * dst) ;
 
 void
-CNInitElementPool(struct CNElementPool * dst, size_t size, unsigned int num, struct CNListPool * lpool)
+CNInitScalarPool(struct CNScalarPool * dst, size_t size, unsigned int num, struct CNListPool * lpool)
 {
         CNInitPagePool(&(dst->pagePool), lpool) ;
         dst->elementSize = size ;
         dst->elementNum  = num ;
 
-        struct CNList * list = allocateElements(dst) ;
+        struct CNList * list = allocateScalars(dst) ;
         dst->freeList = list ;
 }
 
 void
-CNFreeElementPool(struct CNElementPool * dst)
+CNFreeScalarPool(struct CNScalarPool * dst)
 {
         struct CNList * list = dst->freeList ;
         while(list != NULL) {
@@ -33,8 +35,23 @@ CNFreeElementPool(struct CNElementPool * dst)
         CNFreePagePool(&(dst->pagePool)) ;
 }
 
+void
+CNDumpScalarPool(unsigned int indent, const struct CNScalarPool * src)
+{
+        unsigned int freenum = 0 ;
+        for(struct CNList * list = src->freeList ; list != NULL ; list = list->next) {
+                freenum += 1 ;
+        }
+
+        CNDumpIndent(indent) ;
+        printf("ScalarPool: elementSize = %lu\n", src->elementSize) ;
+        printf("ScalarPool: elementNum  = %u\n",  src->elementNum) ;
+        printf("ScalarPool: freeNum     = %u\n",  freenum) ;
+        CNDumpPagePool(indent+1, &(src->pagePool)) ;
+}
+
 void *
-CNAllocateElement(struct CNElementPool * src)
+CNAllocateScalar(struct CNScalarPool * src)
 {
         /* search free elements */
         struct CNList * list = src->freeList ;
@@ -44,14 +61,14 @@ CNAllocateElement(struct CNElementPool * src)
                 CNFreeList((src->pagePool).listPool, list) ;
                 return data ;
         } else {
-                struct CNList * list = allocateElements(src) ;
+                struct CNList * list = allocateScalars(src) ;
                 src->freeList = list ;
-                return CNAllocateElement(src) ;
+                return CNAllocateScalar(src) ;
         }
 }
 
 static struct CNList *
-allocateElements(struct CNElementPool * dst)
+allocateScalars(struct CNScalarPool * dst)
 {
         unsigned int elmnum  = dst->elementNum ;
         size_t       elmsize = dst->elementSize ;
@@ -68,7 +85,7 @@ allocateElements(struct CNElementPool * dst)
 }
 
 void
-CNFreeElement(struct CNElementPool * src, void * data)
+CNFreeScalar(struct CNScalarPool * src, void * data)
 {
         struct CNList * list = CNAllocateList((src->pagePool).listPool) ;
         list->attribute = src->elementSize ;

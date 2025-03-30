@@ -13,21 +13,21 @@
 void
 CNInitValuePool(struct CNValuePool * dst, struct CNListPool * lpool)
 {
-        CNInitElementPool(&(dst->elementPool), sizeof(struct CNValue), 1024, lpool) ;
+        CNInitScalarPool(&(dst->ScalarPool), sizeof(struct CNValue), 1024, lpool) ;
         CNInitArrayPool(&(dst->arrayPool), sizeof(struct CNValue), lpool) ;
 }
 
 void
 CNFreeValuePool(struct CNValuePool * dst)
 {
-        CNFreeElementPool(&(dst->elementPool)) ;
+        CNFreeScalarPool(&(dst->ScalarPool)) ;
         CNFreeArrayPool(&(dst->arrayPool)) ;
 }
 
 static struct CNValue *
 CNValueAllocate(CNValueType vtype, uint32_t size, struct CNValuePool * vpool)
 {
-        struct CNValue * newval = CNAllocateElement(&(vpool->elementPool)) ;
+        struct CNValue * newval = CNAllocateScalar(&(vpool->ScalarPool)) ;
         newval->attribute       = CNMakeValueAttribute(vtype, size) ;
         return newval ;
 }

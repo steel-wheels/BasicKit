@@ -43,6 +43,7 @@ bool UTArrayPool(void)
 
         printf("(%s) Final state\n", __func__) ;
         CNFreeArrayPool(&apool) ;
+        CNFreeListPool(&lpool) ;
 
         return result ;
 }

@@ -12,7 +12,7 @@
 #import <BasicKit/CNList.h>
 #import <BasicKit/CNString.h>
 #import <BasicKit/CNArray.h>
-#import <BasicKit/CNElementPool.h>
+#import <BasicKit/CNScalarPool.h>
 #import <BasicKit/CNArrayPool.h>
 
 typedef enum {
@@ -64,7 +64,7 @@ CNSetVoidValue(struct CNValue * dst)
 }
 
 struct CNValuePool {
-        struct CNElementPool    elementPool ;
+        struct CNScalarPool    ScalarPool ;
         struct CNArrayPool      arrayPool ;
 } ;
 
