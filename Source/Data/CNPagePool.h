@@ -27,6 +27,9 @@ CNInitPagePool(struct CNPagePool * dst, struct CNListPool * lpool) ;
 void
 CNFreePagePool(struct CNPagePool * dst) ;
 
+void
+CNDumpPagePool(unsigned int indent, const struct CNPagePool * src) ;
+
 void *
 CNAllocatePage(struct CNPagePool * src, size_t reqsize) ;
 

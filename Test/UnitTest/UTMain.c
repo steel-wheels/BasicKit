@@ -6,6 +6,7 @@
  */
 
 #include "UTList.h"
+#include "UTArrayPool.h"
 #include "UTValue.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,10 +16,11 @@ int main(int argc, char * argv[])
         printf("Hello world\n") ;
 
         bool result0 = UTList() ;
-        bool result1 = UTValue() ;
+        bool result1 = UTArrayPool() ;
+        bool result2 = UTValue() ;
 
         int ecode ;
-        bool result = result0 && result1 ;
+        bool result = result0 && result1 && result2 ;
         if(result) {
                 printf("SUMMARY: OK\n") ;
                 ecode = 0 ;

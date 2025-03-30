@@ -5,7 +5,6 @@
  *   Copyright (C) 2025 Steel Wheels Project
  */
 
-
 #import <BasicKit/CNElementPool.h>
 
 static struct CNList *

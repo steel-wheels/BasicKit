@@ -29,15 +29,21 @@ bool UTValue(void)
         CNInitValuePool(&valpool, &listpool) ;
         CNDumpListPool(0, &listpool) ;
 
-        /*  */
+        char str[101] ;
+        for(unsigned int i=0 ; i<100 ; i++) {
+                str[i] = '0' + (i % 10) ;
+        }
+        str[100] = '\0' ;
 
         struct CNValue * val0 = CNAllocateInt64(1234, &valpool) ;
         struct CNValue * val1 = CNAllocateInt64(12.34, &valpool) ;
         struct CNValue * val2 = CNAllocateString("hello", &valpool) ;
+        struct CNValue * val3 = CNAllocateString(str, &valpool) ;
 
         printf("val0 = ") ; CNValueDump(0, val0) ;
         printf("val1 = ") ; CNValueDump(0, val1) ;
         printf("val2 = ") ; CNValueDump(0, val2) ;
+        printf("val3 = ") ; CNValueDump(0, val3) ;
 
         /*  */
 

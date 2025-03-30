@@ -43,4 +43,7 @@ CNFreeArray(struct CNArrayPool * src, unsigned int elmnum, void * data)
         CNFreePage(&(src->pagePool), datasize, data) ;
 }
 
+void
+CNDumpArrayPool(unsigned int indent, const struct CNArrayPool * src) ;
+
 #endif /* CNARRAYPOOL_H */

@@ -48,6 +48,8 @@
 		05B2DA792D97F5C7006A75F1 /* CNUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B2DA762D97F5C7006A75F1 /* CNUtils.h */; };
 		05B2DA7A2D97F5C7006A75F1 /* CNUtils.c in Sources */ = {isa = PBXBuildFile; fileRef = 05B2DA772D97F5C7006A75F1 /* CNUtils.c */; };
 		05B2DA7B2D97F5C7006A75F1 /* CNUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B2DA762D97F5C7006A75F1 /* CNUtils.h */; };
+		05B2DA832D98BAE3006A75F1 /* CNArrayPool.c in Sources */ = {isa = PBXBuildFile; fileRef = 05B2DA822D98BAE3006A75F1 /* CNArrayPool.c */; };
+		05B2DA842D98BAE3006A75F1 /* CNArrayPool.c in Sources */ = {isa = PBXBuildFile; fileRef = 05B2DA822D98BAE3006A75F1 /* CNArrayPool.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +105,7 @@
 		05B2DA712D9769FF006A75F1 /* CNPagePool.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNPagePool.c; sourceTree = "<group>"; };
 		05B2DA762D97F5C7006A75F1 /* CNUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNUtils.h; sourceTree = "<group>"; };
 		05B2DA772D97F5C7006A75F1 /* CNUtils.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNUtils.c; sourceTree = "<group>"; };
+		05B2DA822D98BAE3006A75F1 /* CNArrayPool.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNArrayPool.c; sourceTree = "<group>"; };
 		05C62FEC2D7C520C00C42DB7 /* BasicKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = BasicKit.xcframework; path = ../../../Library/Frameworks/BasicKit.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -183,6 +186,7 @@
 				050BCF002D86D07E00C05DE3 /* CNValue.h */,
 				050BCF012D86D07E00C05DE3 /* CNValue.c */,
 				05B2DA6A2D96D996006A75F1 /* CNArrayPool.h */,
+				05B2DA822D98BAE3006A75F1 /* CNArrayPool.c */,
 				05AE4AEC2D9449D20095BD66 /* CNElementPool.h */,
 				05AE4AED2D9449D20095BD66 /* CNElementPool.c */,
 				05B2DA702D9769FF006A75F1 /* CNPagePool.h */,
@@ -436,6 +440,7 @@
 				05B2DA7A2D97F5C7006A75F1 /* CNUtils.c in Sources */,
 				05B2DA662D9674D9006A75F1 /* CNArray.c in Sources */,
 				051697E02D86664700628DF6 /* CNList.c in Sources */,
+				05B2DA842D98BAE3006A75F1 /* CNArrayPool.c in Sources */,
 				05B2DA722D9769FF006A75F1 /* CNPagePool.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -458,6 +463,7 @@
 				05B2DA782D97F5C7006A75F1 /* CNUtils.c in Sources */,
 				05B2DA682D9674D9006A75F1 /* CNArray.c in Sources */,
 				051697E22D86664800628DF6 /* CNList.c in Sources */,
+				05B2DA832D98BAE3006A75F1 /* CNArrayPool.c in Sources */,
 				05B2DA742D9769FF006A75F1 /* CNPagePool.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
