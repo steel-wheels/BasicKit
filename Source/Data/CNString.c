@@ -10,11 +10,20 @@
 #import <stdio.h>
 
 void
-CNFreeString(struct CNValuePool * pool, struct CNString * dst)
+CNRetainString(struct CNString * dst)
 {
         struct CNValue * next = dst->next ;
         if(next != NULL){
-                CNFreeValue(pool, next) ;
+                CNRetainValue(next) ;
+        }
+}
+
+void
+CNReleaseString(struct CNValuePool * pool, struct CNString * dst)
+{
+        struct CNValue * next = dst->next ;
+        if(next != NULL){
+                CNReleaseValue(pool, next) ;
         }
 }
 

@@ -12,10 +12,28 @@
 #include <stdio.h>
 
 void
-CNFreeArray(struct CNValuePool * pool, struct CNArray * dst)
+CNRetainArray(struct CNArray * dst)
 {
-        uint32_t         count  = dst->count ;
         struct CNValue * values = dst->values ;
+        uint32_t        count  = dst->count ;
+
+        struct CNValue * ptr    = values ;
+        struct CNValue * endptr = ptr + count ;
+        for( ; ptr < endptr ; ptr++){
+                CNRetainValue(values) ;
+        }
+}
+
+void
+CNReleaseArray(struct CNValuePool * pool, struct CNArray * dst)
+{
+        uint32_t        count  = dst->count ;
+        struct CNValue * values = dst->values ;
+        struct CNValue * ptr    = values ;
+        struct CNValue * endptr = ptr + count ;
+        for( ; ptr < endptr ; ptr++){
+                CNReleaseValue(pool, ptr) ;
+        }
         CNFreeArrayData(&(pool->arrayPool), count, values) ;
 }
 

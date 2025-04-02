@@ -38,8 +38,8 @@ bool UTValue(void)
         printf("val1 = ") ; CNDumpValue(0, val1) ;
 
         printf("(%s) Free state\n", __func__) ;
-        CNFreeValue(&valpool, val0) ;
-        CNFreeValue(&valpool, val1) ;
+        CNReleaseValue(&valpool, val0) ;
+        CNReleaseValue(&valpool, val1) ;
 
         CNDumpListPool(0, &listpool) ;
         CNFreeValuePool(&valpool) ;

@@ -27,7 +27,7 @@ bool UTArrayPool(void)
         printf("(%s) Allocate state\n", __func__) ;
         CNDumpValuePool(0, &vpool) ;
 
-        CNFreeValue(&vpool, values) ;
+        CNReleaseValue(&vpool, values) ;
         printf("(%s) Free state\n", __func__) ;
         CNDumpValuePool(0, &vpool) ;
 

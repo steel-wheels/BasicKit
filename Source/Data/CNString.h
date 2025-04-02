@@ -18,7 +18,10 @@ struct CNString {
 } ;
 
 void
-CNFreeString(struct CNValuePool * pool, struct CNString * dst) ;
+CNRetainString(struct CNString * dst) ;
+
+void
+CNReleaseString(struct CNValuePool * pool, struct CNString * dst) ;
 
 void
 CNDumpString(uint32_t count, const struct CNString * src) ;

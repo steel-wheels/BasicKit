@@ -34,7 +34,7 @@ bool UTString(void)
         CNDumpValuePool(0, &vpool) ;
 
         printf("(%s) Free state\n", __func__) ;
-        CNFreeValue(&vpool, str0) ;
+        CNReleaseValue(&vpool, str0) ;
         CNDumpValuePool(0, &vpool) ;
         
         printf("(%s) Final state\n", __func__) ;

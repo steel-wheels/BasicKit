@@ -137,7 +137,10 @@ struct CNValue *
 CNAllocateArray(uint32_t count, struct CNValuePool * pool) ;
 
 void
-CNFreeValue(struct CNValuePool * pool, struct CNValue * dst) ;
+CNRetainValue(struct CNValue * dst) ;
+
+void
+CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst) ;
 
 void
 CNDumpValue(unsigned int indent, const struct CNValue * src) ;

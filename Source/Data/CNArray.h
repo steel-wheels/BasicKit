@@ -16,7 +16,10 @@ struct CNArray {
 } ;
 
 void
-CNFreeArray(struct CNValuePool * pool, struct CNArray * dst) ;
+CNRetainArray(struct CNArray * dst) ;
+
+void
+CNReleaseArray(struct CNValuePool * pool, struct CNArray * dst) ;
 
 void
 CNArrayDump(unsigned int indent, uint32_t count, const struct CNArray * src) ;

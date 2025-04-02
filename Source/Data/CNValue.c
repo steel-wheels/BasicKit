@@ -130,7 +130,34 @@ CNAllocateArray(uint32_t count, struct CNValuePool * pool)
 }
 
 void
-CNFreeValue(struct CNValuePool * pool, struct CNValue * dst)
+CNRetainValue(struct CNValue * dst)
+{
+        struct CNValueAttribute attr = CNIntToValueAttribute(dst->attribute) ;
+
+        /* update element */
+        switch(attr.valueType) {
+                case CNVoidValueType:
+                case CNCharValueType:
+                case CNIntValueType:
+                case CNFloatValueType: {
+                } break ;
+                case CNStringValueType: {
+                        CNRetainString(&(dst->stringValue)) ;
+                } break ;
+                case CNArrayValueType: {
+                        CNRetainArray(&(dst->arrayValue)) ;
+                } break ;
+        }
+
+        /* update reference count */
+        if(attr.frameLocked){
+                attr.referenceCount += 1 ;
+                dst->attribute = CNValueAttributeToInt(&attr) ;
+        }
+}
+
+void
+CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
 {
         struct CNValueAttribute attr = CNIntToValueAttribute(dst->attribute) ;
         if(attr.referenceCount > 1) {
@@ -144,10 +171,10 @@ CNFreeValue(struct CNValuePool * pool, struct CNValue * dst)
                 case CNFloatValueType: {
                 } break ;
                 case CNStringValueType: {
-                        CNFreeString(pool, &(dst->stringValue)) ;
+                        CNReleaseString(pool, &(dst->stringValue)) ;
                 } break ;
                 case CNArrayValueType: {
-                        CNFreeArray(pool, &(dst->arrayValue)) ;
+                        CNReleaseArray(pool, &(dst->arrayValue)) ;
                 } break ;
         }
         /* release the value itself */
