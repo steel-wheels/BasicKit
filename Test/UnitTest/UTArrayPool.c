@@ -15,23 +15,24 @@ bool UTArrayPool(void)
         struct CNListPool lpool ;
         CNInitListPool(&lpool) ;
 
-        struct CNArrayPool apool ;
-        CNInitArrayPool(&apool, sizeof(struct CNValue), &lpool) ;
+        struct CNValuePool vpool ;
+        CNInitValuePool(&vpool, &lpool) ;
+
         printf("(%s) Initial state\n", __func__) ;
-        CNDumpArrayPool(0, &apool) ;
+        CNDumpValuePool(0, &vpool) ;
 
         unsigned int elmnum = 256 ;
         struct CNValue * values ;
-        values = CNAllocateArray(&apool, elmnum) ;
+        values = CNAllocateArray(elmnum, &vpool) ;
         printf("(%s) Allocate state\n", __func__) ;
-        CNDumpArrayPool(0, &apool) ;
+        CNDumpValuePool(0, &vpool) ;
 
-        CNFreeArray(&apool, elmnum, values) ;
+        CNFreeValue(&vpool, values) ;
         printf("(%s) Free state\n", __func__) ;
-        CNDumpArrayPool(0, &apool) ;
+        CNDumpValuePool(0, &vpool) ;
 
         struct CNValue * rvalues ;
-        rvalues = CNAllocateArray(&apool, elmnum) ;
+        rvalues = CNAllocateArray(elmnum, &vpool) ;
         printf("(%s) Re-allocate state\n", __func__) ;
         if(values == rvalues){
                 printf("(%s) reused ... OK\n", __func__) ;
@@ -39,10 +40,10 @@ bool UTArrayPool(void)
                 printf("(%s) notreused ... Error\n", __func__) ;
                 result = false ;
         }
-        CNDumpArrayPool(0, &apool) ;
+        CNDumpValuePool(0, &vpool) ;
 
         printf("(%s) Final state\n", __func__) ;
-        CNFreeArrayPool(&apool) ;
+        CNFreeValuePool(&vpool) ;
         CNFreeListPool(&lpool) ;
 
         return result ;

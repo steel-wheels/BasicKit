@@ -34,10 +34,16 @@ CNDumpValuePool(unsigned int indent, const struct CNValuePool * src)
 }
 
 static struct CNValue *
-CNValueAllocate(CNValueType vtype, size_t size, struct CNValuePool * vpool)
+CNValueAllocate(CNValueType vtype, uint32_t size, struct CNValuePool * vpool)
 {
+        struct CNValueAttribute attr = {
+                 .frameLocked           = false,
+                 .valueType             = vtype,
+                 .referenceCount        = 1,
+                 .size                  = size
+        } ;
         struct CNValue * newval = CNAllocateScalar(&(vpool->scalarPool)) ;
-        newval->attribute       = CNMakeValueAttribute(vtype, size) ;
+        newval->attribute       = CNValueAttributeToInt(&attr) ;
         return newval ;
 }
 
@@ -74,7 +80,7 @@ CNAllocateUUInt64(uint64_t num, struct CNValuePool * pool)
 struct CNValue *
 CNAllocateFloat(double num, struct CNValuePool * pool)
 {
-        struct CNValue * val = CNValueAllocate(CNIntValueType, sizeof(uint64_t), pool) ;
+        struct CNValue * val = CNValueAllocate(CNIntValueType, sizeof(double), pool) ;
         val->floatValue = num ;
         return val ;
 }
@@ -87,7 +93,7 @@ initString(struct CNString * dst, struct CNValue * next, size_t len, const char 
 }
 
 struct CNValue *
-CNAllocateString(const char * str, size_t len, struct CNValuePool * pool)
+CNAllocateString(const char * str, uint32_t len, struct CNValuePool * pool)
 {
         if(len > CNSTRING_ELEMENT_NUM) {
                 struct CNValue * newval = CNValueAllocate(CNStringValueType, len,  pool) ;
@@ -105,10 +111,33 @@ CNAllocateString(const char * str, size_t len, struct CNValuePool * pool)
         }
 }
 
+struct CNValue *
+CNAllocateArray(uint32_t count, struct CNValuePool * pool)
+{
+        struct CNValue * val  = CNValueAllocate(CNArrayValueType, count, pool) ;
+
+        struct CNValue * data = CNAllocateArrayData(&(pool->arrayPool), count) ;
+        for(unsigned int i=0 ; i<count ; i++){
+                struct CNValue * elm = &(data[i]) ;
+                CNSetVoidValue(elm, true) ;
+        }
+        struct CNArray array = {
+                .count  = count,
+                .values = data
+        } ;
+        val->arrayValue = array ;
+        return val ;
+}
+
 void
 CNFreeValue(struct CNValuePool * pool, struct CNValue * dst)
 {
-        switch(CNTypeOfValue(dst)) {
+        struct CNValueAttribute attr = CNIntToValueAttribute(dst->attribute) ;
+        if(attr.referenceCount > 1) {
+                dst->attribute = CNValueAttributeToInt(&attr) ;
+                return ;
+        }
+        switch(attr.valueType) {
                 case CNVoidValueType:
                 case CNCharValueType:
                 case CNIntValueType:
@@ -118,18 +147,22 @@ CNFreeValue(struct CNValuePool * pool, struct CNValue * dst)
                         CNFreeString(pool, &(dst->stringValue)) ;
                 } break ;
                 case CNArrayValueType: {
-                        uint32_t count = (dst->arrayValue).count ;
-                        struct CNValue * values = (dst->arrayValue).values ;
-                        CNFreeArray(&(pool->arrayPool), count, values) ;
+                        CNFreeArray(pool, &(dst->arrayValue)) ;
                 } break ;
-
+        }
+        /* release the value itself */
+        if(attr.frameLocked){
+                CNSetVoidValue(dst, true) ;
+        } else {
+                CNFreeScalar(&(pool->scalarPool), dst) ;
         }
 }
 
 void
 CNDumpValue(unsigned int indent, const struct CNValue * src)
 {
-        switch(CNTypeOfValue(src)){
+        struct CNValueAttribute attr = CNIntToValueAttribute(src->attribute) ;
+        switch(attr.valueType){
                 case CNVoidValueType: {
                         CNDumpIndent(indent) ;
                         fputs("nil\n", stdout) ;
@@ -149,16 +182,17 @@ CNDumpValue(unsigned int indent, const struct CNValue * src)
                 case CNStringValueType: {
                         CNDumpIndent(indent) ;
                         printf("\"") ;
-                        CNDumpString(CNSizeOfValue(src), &(src->stringValue)) ;
+                        CNDumpString(attr.size, &(src->stringValue)) ;
                         fputs("\"\n", stdout) ;
                 } break ;
                 case CNArrayValueType: {
-                        unsigned int num = CNSizeOfValue(src) ;
+                        unsigned int num = attr.size ;
                         CNDumpIndent(indent) ;
                         printf("%u [\n", num) ;
-                        struct CNValue * values = (src->arrayValue).values ;
-                        for(unsigned int i=0 ; i<num ; i++) {
-                                CNDumpValue(indent+1, &(values[i])) ;
+                        const struct CNValue * values = (src->arrayValue).values ;
+                        const struct CNValue * endval = values + num ;
+                        for( ; values < endval ; values++){
+                                CNDumpValue(indent+1, values) ;
                         }
                         CNDumpIndent(indent) ;
                         printf("]\n") ;

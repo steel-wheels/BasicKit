@@ -22,13 +22,13 @@ bool UTString(void)
 
         printf("(%s) Allocate state\n", __func__) ;
         const char * src0 = "Hello, world !!" ;
-        size_t       len0 = strlen(src0) ;
+        uint32_t     len0 = (uint32_t) strlen(src0) ;
         struct CNValue * str0 = CNAllocateString(src0, len0, &vpool) ;
         CNDumpValue(0, str0) ;
         if(CNLengthOfString(str0) == len0) {
-                printf("(%s) len = %lu ... OK\n", __func__, len0) ;
+                printf("(%s) len = %u ... OK\n", __func__, len0) ;
         } else {
-                printf("(%s) len = %lu ... Error\n", __func__, len0) ;
+                printf("(%s) len = %u ... Error\n", __func__, len0) ;
                 result = false ;
         }
         CNDumpValuePool(0, &vpool) ;

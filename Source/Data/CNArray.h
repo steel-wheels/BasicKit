@@ -11,9 +11,12 @@
 #import <BasicKit/CNType.h>
 
 struct CNArray {
-        uint32_t                count ;
-        struct CNValue *        values ;
+        uint32_t               count ;
+        struct CNValue *       values ;
 } ;
+
+void
+CNFreeArray(struct CNValuePool * pool, struct CNArray * dst) ;
 
 void
 CNArrayDump(unsigned int indent, uint32_t count, const struct CNArray * src) ;

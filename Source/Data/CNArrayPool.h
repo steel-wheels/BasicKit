@@ -30,14 +30,14 @@ CNFreeArrayPool(struct CNArrayPool * dst)
 }
 
 static inline void *
-CNAllocateArray(struct CNArrayPool * src, unsigned int elmnum)
+CNAllocateArrayData(struct CNArrayPool * src, unsigned int elmnum)
 {
-        size_t reqsize  = src->elementSize * elmnum ;
+        size_t reqsize = src->elementSize * elmnum ;
         return CNAllocatePage(&(src->pagePool), reqsize) ;
 }
 
 static inline void
-CNFreeArray(struct CNArrayPool * src, unsigned int elmnum, void * data)
+CNFreeArrayData(struct CNArrayPool * src, unsigned int elmnum, void * data)
 {
         size_t datasize = src->elementSize * elmnum ;
         CNFreePage(&(src->pagePool), datasize, data) ;
