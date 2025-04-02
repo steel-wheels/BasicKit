@@ -29,7 +29,7 @@ int main(int argc, char * argv[])
                 printf("SUMMARY: OK\n") ;
                 ecode = 0 ;
         } else {
-                printf("SUMMARY: Error") ;
+                printf("SUMMARY: Error\n") ;
                 ecode = 1 ;
         }
         exit(ecode) ;

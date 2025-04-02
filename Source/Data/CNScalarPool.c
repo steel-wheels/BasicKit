@@ -42,11 +42,9 @@ CNDumpScalarPool(unsigned int indent, const struct CNScalarPool * src)
         for(struct CNList * list = src->freeList ; list != NULL ; list = list->next) {
                 freenum += 1 ;
         }
-
-        CNDumpIndent(indent) ;
-        printf("ScalarPool: elementSize = %lu\n", src->elementSize) ;
-        printf("ScalarPool: elementNum  = %u\n",  src->elementNum) ;
-        printf("ScalarPool: freeNum     = %u\n",  freenum) ;
+        CNDumpIndent(indent) ; printf("ScalarPool: elementSize = %lu\n", src->elementSize) ;
+        CNDumpIndent(indent) ; printf("ScalarPool: elementNum  = %u\n",  src->elementNum) ;
+        CNDumpIndent(indent) ; printf("ScalarPool: freeNum     = %u\n",  freenum) ;
         CNDumpPagePool(indent+1, &(src->pagePool)) ;
 }
 
@@ -94,3 +92,12 @@ CNFreeScalar(struct CNScalarPool * src, void * data)
         src->freeList   = list ;
 }
 
+unsigned int
+CNCountOfFreeItemsInScalarPool(const struct CNScalarPool * src)
+{
+        unsigned int result = 0 ;
+        for(struct CNList * list = src->freeList ; list != NULL ; list = list->next){
+                result += 1 ;
+        }
+        return result ;
+}

@@ -12,19 +12,37 @@
 bool UTList(void)
 {
         printf("UTList: start\n") ;
+        bool result = true ;
 
-        struct CNListPool       listpool ;
-        CNInitListPool(&listpool) ;
-        CNDumpListPool(0, &listpool) ;
+        struct CNListPool       lpool ;
+        CNInitListPool(&lpool) ;
+        CNDumpListPool(0, &lpool) ;
+        unsigned int fcount_1st = CNCountOfFreeItemsInListPool(&lpool) ;
 
-        struct CNList * item = CNAllocateList(&listpool) ;
-        CNDumpListPool(0, &listpool) ;
+#       define ITEM_NUM         10
+        struct CNList * items[ITEM_NUM] ;
+        for(unsigned int i=0 ; i<ITEM_NUM ; i++){
+                items[i] = CNAllocateList(&lpool) ;
+        }
+        CNDumpListPool(0, &lpool) ;
+        unsigned int fcount_mid = CNCountOfFreeItemsInListPool(&lpool) ;
 
-        CNFreeList(&listpool, item) ;
-        CNDumpListPool(0, &listpool) ;
+        for(unsigned int i=0 ; i<ITEM_NUM ; i++){
+                CNFreeList(&lpool, items[i]) ;
+        }
+        CNDumpListPool(0, &lpool) ;
+        unsigned int fcount_last = CNCountOfFreeItemsInListPool(&lpool) ;
 
-        CNFreeListPool(&listpool) ;
+        CNFreeListPool(&lpool) ;
 
+        if(fcount_1st != fcount_last){
+                printf("(%s) [Error] Invalid last count\n", __func__) ;
+                result = false ;
+        }
+        if(fcount_1st != fcount_mid + ITEM_NUM) {
+                printf("(%s) [Error] Invalid middle count\n", __func__) ;
+                result = false ;
+        }
         printf("UTList: end\n") ;
-        return true ;
+        return result ;
 }

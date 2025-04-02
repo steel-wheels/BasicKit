@@ -38,4 +38,7 @@ CNAllocateList(struct CNListPool * pool) ;
 void
 CNFreeList(struct CNListPool * pool, struct CNList * dst) ;
 
+unsigned int
+CNCountOfFreeItemsInListPool(const struct CNListPool * src) ;
+
 #endif /* CNLIST_H */

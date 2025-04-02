@@ -46,4 +46,10 @@ CNFreeArrayData(struct CNArrayPool * src, unsigned int elmnum, void * data)
 void
 CNDumpArrayPool(unsigned int indent, const struct CNArrayPool * src) ;
 
+static inline unsigned int
+CNCountOfFreeItemsInArrayPool(const struct CNArrayPool * src)
+{
+        return CNCountOfFreeItemsInPagePool(&(src->pagePool)) ;
+}
+
 #endif /* CNARRAYPOOL_H */

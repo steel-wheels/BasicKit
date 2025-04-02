@@ -106,6 +106,18 @@ CNInitValuePool(struct CNValuePool * dst, struct CNListPool * lpool) ;
 void
 CNFreeValuePool(struct CNValuePool * dst) ;
 
+static inline unsigned int
+CNCountOfFreeScalarItemsInValuePool(const struct CNValuePool * src)
+{
+        return CNCountOfFreeItemsInScalarPool(&(src->scalarPool)) ;
+}
+
+static inline unsigned int
+CNCountOfFreeArrayItemsInValuePool(const struct CNValuePool * src)
+{
+        return CNCountOfFreeItemsInArrayPool(&(src->arrayPool)) ;
+}
+
 void
 CNDumpValuePool(unsigned int indent, const struct CNValuePool * src) ;
 

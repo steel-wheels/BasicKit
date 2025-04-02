@@ -15,10 +15,12 @@ bool UTScalarPool(void)
         printf("(%s) Initial state\n", __func__) ;
         struct CNListPool lpool ;
         CNInitListPool(&lpool) ;
+        unsigned int lcount_init = CNCountOfFreeItemsInListPool(&lpool) ;
 
         struct CNScalarPool spool ;
         CNInitScalarPool(&spool, sizeof(struct CNValue), 1024, &lpool) ;
         CNDumpScalarPool(0, &spool) ;
+        unsigned int freescaler_init = CNCountOfFreeItemsInScalarPool(&spool) ;
 
         printf("(%s) Allocate state\n", __func__) ;
 #       define VALUE_NUM        64
@@ -33,10 +35,23 @@ bool UTScalarPool(void)
                 CNFreeScalar(&spool, values[i]) ;
         }
         CNDumpScalarPool(0, &spool) ;
-        
+
         printf("(%s) Final state\n", __func__) ;
+        unsigned int freescaler_last = CNCountOfFreeItemsInScalarPool(&spool) ;
         CNFreeScalarPool(&spool) ;
+        unsigned int lcount_last = CNCountOfFreeItemsInListPool(&lpool) ;
         CNFreeListPool(&lpool) ;
+
+        if(lcount_init != lcount_last) {
+                printf("(%s) [Error] Invalid last count %u <=> %u\n",
+                       __func__, lcount_init, lcount_last) ;
+                result = false ;
+        }
+        if(freescaler_init != freescaler_last) {
+                printf("(%s) [Error] Invalid last count %u <=> %u\n",
+                       __func__, freescaler_init, freescaler_last) ;
+                result = false ;
+        }
 
         return result ;
 }

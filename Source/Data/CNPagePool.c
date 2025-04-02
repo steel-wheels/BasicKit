@@ -72,3 +72,13 @@ CNFreePage(struct CNPagePool * src, size_t size, void * data)
         list->next      = src->freeList ;
         src->freeList   = list ;
 }
+
+unsigned int
+CNCountOfFreeItemsInPagePool(const struct CNPagePool * src)
+{
+        unsigned int result = 0 ;
+        for(struct CNList * list = src->freeList ; list != NULL ; list = list->next){
+                result += 1 ;
+        }
+        return result ;
+}
