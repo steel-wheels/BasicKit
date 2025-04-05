@@ -7,7 +7,7 @@
 
 #import <BasicKit/CNString.h>
 #import <BasicKit/CNValue.h>
-#import <stdio.h>
+#import <BasicKit/CNInterface.h>
 #import <string.h>
 
 #define MIN(A, B)       ((A) < (B) ? (A) : (B))
@@ -36,7 +36,7 @@ CNCompareString(uint32_t len0, const struct CNString * s0, uint32_t len1, const 
                 s1   =  s1->next ? &(s1->next->stringValue) : NULL ;
                 len0 -= sublen ;
                 if(len0 > 0 && (s0 == NULL || s1 == NULL)){
-                        fprintf(stderr, "[Error] Null pointer reference at %s\n", __func__) ;
+                        CNInterface()->printf("[Error] Null pointer reference at %s\n", __func__) ;
                 }
         }
         return 0 ;
@@ -64,9 +64,12 @@ static inline void
 CNDumpStringElement(uint32_t count, const struct CNString * src)
 {
         unsigned int i ;
+        char buffer[CNSTRING_ELEMENT_NUM+1] ;
         for(i=0 ; i<count ; i++){
-                fputc(src->buffer[i], stdout) ;
+                buffer[i] = src->buffer[i] ;
         }
+        buffer[i] = '\0' ;
+        CNInterface()->printf(buffer) ;
 }
 
 void
@@ -78,7 +81,7 @@ CNDumpString(uint32_t count, const struct CNString * src)
                 if(next != NULL){
                         CNDumpString(count - CNSTRING_ELEMENT_NUM, &(next->stringValue)) ;
                 } else {
-                        printf("<INTERNAL_ERROR>") ;
+                        CNInterface()->error("[Error] at %s", __func__) ;
                 }
         } else {
                 CNDumpStringElement(count, src) ;

@@ -37,6 +37,7 @@ UTDictionary(void)
         setDictionary(&(dict0->dictionaryValue), "D", 45.6, &vpool) ;
         setDictionary(&(dict0->dictionaryValue), "E", 56.7, &vpool) ;
         CNDumpValue(0, dict0) ;
+        CNDumpValuePool(0, &vpool) ;
 
         struct CNValue * rev0 = searchValueInDictionary(&(dict0->dictionaryValue), "A", &vpool) ;
         if(rev0 != NULL){
@@ -66,12 +67,6 @@ UTDictionary(void)
                        __func__, scalar_init, scalar_last) ;
                 result = false ;
         }
-        /*
-        if(scalar_mid != scalar_init - 1) {
-                printf("(%s) [Error] Invalid mid scalar count %u <=> %u\n",
-                       __func__, scalar_init, scalar_last) ;
-                result = false ;
-        }*/
 
         return result ;
 }

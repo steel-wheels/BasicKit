@@ -6,8 +6,8 @@
  */
 
 #import <BasicKit/CNScalarPool.h>
+#import <BasicKit/CNInterface.h>
 #import <BasicKit/CNUtils.h>
-#include <stdio.h>
 
 static struct CNList *
 allocateScalars(struct CNScalarPool * dst) ;
@@ -42,9 +42,9 @@ CNDumpScalarPool(unsigned int indent, const struct CNScalarPool * src)
         for(struct CNList * list = src->freeList ; list != NULL ; list = list->next) {
                 freenum += 1 ;
         }
-        CNDumpIndent(indent) ; printf("ScalarPool: elementSize = %lu\n", src->elementSize) ;
-        CNDumpIndent(indent) ; printf("ScalarPool: elementNum  = %u\n",  src->elementNum) ;
-        CNDumpIndent(indent) ; printf("ScalarPool: freeNum     = %u\n",  freenum) ;
+        CNDumpIndent(indent) ; CNInterface()->printf("ScalarPool: elementSize = %lu\n", src->elementSize) ;
+        CNDumpIndent(indent) ; CNInterface()->printf("ScalarPool: elementNum  = %u\n",  src->elementNum) ;
+        CNDumpIndent(indent) ; CNInterface()->printf("ScalarPool: freeNum     = %u\n",  freenum) ;
         CNDumpPagePool(indent+1, &(src->pagePool)) ;
 }
 

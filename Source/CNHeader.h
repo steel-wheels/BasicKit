@@ -6,7 +6,13 @@
  */
 
 #import <BasicKit/CNType.h>
+#import <BasicKit/CNInterface.h>
 #import <BasicKit/CNList.h>
+#import <BasicKit/CNArrayPool.h>
+#import <BasicKit/CNScalarPool.h>
+#import <BasicKit/CNPagePool.h>
+#import <BasicKit/CNArray.h>
 #import <BasicKit/CNString.h>
+#import <BasicKit/CNDictionary.h>
 #import <BasicKit/CNValue.h>
 

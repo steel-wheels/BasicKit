@@ -9,7 +9,6 @@
 #import <BasicKit/CNArrayPool.h>
 #import <BasicKit/CNValue.h>
 #import <BasicKit/CNUtils.h>
-#include <stdio.h>
 
 int
 CNCompareArray(const struct CNArray * s0, const struct CNArray * s1)

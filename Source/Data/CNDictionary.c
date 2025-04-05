@@ -7,8 +7,8 @@
 
 #import <BasicKit/CNDictionary.h>
 #import <BasicKit/CNValue.h>
+#import <BasicKit/CNInterface.h>
 #import <BasicKit/CNUtils.h>
-#import <stdio.h>
 
 static unsigned int
 CNNumberOfElementsInDictionary(const struct CNDictionary * src) ;
@@ -184,9 +184,9 @@ CNDumpDictionary(unsigned int indent, const struct CNDictionary * src)
         for(unsigned int i=0 ; i < CNDICTIONARY_ELEMENT_NUM ; i++){
                 const struct CNDictionaryElement * elm = &(src->elements[i]) ;
                 if(elm->key != NULL && elm->value) {
-                        CNDumpIndent(indent) ; fputs("key:   ", stdout) ;
+                        CNDumpIndent(indent) ; CNInterface()->printf("key:   ") ;
                         CNDumpValue(0, elm->key) ;
-                        CNDumpIndent(indent) ; fputs("value: ", stdout) ;
+                        CNDumpIndent(indent) ; CNInterface()->printf("value: ") ;
                         CNDumpValue(0, elm->value) ;
                 }
 

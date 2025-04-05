@@ -6,9 +6,9 @@
  */
 
 #import <BasicKit/CNPagePool.h>
+#import <BasicKit/CNInterface.h>
 #import <BasicKit/CNUtils.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 void
 CNInitPagePool(struct CNPagePool * dst, struct CNListPool * lpool)
@@ -38,7 +38,7 @@ CNDumpPagePool(unsigned int indent, const struct CNPagePool * src)
                 freenum += 1 ;
         }
         CNDumpIndent(indent) ;
-        printf("PagePool: free-num = %u\n", freenum) ;
+        CNInterface()->printf("PagePool: free-num = %u\n", freenum) ;
         CNDumpListPool(indent+1, src->listPool) ;
 }
 
