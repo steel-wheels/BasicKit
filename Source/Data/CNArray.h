@@ -15,6 +15,9 @@ struct CNArray {
         struct CNValue *       values ;
 } ;
 
+int
+CNCompareArray(const struct CNArray * s0, const struct CNArray * s1) ;
+
 void
 CNRetainArray(struct CNArray * dst) ;
 

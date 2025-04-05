@@ -8,6 +8,39 @@
 #import <BasicKit/CNString.h>
 #import <BasicKit/CNValue.h>
 #import <stdio.h>
+#import <string.h>
+
+#define MIN(A, B)       ((A) < (B) ? (A) : (B))
+
+static int
+CNCompareStringElement(uint32_t len, const struct CNString * s0, const struct CNString * s1)
+{
+        return memcmp(s0->buffer, s1->buffer, len) ;
+}
+
+int
+CNCompareString(uint32_t len0, const struct CNString * s0, uint32_t len1, const struct CNString * s1)
+{
+        if(len0 > len1){
+                return 1 ;
+        } else if(len0 < len1) {
+                return -1 ;
+        }
+        while(len0 > 0) {
+                int sublen = MIN(len0, CNSTRING_ELEMENT_NUM) ;
+                int res = CNCompareStringElement(sublen, s0, s1) ;
+                if(res != 0){
+                        return res ;
+                }
+                s0   =  s0->next ? &(s0->next->stringValue) : NULL ;
+                s1   =  s1->next ? &(s1->next->stringValue) : NULL ;
+                len0 -= sublen ;
+                if(len0 > 0 && (s0 == NULL || s1 == NULL)){
+                        fprintf(stderr, "[Error] Null pointer reference at %s\n", __func__) ;
+                }
+        }
+        return 0 ;
+}
 
 void
 CNRetainString(struct CNString * dst)

@@ -9,6 +9,7 @@
 #include "UTArrayPool.h"
 #include "UTScalarPool.h"
 #include "UTString.h"
+#include "UTDictionary.h"
 #include "UTValue.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,10 +22,11 @@ int main(int argc, char * argv[])
         bool result1 = UTArrayPool() ;
         bool result2 = UTScalarPool() ;
         bool result3 = UTString() ;
-        bool result4 = UTValue() ;
+        bool result4 = UTDictionary() ;
+        bool result5 = UTValue() ;
 
         int ecode ;
-        bool result = result0 && result1 && result2 && result3 && result4 ;
+        bool result = result0 && result1 && result2 && result3 && result4 && result5 ;
         if(result) {
                 printf("SUMMARY: OK\n") ;
                 ecode = 0 ;

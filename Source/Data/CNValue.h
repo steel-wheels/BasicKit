@@ -12,6 +12,7 @@
 #import <BasicKit/CNList.h>
 #import <BasicKit/CNString.h>
 #import <BasicKit/CNArray.h>
+#import <BasicKit/CNDictionary.h>
 #import <BasicKit/CNScalarPool.h>
 #import <BasicKit/CNArrayPool.h>
 
@@ -25,7 +26,8 @@ typedef enum {
         CNIntValueType,
         CNFloatValueType,
         CNStringValueType,
-        CNArrayValueType
+        CNArrayValueType,
+        CNDictionaryValueType
 } CNValueType ;
 
 struct CNValueAttribute {
@@ -45,6 +47,7 @@ struct CNValue
                 double                  floatValue ;
                 struct CNString         stringValue ;
                 struct CNArray          arrayValue ;
+                struct CNDictionary     dictionaryValue ;
         } ; // no name
 } ;
 
@@ -147,6 +150,12 @@ CNLengthOfString(const struct CNValue * src)
 
 struct CNValue *
 CNAllocateArray(uint32_t count, struct CNValuePool * pool) ;
+
+struct CNValue *
+CNAllocateDictionary(struct CNValuePool * pool) ;
+
+int
+CNCompareValue(const struct CNValue * s0, const struct CNValue * s1) ;
 
 void
 CNRetainValue(struct CNValue * dst) ;

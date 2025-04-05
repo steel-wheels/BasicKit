@@ -29,18 +29,27 @@ CNFreeArrayPool(struct CNArrayPool * dst)
         CNFreePagePool(&(dst->pagePool)) ;
 }
 
+static inline size_t
+CNArrayPageSize(size_t elmsize, unsigned int elmnum)
+{
+        static const size_t UNIT_SIZE = 512 ;
+        size_t unum = (elmsize * elmnum + UNIT_SIZE - 1) / UNIT_SIZE ;
+        return unum * UNIT_SIZE ;
+
+}
+
 static inline void *
 CNAllocateArrayData(struct CNArrayPool * src, unsigned int elmnum)
 {
-        size_t reqsize = src->elementSize * elmnum ;
-        return CNAllocatePage(&(src->pagePool), reqsize) ;
+        size_t size = CNArrayPageSize(src->elementSize, elmnum) ;
+        return CNAllocatePage(&(src->pagePool), size) ;
 }
 
 static inline void
 CNFreeArrayData(struct CNArrayPool * src, unsigned int elmnum, void * data)
 {
-        size_t datasize = src->elementSize * elmnum ;
-        CNFreePage(&(src->pagePool), datasize, data) ;
+        size_t size = CNArrayPageSize(src->elementSize, elmnum) ;
+        CNFreePage(&(src->pagePool), size, data) ;
 }
 
 void

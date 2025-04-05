@@ -11,6 +11,28 @@
 #import <BasicKit/CNUtils.h>
 #include <stdio.h>
 
+int
+CNCompareArray(const struct CNArray * s0, const struct CNArray * s1)
+{
+        if(s0->count > s1->count){
+                return 1 ;
+        } else if(s0->count < s1->count) {
+                return -1 ;
+        }
+        // s0->count == s1->count
+        uint32_t count = s0->count ;
+        for(unsigned int i=0 ; i<count ; i++){
+                struct CNValue * v0 = &(s0->values[i]) ;
+                struct CNValue * v1 = &(s1->values[i]) ;
+
+                int res = CNCompareValue(v0, v1) ;
+                if(res != 0){
+                        return res ;
+                }
+        }
+        return 0 ; // every elements are same
+}
+
 void
 CNRetainArray(struct CNArray * dst)
 {

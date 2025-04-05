@@ -17,6 +17,9 @@ struct CNString {
         char                    buffer[CNSTRING_ELEMENT_NUM] ;
 } ;
 
+int
+CNCompareString(uint32_t len0, const struct CNString * s0, uint32_t len1, const struct CNString * s1) ;
+
 void
 CNRetainString(struct CNString * dst) ;
 
