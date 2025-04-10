@@ -32,7 +32,7 @@ typedef enum {
 } CNValueType ;
 
 struct CNValueAttribute {
-        bool            frameLocked ;           // [63:63]  1 bit
+        bool            releasable ;            // [63:63]  1 bit
         CNValueType     valueType ;             // [62:56]  7 bit
         uint32_t        referenceCount ;        // [55:28] 28 bit
         uint32_t        size ;                  // [27: 0] 28 bit
@@ -54,11 +54,11 @@ struct CNValue
 
 static inline uint64_t
 CNValueAttributeToInt(const struct CNValueAttribute * attr) {
-        uint64_t lock   = attr->frameLocked ? 1 : 0 ;
+        uint64_t rels   = attr->releasable ? 1 : 0 ;
         uint64_t type   = attr->valueType & 0x7f ;
         uint64_t refc   = attr->referenceCount & 0x0fffffff ;
         uint64_t size   = attr->size & 0x0fffffff ;
-        return    (lock << 63)
+        return    (rels << 63)
                 | (type << 56)
                 | (refc << 28)
                 | (size <<  0)
@@ -74,12 +74,12 @@ CNSizeOfValue(const struct CNValue * src)
 static inline struct CNValueAttribute
 CNIntToValueAttribute(uint64_t attr)
 {
-        uint64_t lock  = (attr >> 63) ;
+        uint64_t rels  = (attr >> 63) ;
         uint64_t type  = (attr >> 56) & 0x7f ;
         uint32_t refc  = (attr >> 28) & 0x0fffffff ;
         uint32_t size  = (attr >>  0) & 0x0fffffff ;
         struct CNValueAttribute result = {
-                .frameLocked    = (lock != 0),
+                .releasable     = (rels != 0),
                 .valueType      = (CNValueType) type,
                 .referenceCount = refc,
                 .size           = size
@@ -88,10 +88,10 @@ CNIntToValueAttribute(uint64_t attr)
 }
 
 static inline void
-CNSetNullValue(struct CNValue * dst, bool framelocked)
+CNSetNullValue(struct CNValue * dst, bool releasable)
 {
          struct CNValueAttribute attr = {
-                 .frameLocked           = framelocked,
+                 .releasable            = releasable,
                  .valueType             = CNNullType,
                  .referenceCount        = 1,
                  .size                  = 0

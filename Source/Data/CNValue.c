@@ -36,7 +36,7 @@ static struct CNValue *
 CNValueAllocate(CNValueType vtype, uint32_t size, struct CNValuePool * vpool)
 {
         struct CNValueAttribute attr = {
-                 .frameLocked           = false,
+                 .releasable            = true,
                  .valueType             = vtype,
                  .referenceCount        = 1,
                  .size                  = size
@@ -118,7 +118,7 @@ CNAllocateArray(uint32_t count, struct CNValuePool * pool)
         struct CNValue * data = CNAllocateArrayData(&(pool->arrayPool), count) ;
         for(unsigned int i=0 ; i<count ; i++){
                 struct CNValue * elm = &(data[i]) ;
-                CNSetNullValue(elm, true) ;
+                CNSetNullValue(elm, false) ;
         }
         struct CNArray array = {
                 .count  = count,
@@ -232,7 +232,7 @@ CNRetainValue(struct CNValue * dst)
         }
 
         /* update reference count */
-        if(attr.frameLocked){
+        if(!attr.releasable){
                 attr.referenceCount += 1 ;
                 dst->attribute = CNValueAttributeToInt(&attr) ;
         }
@@ -264,9 +264,8 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
                 } break ;
         }
         /* release the value itself */
-        if(attr.frameLocked){
-                CNSetNullValue(dst, true) ;
-        } else {
+        CNSetNullValue(dst, attr.releasable) ;
+        if(attr.releasable){
                 CNFreeScalar(&(pool->scalarPool), dst) ;
         }
 }
