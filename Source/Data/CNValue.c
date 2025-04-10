@@ -61,17 +61,17 @@ CNAllocateChar(char c, struct CNValuePool * pool)
 }
 
 struct CNValue *
-CNAllocateInt64(int64_t num, struct CNValuePool * pool)
+CNAllocateSignedInt(int64_t num, struct CNValuePool * pool)
 {
-        struct CNValue * val = CNValueAllocate(CNIntType, sizeof(int64_t), pool) ;
+        struct CNValue * val = CNValueAllocate(CNSignedIntType, sizeof(int64_t), pool) ;
         val->int64Value = num ;
         return val ;
 }
 
 struct CNValue *
-CNAllocateUUInt64(uint64_t num, struct CNValuePool * pool)
+CNAllocateUnsignedInt(uint64_t num, struct CNValuePool * pool)
 {
-        struct CNValue * val = CNValueAllocate(CNIntType, sizeof(uint64_t), pool) ;
+        struct CNValue * val = CNValueAllocate(CNUnsignedIntType, sizeof(uint64_t), pool) ;
         val->uint64Value = num ;
         return val ;
 }
@@ -159,9 +159,20 @@ CNCompareValue(const struct CNValue * s0, const struct CNValue * s1)
                 case CNCharType: {
                         result = s0->charValue - s1->charValue ;
                 } break ;
-                case CNIntType: {
+                case CNSignedIntType: {
                         int64_t v0 = s0->int64Value ;
                         int64_t v1 = s1->int64Value ;
+                        if(v0 > v1){
+                                result = 1 ;
+                        } else if(v0 == v1){
+                                result = 0 ;
+                        } else {
+                                result = -1 ;
+                        }
+                } break ;
+                case CNUnsignedIntType: {
+                        uint64_t v0 = s0->uint64Value ;
+                        uint64_t v1 = s1->uint64Value ;
                         if(v0 > v1){
                                 result = 1 ;
                         } else if(v0 == v1){
@@ -205,7 +216,8 @@ CNRetainValue(struct CNValue * dst)
         switch(attr.valueType) {
                 case CNNullType:
                 case CNCharType:
-                case CNIntType:
+                case CNSignedIntType:
+                case CNUnsignedIntType:
                 case CNFloatType: {
                 } break ;
                 case CNStringType: {
@@ -237,7 +249,8 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
         switch(attr.valueType) {
                 case CNNullType:
                 case CNCharType:
-                case CNIntType:
+                case CNSignedIntType:
+                case CNUnsignedIntType:
                 case CNFloatType: {
                 } break ;
                 case CNStringType: {
@@ -270,9 +283,13 @@ CNDumpValue(unsigned int indent, const struct CNValue * src)
                         CNDumpIndent(indent) ;
                         CNInterface()->printf("'%c'\n", (src->charValue)) ;
                 } break ;
-                case CNIntType: {
+                case CNSignedIntType: {
                         CNDumpIndent(indent) ;
                         CNInterface()->printf("%lld\n", (src->int64Value)) ;
+                } break ;
+                case CNUnsignedIntType: {
+                        CNDumpIndent(indent) ;
+                        CNInterface()->printf("%llu\n", (src->uint64Value)) ;
                 } break ;
                 case CNFloatType: {
                         CNDumpIndent(indent) ;

@@ -23,7 +23,8 @@
 typedef enum {
         CNNullType,
         CNCharType,
-        CNIntType,
+        CNSignedIntType,
+        CNUnsignedIntType,
         CNFloatType,
         CNStringType,
         CNArrayType,
@@ -131,10 +132,10 @@ struct CNValue *
 CNAllocateChar(char c, struct CNValuePool * pool) ;
 
 struct CNValue *
-CNAllocateInt64(int64_t val, struct CNValuePool * pool) ;
+CNAllocateSignedInt(int64_t val, struct CNValuePool * pool) ;
 
 struct CNValue *
-CNAllocateUInt64(uint64_t val, struct CNValuePool * pool) ;
+CNAllocateUnsignedInt(uint64_t val, struct CNValuePool * pool) ;
 
 struct CNValue *
 CNAllocateFloat(double val, struct CNValuePool * pool) ;

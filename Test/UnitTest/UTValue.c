@@ -31,8 +31,8 @@ bool UTValue(void)
         unsigned int scalar_init = CNCountOfFreeScalarItemsInValuePool(&valpool) ;
 
         printf("(%s) Allocate state\n", __func__) ;
-        struct CNValue * val0 = CNAllocateInt64(1234, &valpool) ;
-        struct CNValue * val1 = CNAllocateInt64(12.34, &valpool) ;
+        struct CNValue * val0 = CNAllocateSignedInt(1234, &valpool) ;
+        struct CNValue * val1 = CNAllocateFloat(12.34, &valpool) ;
         printf("val0 = ") ; CNDumpValue(0, val0) ;
         printf("val1 = ") ; CNDumpValue(0, val1) ;
         CNDumpValuePool(0, &valpool) ;
