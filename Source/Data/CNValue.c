@@ -47,15 +47,15 @@ CNValueAllocate(CNValueType vtype, uint32_t size, struct CNValuePool * vpool)
 }
 
 struct CNValue *
-CNAllocateVoid(struct CNValuePool * pool)
+CNAllocateNull(struct CNValuePool * pool)
 {
-        return CNValueAllocate(CNVoidValueType, 0, pool) ;
+        return CNValueAllocate(CNNullType, 0, pool) ;
 }
 
 struct CNValue *
 CNAllocateChar(char c, struct CNValuePool * pool)
 {
-        struct CNValue * val = CNValueAllocate(CNCharValueType, sizeof(char), pool) ;
+        struct CNValue * val = CNValueAllocate(CNCharType, sizeof(char), pool) ;
         val->charValue = c ;
         return val ;
 }
@@ -63,7 +63,7 @@ CNAllocateChar(char c, struct CNValuePool * pool)
 struct CNValue *
 CNAllocateInt64(int64_t num, struct CNValuePool * pool)
 {
-        struct CNValue * val = CNValueAllocate(CNIntValueType, sizeof(int64_t), pool) ;
+        struct CNValue * val = CNValueAllocate(CNIntType, sizeof(int64_t), pool) ;
         val->int64Value = num ;
         return val ;
 }
@@ -71,7 +71,7 @@ CNAllocateInt64(int64_t num, struct CNValuePool * pool)
 struct CNValue *
 CNAllocateUUInt64(uint64_t num, struct CNValuePool * pool)
 {
-        struct CNValue * val = CNValueAllocate(CNIntValueType, sizeof(uint64_t), pool) ;
+        struct CNValue * val = CNValueAllocate(CNIntType, sizeof(uint64_t), pool) ;
         val->uint64Value = num ;
         return val ;
 }
@@ -79,7 +79,7 @@ CNAllocateUUInt64(uint64_t num, struct CNValuePool * pool)
 struct CNValue *
 CNAllocateFloat(double num, struct CNValuePool * pool)
 {
-        struct CNValue * val = CNValueAllocate(CNFloatValueType, sizeof(double), pool) ;
+        struct CNValue * val = CNValueAllocate(CNFloatType, sizeof(double), pool) ;
         val->floatValue = num ;
         return val ;
 }
@@ -95,7 +95,7 @@ struct CNValue *
 CNAllocateString(const char * str, uint32_t len, struct CNValuePool * pool)
 {
         if(len > CNSTRING_ELEMENT_NUM) {
-                struct CNValue * newval = CNValueAllocate(CNStringValueType, len,  pool) ;
+                struct CNValue * newval = CNValueAllocate(CNStringType, len,  pool) ;
                 initString(&(newval->stringValue), NULL, CNSTRING_ELEMENT_NUM, str) ;
 
                 const char * nstr = str + CNSTRING_ELEMENT_NUM ;
@@ -104,7 +104,7 @@ CNAllocateString(const char * str, uint32_t len, struct CNValuePool * pool)
 
                 return newval ;
         } else {
-                struct CNValue * newval = CNValueAllocate(CNStringValueType, len, pool) ;
+                struct CNValue * newval = CNValueAllocate(CNStringType, len, pool) ;
                 initString(&(newval->stringValue), NULL, len, str) ;
                 return newval ;
         }
@@ -113,12 +113,12 @@ CNAllocateString(const char * str, uint32_t len, struct CNValuePool * pool)
 struct CNValue *
 CNAllocateArray(uint32_t count, struct CNValuePool * pool)
 {
-        struct CNValue * val  = CNValueAllocate(CNArrayValueType, count, pool) ;
+        struct CNValue * val  = CNValueAllocate(CNArrayType, count, pool) ;
 
         struct CNValue * data = CNAllocateArrayData(&(pool->arrayPool), count) ;
         for(unsigned int i=0 ; i<count ; i++){
                 struct CNValue * elm = &(data[i]) ;
-                CNSetVoidValue(elm, true) ;
+                CNSetNullValue(elm, true) ;
         }
         struct CNArray array = {
                 .count  = count,
@@ -131,7 +131,7 @@ CNAllocateArray(uint32_t count, struct CNValuePool * pool)
 struct CNValue *
 CNAllocateDictionary(struct CNValuePool * pool)
 {
-        struct CNValue * val  = CNValueAllocate(CNDictionaryValueType, 0, pool) ;
+        struct CNValue * val  = CNValueAllocate(CNDictionaryType, 0, pool) ;
 
         struct CNDictionary dict ;
         dict.next = NULL ;
@@ -153,13 +153,13 @@ CNCompareValue(const struct CNValue * s0, const struct CNValue * s1)
         }
         int result ;
         switch(a0.valueType){
-                case CNVoidValueType: {
+                case CNNullType: {
                         result = 0 ;
                 } break ;
-                case CNCharValueType: {
+                case CNCharType: {
                         result = s0->charValue - s1->charValue ;
                 } break ;
-                case CNIntValueType: {
+                case CNIntType: {
                         int64_t v0 = s0->int64Value ;
                         int64_t v1 = s1->int64Value ;
                         if(v0 > v1){
@@ -170,7 +170,7 @@ CNCompareValue(const struct CNValue * s0, const struct CNValue * s1)
                                 result = -1 ;
                         }
                 } break ;
-                case CNFloatValueType: {
+                case CNFloatType: {
                         double v0 = s0->floatValue ;
                         double v1 = s1->floatValue ;
                         if(v0 > v1){
@@ -181,15 +181,15 @@ CNCompareValue(const struct CNValue * s0, const struct CNValue * s1)
                                 result = -1 ;
                         }
                 } break ;
-                case CNStringValueType: {
+                case CNStringType: {
                         uint32_t len0 = CNLengthOfString(s0) ;
                         uint32_t len1 = CNLengthOfString(s1) ;
                         result = CNCompareString(len0, &(s0->stringValue), len1, &(s1->stringValue)) ;
                 } break ;
-                case CNArrayValueType: {
+                case CNArrayType: {
                         result = CNCompareArray(&(s0->arrayValue), &(s1->arrayValue)) ;
                 } break ;
-                case CNDictionaryValueType: {
+                case CNDictionaryType: {
                         result = CNCompareDictionary(&(s0->dictionaryValue), &(s1->dictionaryValue)) ;
                 } break ;
         }
@@ -203,18 +203,18 @@ CNRetainValue(struct CNValue * dst)
 
         /* update element */
         switch(attr.valueType) {
-                case CNVoidValueType:
-                case CNCharValueType:
-                case CNIntValueType:
-                case CNFloatValueType: {
+                case CNNullType:
+                case CNCharType:
+                case CNIntType:
+                case CNFloatType: {
                 } break ;
-                case CNStringValueType: {
+                case CNStringType: {
                         CNRetainString(&(dst->stringValue)) ;
                 } break ;
-                case CNArrayValueType: {
+                case CNArrayType: {
                         CNRetainArray(&(dst->arrayValue)) ;
                 } break ;
-                case CNDictionaryValueType: {
+                case CNDictionaryType: {
                         CNRetainDictionary(&(dst->dictionaryValue)) ;
                 } break ;
         }
@@ -235,24 +235,24 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
                 return ;
         }
         switch(attr.valueType) {
-                case CNVoidValueType:
-                case CNCharValueType:
-                case CNIntValueType:
-                case CNFloatValueType: {
+                case CNNullType:
+                case CNCharType:
+                case CNIntType:
+                case CNFloatType: {
                 } break ;
-                case CNStringValueType: {
+                case CNStringType: {
                         CNReleaseString(pool, &(dst->stringValue)) ;
                 } break ;
-                case CNArrayValueType: {
+                case CNArrayType: {
                         CNReleaseArray(pool, &(dst->arrayValue)) ;
                 } break ;
-                case CNDictionaryValueType: {
+                case CNDictionaryType: {
                         CNReleaseDictionary(pool, &(dst->dictionaryValue)) ;
                 } break ;
         }
         /* release the value itself */
         if(attr.frameLocked){
-                CNSetVoidValue(dst, true) ;
+                CNSetNullValue(dst, true) ;
         } else {
                 CNFreeScalar(&(pool->scalarPool), dst) ;
         }
@@ -263,28 +263,28 @@ CNDumpValue(unsigned int indent, const struct CNValue * src)
 {
         struct CNValueAttribute attr = CNIntToValueAttribute(src->attribute) ;
         switch(attr.valueType){
-                case CNVoidValueType: {
+                case CNNullType: {
                         CNDumpIndent(indent) ; CNInterface()->printf("nil\n") ;
                 } break ;
-                case CNCharValueType: {
+                case CNCharType: {
                         CNDumpIndent(indent) ;
                         CNInterface()->printf("'%c'\n", (src->charValue)) ;
                 } break ;
-                case CNIntValueType: {
+                case CNIntType: {
                         CNDumpIndent(indent) ;
                         CNInterface()->printf("%lld\n", (src->int64Value)) ;
                 } break ;
-                case CNFloatValueType: {
+                case CNFloatType: {
                         CNDumpIndent(indent) ;
                         CNInterface()->printf("%lf\n", (src->floatValue)) ;
                 } break ;
-                case CNStringValueType: {
+                case CNStringType: {
                         CNDumpIndent(indent) ;
                         CNInterface()->printf("\"") ;
                         CNDumpString(attr.size, &(src->stringValue)) ;
                         CNInterface()->printf("\"\n") ;
                 } break ;
-                case CNArrayValueType: {
+                case CNArrayType: {
                         unsigned int num = attr.size ;
                         CNDumpIndent(indent) ; CNInterface()->printf("%u [\n", num) ;
                         const struct CNValue * values = (src->arrayValue).values ;
@@ -294,7 +294,7 @@ CNDumpValue(unsigned int indent, const struct CNValue * src)
                         }
                         CNDumpIndent(indent) ; CNInterface()->printf("]\n") ;
                 } break ;
-                case CNDictionaryValueType: {
+                case CNDictionaryType: {
                         CNDumpIndent(indent) ; CNInterface()->printf("{\n") ;
                         CNDumpDictionary(indent+1, &(src->dictionaryValue)) ;
                         CNDumpIndent(indent) ; CNInterface()->printf("}\n") ;

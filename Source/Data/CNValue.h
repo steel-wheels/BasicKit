@@ -21,13 +21,13 @@
  * the "attribute" of CNValue
  */
 typedef enum {
-        CNVoidValueType,
-        CNCharValueType,
-        CNIntValueType,
-        CNFloatValueType,
-        CNStringValueType,
-        CNArrayValueType,
-        CNDictionaryValueType
+        CNNullType,
+        CNCharType,
+        CNIntType,
+        CNFloatType,
+        CNStringType,
+        CNArrayType,
+        CNDictionaryType
 } CNValueType ;
 
 struct CNValueAttribute {
@@ -87,11 +87,11 @@ CNIntToValueAttribute(uint64_t attr)
 }
 
 static inline void
-CNSetVoidValue(struct CNValue * dst, bool framelocked)
+CNSetNullValue(struct CNValue * dst, bool framelocked)
 {
          struct CNValueAttribute attr = {
                  .frameLocked           = framelocked,
-                 .valueType             = CNVoidValueType,
+                 .valueType             = CNNullType,
                  .referenceCount        = 1,
                  .size                  = 0
          } ;
