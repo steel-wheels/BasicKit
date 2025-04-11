@@ -23,6 +23,17 @@ UTArray(void)
         unsigned int lcount_init = CNCountOfFreeItemsInListPool(&lpool) ;
         unsigned int scalar_init = CNCountOfFreeScalarItemsInValuePool(&vpool) ;
 
+        printf("(%s) Allocate state\n", __func__) ;
+        //struct CNValue * val0 = CNAllocateArray(24, &vpool) ;
+        //struct CNValue * val1 = CNAllocateArray(16, &vpool) ;
+
+        //CNDumpValue(0, val0) ;
+        //CNDumpValue(0, val1) ;
+
+        printf("(%s) Release state\n", __func__) ;
+        //CNReleaseValue(&vpool, val0) ;
+        //CNReleaseValue(&vpool, val1) ;
+
         printf("(%s) Final state\n", __func__) ;
         unsigned int lcount_last = CNCountOfFreeItemsInListPool(&lpool) ;
         unsigned int scalar_last = CNCountOfFreeScalarItemsInValuePool(&vpool) ;

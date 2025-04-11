@@ -21,8 +21,8 @@ CNCompareArray(const struct CNArray * s0, const struct CNArray * s1)
         // s0->count == s1->count
         uint32_t count = s0->count ;
         for(unsigned int i=0 ; i<count ; i++){
-                struct CNValue * v0 = &(s0->values[i]) ;
-                struct CNValue * v1 = &(s1->values[i]) ;
+                struct CNValue * v0 = s0->values[i] ;
+                struct CNValue * v1 = s1->values[i] ;
 
                 int res = CNCompareValue(v0, v1) ;
                 if(res != 0){
@@ -35,13 +35,16 @@ CNCompareArray(const struct CNArray * s0, const struct CNArray * s1)
 void
 CNRetainArray(struct CNArray * dst)
 {
-        struct CNValue * values = dst->values ;
-        uint32_t        count  = dst->count ;
+        struct CNValue ** values = dst->values ;
+        uint32_t          count  = dst->count ;
 
-        struct CNValue * ptr    = values ;
-        struct CNValue * endptr = ptr + count ;
+        struct CNValue ** ptr    = values ;
+        struct CNValue ** endptr = ptr + count ;
         for( ; ptr < endptr ; ptr++){
-                CNRetainValue(values) ;
+                struct CNValue * value = *ptr ;
+                if(value != NULL){
+                        CNRetainValue(value) ;
+                }
         }
 }
 
@@ -49,11 +52,14 @@ void
 CNReleaseArray(struct CNValuePool * pool, struct CNArray * dst)
 {
         uint32_t        count  = dst->count ;
-        struct CNValue * values = dst->values ;
-        struct CNValue * ptr    = values ;
-        struct CNValue * endptr = ptr + count ;
+        struct CNValue ** values = dst->values ;
+        struct CNValue ** ptr    = values ;
+        struct CNValue ** endptr = ptr + count ;
         for( ; ptr < endptr ; ptr++){
-                CNReleaseValue(pool, ptr) ;
+                struct CNValue * value = *ptr ;
+                if(value != NULL){
+                        CNReleaseValue(pool, value) ;
+                }
         }
         CNFreeArrayData(&(pool->arrayPool), count, values) ;
 }
@@ -61,9 +67,13 @@ CNReleaseArray(struct CNValuePool * pool, struct CNArray * dst)
 void
 CNArrayDump(unsigned int indent, uint32_t count, const struct CNArray * src)
 {
-        const struct CNValue * values  = src->values ;
-        const struct CNValue * endval  = values + count ;
-        for( ; values < endval ; values++){
-                CNDumpValue(indent + 1, values) ;
+        struct CNValue ** values  = src->values ;
+        struct CNValue ** ptr     = values ;
+        struct CNValue ** endptr  = ptr + count ;
+        for( ; ptr < endptr ; ptr++){
+                const struct CNValue * value = *ptr ;
+                if(value != NULL){
+                        CNDumpValue(indent + 1, value) ;
+                }
         }
 }

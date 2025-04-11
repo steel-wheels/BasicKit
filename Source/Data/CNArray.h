@@ -11,8 +11,8 @@
 #import <BasicKit/CNType.h>
 
 struct CNArray {
-        uint32_t               count ;
-        struct CNValue *       values ;
+        uint32_t                count ;
+        struct CNValue **       values ;
 } ;
 
 int

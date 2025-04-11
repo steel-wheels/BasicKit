@@ -14,7 +14,7 @@ void
 CNInitValuePool(struct CNValuePool * dst, struct CNListPool * lpool)
 {
         CNInitScalarPool(&(dst->scalarPool), sizeof(struct CNValue), 1024, lpool) ;
-        CNInitArrayPool(&(dst->arrayPool), sizeof(struct CNValue), lpool) ;
+        CNInitArrayPool(&(dst->arrayPool), sizeof(struct CNValue *), lpool) ;
 }
 
 void
@@ -29,7 +29,7 @@ CNDumpValuePool(unsigned int indent, const struct CNValuePool * src)
 {
         CNDumpIndent(indent) ; CNInterface()->printf("ValuePool\n") ;
         CNDumpScalarPool(indent + 1, &(src->scalarPool)) ;
-        CNDumpArrayPool(indent + 1,  &(src->arrayPool)) ;
+        CNDumpArrayPool(indent  + 1, &(src->arrayPool)) ;
 }
 
 static struct CNValue *
@@ -115,10 +115,11 @@ CNAllocateArray(uint32_t count, struct CNValuePool * pool)
 {
         struct CNValue * val  = CNValueAllocate(CNArrayType, count, pool) ;
 
-        struct CNValue * data = CNAllocateArrayData(&(pool->arrayPool), count) ;
-        for(unsigned int i=0 ; i<count ; i++){
-                struct CNValue * elm = &(data[i]) ;
-                CNSetNullValue(elm, false) ;
+        struct CNValue ** data   = CNAllocateArrayData(&(pool->arrayPool), count) ;
+        struct CNValue ** ptr    = data ;
+        struct CNValue ** endptr = ptr + count ;
+        for( ; ptr < endptr ; ptr++){
+                *ptr = CNAllocateNull(pool) ;
         }
         struct CNArray array = {
                 .count  = count,
@@ -303,10 +304,13 @@ CNDumpValue(unsigned int indent, const struct CNValue * src)
                 case CNArrayType: {
                         unsigned int num = attr.size ;
                         CNDumpIndent(indent) ; CNInterface()->printf("%u [\n", num) ;
-                        const struct CNValue * values = (src->arrayValue).values ;
-                        const struct CNValue * endval = values + num ;
-                        for( ; values < endval ; values++){
-                                CNDumpValue(indent+1, values) ;
+                        struct CNValue ** ptr    = (src->arrayValue).values ;
+                        struct CNValue ** endptr = ptr + num ;
+                        for( ; ptr < endptr ; ptr++){
+                                struct CNValue * value = *ptr ;
+                                if(value != NULL){
+                                        CNDumpValue(indent+1, value) ;
+                                }
                         }
                         CNDumpIndent(indent) ; CNInterface()->printf("]\n") ;
                 } break ;
