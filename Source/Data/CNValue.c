@@ -18,10 +18,10 @@ CNInitValuePool(struct CNValuePool * dst, struct CNListPool * lpool)
 }
 
 void
-CNFreeValuePool(struct CNValuePool * dst)
+CNDeinitValuePool(struct CNValuePool * dst)
 {
-        CNFreeScalarPool(&(dst->scalarPool)) ;
-        CNFreeArrayPool(&(dst->arrayPool)) ;
+        CNDeinitScalarPool(&(dst->scalarPool)) ;
+        CNDeinitArrayPool(&(dst->arrayPool)) ;
 }
 
 void

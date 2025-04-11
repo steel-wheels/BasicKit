@@ -48,7 +48,7 @@ bool UTValue(void)
 
         unsigned int scalar_last = CNCountOfFreeScalarItemsInValuePool(&valpool) ;
         CNDumpListPool(0, &listpool) ;
-        CNFreeValuePool(&valpool) ;
+        CNDeinitValuePool(&valpool) ;
 
         if(scalar_init != scalar_last) {
                 printf("(%s) [Error] Invalid last list count %u <=> %u\n",

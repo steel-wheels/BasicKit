@@ -43,8 +43,8 @@ bool UTString(void)
         printf("(%s) Final state\n", __func__) ;
         unsigned int lcount_last = CNCountOfFreeItemsInListPool(&lpool) ;
         unsigned int scalar_last = CNCountOfFreeScalarItemsInValuePool(&vpool) ;
-        CNFreeValuePool(&vpool) ;
-        CNFreeListPool(&lpool) ;
+        CNDeinitValuePool(&vpool) ;
+        CNDeinitListPool(&lpool) ;
 
         if(lcount_init != lcount_last) {
                 printf("(%s) [Error] Invalid last list count %u <=> %u\n",

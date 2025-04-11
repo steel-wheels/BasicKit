@@ -33,7 +33,7 @@ bool UTList(void)
         CNDumpListPool(0, &lpool) ;
         unsigned int fcount_last = CNCountOfFreeItemsInListPool(&lpool) ;
 
-        CNFreeListPool(&lpool) ;
+        CNDeinitListPool(&lpool) ;
 
         if(fcount_1st != fcount_last){
                 printf("(%s) [Error] Invalid last count\n", __func__) ;

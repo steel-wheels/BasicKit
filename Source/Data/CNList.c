@@ -18,7 +18,7 @@ struct CNListPage {
 } ;
 
 static struct CNListPage *
-CNListPageAllocate(void)
+CNAllocateListPage(void)
 {
         struct CNListPage * newpage = malloc(sizeof(struct CNListPage)) ;
         newpage->next = NULL ;
@@ -26,7 +26,7 @@ CNListPageAllocate(void)
 }
 
 static void
-CNListPageFree(struct CNListPage * dst)
+CNFreeListPage(struct CNListPage * dst)
 {
         free(dst) ;
 }
@@ -34,7 +34,7 @@ CNListPageFree(struct CNListPage * dst)
 void
 CNInitListPool(struct CNListPool * dst)
 {
-        struct CNListPage * newpage = CNListPageAllocate() ;
+        struct CNListPage * newpage = CNAllocateListPage() ;
         dst->freeList  = NULL ;
         dst->firstPage = newpage ;
 
@@ -47,13 +47,13 @@ CNInitListPool(struct CNListPool * dst)
 }
 
 void
-CNFreeListPool(struct CNListPool * dst)
+CNDeinitListPool(struct CNListPool * dst)
 {
         struct CNListPage * page = dst->firstPage ;
         while(page != NULL) {
                 struct CNListPage * target = page ;
                 page = target->next ;
-                CNListPageFree(target) ;
+                CNFreeListPage(target) ;
         }
 }
 
@@ -77,7 +77,7 @@ CNAllocateList(struct CNListPool * pool)
                 result = fitem ;
                 pool->freeList = fitem->next ;
         } else {
-                struct CNListPage * newpage = CNListPageAllocate() ;
+                struct CNListPage * newpage = CNAllocateListPage() ;
                 newpage->next   = pool->firstPage ;
                 pool->firstPage = newpage ;
 

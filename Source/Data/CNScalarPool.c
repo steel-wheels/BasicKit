@@ -24,7 +24,7 @@ CNInitScalarPool(struct CNScalarPool * dst, size_t size, unsigned int num, struc
 }
 
 void
-CNFreeScalarPool(struct CNScalarPool * dst)
+CNDeinitScalarPool(struct CNScalarPool * dst)
 {
         struct CNList * list = dst->freeList ;
         while(list != NULL) {
@@ -32,7 +32,7 @@ CNFreeScalarPool(struct CNScalarPool * dst)
                 CNFreeList((dst->pagePool).listPool, list) ;
                 list = next ;
         }
-        CNFreePagePool(&(dst->pagePool)) ;
+        CNDeinitPagePool(&(dst->pagePool)) ;
 }
 
 void

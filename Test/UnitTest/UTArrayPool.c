@@ -52,8 +52,8 @@ bool UTArrayPool(void)
         printf("(%s) Final state\n", __func__) ;
         unsigned int freescalar_last = CNCountOfFreeScalarItemsInValuePool(&vpool) ;
         unsigned int freearray_last  = CNCountOfFreeArrayItemsInValuePool(&vpool) ;
-        CNFreeValuePool(&vpool) ;
-        CNFreeListPool(&lpool) ;
+        CNDeinitValuePool(&vpool) ;
+        CNDeinitListPool(&lpool) ;
 
         if(freescalar_init != freescalar_last){
                 printf("(%s) [Error] Invalid free scalar count %u <=> %u\n",

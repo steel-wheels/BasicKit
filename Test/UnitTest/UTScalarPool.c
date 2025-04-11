@@ -38,9 +38,9 @@ bool UTScalarPool(void)
 
         printf("(%s) Final state\n", __func__) ;
         unsigned int freescaler_last = CNCountOfFreeItemsInScalarPool(&spool) ;
-        CNFreeScalarPool(&spool) ;
+        CNDeinitScalarPool(&spool) ;
         unsigned int lcount_last = CNCountOfFreeItemsInListPool(&lpool) ;
-        CNFreeListPool(&lpool) ;
+        CNDeinitListPool(&lpool) ;
 
         if(lcount_init != lcount_last) {
                 printf("(%s) [Error] Invalid last count %u <=> %u\n",

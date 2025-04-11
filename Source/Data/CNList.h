@@ -27,7 +27,7 @@ void
 CNInitListPool(struct CNListPool * dst) ;
 
 void
-CNFreeListPool(struct CNListPool * dst) ;
+CNDeinitListPool(struct CNListPool * dst) ;
 
 void
 CNDumpListPool(unsigned int indent, const struct CNListPool * src) ;

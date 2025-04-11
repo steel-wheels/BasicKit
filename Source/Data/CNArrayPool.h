@@ -24,9 +24,9 @@ CNInitArrayPool(struct CNArrayPool * dst, size_t size, struct CNListPool * lpool
 }
 
 static inline void
-CNFreeArrayPool(struct CNArrayPool * dst)
+CNDeinitArrayPool(struct CNArrayPool * dst)
 {
-        CNFreePagePool(&(dst->pagePool)) ;
+        CNDeinitPagePool(&(dst->pagePool)) ;
 }
 
 static inline size_t

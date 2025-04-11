@@ -108,7 +108,7 @@ void
 CNInitValuePool(struct CNValuePool * dst, struct CNListPool * lpool) ;
 
 void
-CNFreeValuePool(struct CNValuePool * dst) ;
+CNDeinitValuePool(struct CNValuePool * dst) ;
 
 static inline unsigned int
 CNCountOfFreeScalarItemsInValuePool(const struct CNValuePool * src)
@@ -126,7 +126,7 @@ void
 CNDumpValuePool(unsigned int indent, const struct CNValuePool * src) ;
 
 struct CNValue *
-CNAllocateVoid(struct CNValuePool * pool) ;
+CNAllocateNull(struct CNValuePool * pool) ;
 
 struct CNValue *
 CNAllocateChar(char c, struct CNValuePool * pool) ;

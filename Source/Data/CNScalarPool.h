@@ -22,7 +22,7 @@ void
 CNInitScalarPool(struct CNScalarPool * dst, size_t size, unsigned int num, struct CNListPool * lpool) ;
 
 void
-CNFreeScalarPool(struct CNScalarPool * dst) ;
+CNDeinitScalarPool(struct CNScalarPool * dst) ;
 
 void
 CNDumpScalarPool(unsigned int indent, const struct CNScalarPool * src) ;
