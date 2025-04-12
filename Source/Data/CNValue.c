@@ -6,31 +6,10 @@
  */
 
 #import <BasicKit/CNValue.h>
+#import <BasicKit/CNValuePool.h>
 #import <BasicKit/CNInterface.h>
 #import <BasicKit/CNUtils.h>
 #include <string.h>
-
-void
-CNInitValuePool(struct CNValuePool * dst, struct CNListPool * lpool)
-{
-        CNInitScalarPool(&(dst->scalarPool), sizeof(struct CNValue), 1024, lpool) ;
-        CNInitArrayPool(&(dst->arrayPool), sizeof(struct CNValue *), lpool) ;
-}
-
-void
-CNDeinitValuePool(struct CNValuePool * dst)
-{
-        CNDeinitScalarPool(&(dst->scalarPool)) ;
-        CNDeinitArrayPool(&(dst->arrayPool)) ;
-}
-
-void
-CNDumpValuePool(unsigned int indent, const struct CNValuePool * src)
-{
-        CNDumpIndent(indent) ; CNInterface()->printf("ValuePool\n") ;
-        CNDumpScalarPool(indent + 1, &(src->scalarPool)) ;
-        CNDumpArrayPool(indent  + 1, &(src->arrayPool)) ;
-}
 
 static struct CNValue *
 CNValueAllocate(CNValueType vtype, uint32_t size, struct CNValuePool * vpool)
@@ -41,7 +20,7 @@ CNValueAllocate(CNValueType vtype, uint32_t size, struct CNValuePool * vpool)
                  .referenceCount        = 1,
                  .size                  = size
         } ;
-        struct CNValue * newval = CNAllocateScalar(&(vpool->scalarPool)) ;
+        struct CNValue * newval = CNAllocateScalar(vpool) ;
         newval->attribute       = CNValueAttributeToInt(&attr) ;
         return newval ;
 }
@@ -115,7 +94,7 @@ CNAllocateArray(uint32_t count, struct CNValuePool * pool)
 {
         struct CNValue * val  = CNValueAllocate(CNArrayType, count, pool) ;
 
-        struct CNValue ** data   = CNAllocateArrayData(&(pool->arrayPool), count) ;
+        struct CNValue ** data   = CNAllocateArrayElements(pool, count) ;
         struct CNValue ** ptr    = data ;
         struct CNValue ** endptr = ptr + count ;
         for( ; ptr < endptr ; ptr++){
@@ -267,7 +246,7 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
         /* release the value itself */
         CNSetNullValue(dst, attr.releasable) ;
         if(attr.releasable){
-                CNFreeScalar(&(pool->scalarPool), dst) ;
+                CNFreeScalar(pool, dst) ;
         }
 }
 

@@ -15,4 +15,5 @@
 #import <BasicKit/CNString.h>
 #import <BasicKit/CNDictionary.h>
 #import <BasicKit/CNValue.h>
+#import <BasicKit/CNValuePool.h>
 

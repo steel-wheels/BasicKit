@@ -49,7 +49,7 @@ CNDumpScalarPool(unsigned int indent, const struct CNScalarPool * src)
 }
 
 void *
-CNAllocateScalar(struct CNScalarPool * src)
+CNAllocateScalarData(struct CNScalarPool * src)
 {
         /* search free elements */
         struct CNList * list = src->freeList ;
@@ -61,7 +61,7 @@ CNAllocateScalar(struct CNScalarPool * src)
         } else {
                 struct CNList * list = allocateScalars(src) ;
                 src->freeList = list ;
-                return CNAllocateScalar(src) ;
+                return CNAllocateScalarData(src) ;
         }
 }
 
@@ -83,7 +83,7 @@ allocateScalars(struct CNScalarPool * dst)
 }
 
 void
-CNFreeScalar(struct CNScalarPool * src, void * data)
+CNFreeScalarData(struct CNScalarPool * src, void * data)
 {
         struct CNList * list = CNAllocateList((src->pagePool).listPool) ;
         list->attribute = src->elementSize ;

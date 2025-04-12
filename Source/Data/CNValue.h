@@ -99,32 +99,6 @@ CNSetNullValue(struct CNValue * dst, bool releasable)
         dst->attribute = CNValueAttributeToInt(&attr) ;
 }
 
-struct CNValuePool {
-        struct CNScalarPool     scalarPool ;
-        struct CNArrayPool      arrayPool ;
-} ;
-
-void
-CNInitValuePool(struct CNValuePool * dst, struct CNListPool * lpool) ;
-
-void
-CNDeinitValuePool(struct CNValuePool * dst) ;
-
-static inline unsigned int
-CNCountOfFreeScalarItemsInValuePool(const struct CNValuePool * src)
-{
-        return CNCountOfFreeItemsInScalarPool(&(src->scalarPool)) ;
-}
-
-static inline unsigned int
-CNCountOfFreeArrayItemsInValuePool(const struct CNValuePool * src)
-{
-        return CNCountOfFreeItemsInArrayPool(&(src->arrayPool)) ;
-}
-
-void
-CNDumpValuePool(unsigned int indent, const struct CNValuePool * src) ;
-
 struct CNValue *
 CNAllocateNull(struct CNValuePool * pool) ;
 

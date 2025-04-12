@@ -6,8 +6,8 @@
  */
 
 #import <BasicKit/CNArray.h>
-#import <BasicKit/CNArrayPool.h>
 #import <BasicKit/CNValue.h>
+#import <BasicKit/CNValuePool.h>
 #import <BasicKit/CNUtils.h>
 
 int
@@ -61,7 +61,7 @@ CNReleaseArray(struct CNValuePool * pool, struct CNArray * dst)
                         CNReleaseValue(pool, value) ;
                 }
         }
-        CNFreeArrayData(&(pool->arrayPool), count, values) ;
+        CNFreeArrayElements(pool, count, values) ;
 }
 
 void

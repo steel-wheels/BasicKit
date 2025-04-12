@@ -28,10 +28,10 @@ void
 CNDumpScalarPool(unsigned int indent, const struct CNScalarPool * src) ;
 
 void *
-CNAllocateScalar(struct CNScalarPool * src) ;
+CNAllocateScalarData(struct CNScalarPool * src) ;
 
 void
-CNFreeScalar(struct CNScalarPool * src, void * data) ;
+CNFreeScalarData(struct CNScalarPool * src, void * data) ;
 
 unsigned int
 CNCountOfFreeItemsInScalarPool(const struct CNScalarPool * src) ;
