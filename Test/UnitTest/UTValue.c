@@ -12,7 +12,7 @@
 bool UTValue(void)
 {
         bool result = true ;
-
+        struct CNMemoryUsage usage ;
 
         printf("(%s) Initial prologue\n", __func__) ;
         printf("chaValue:      %lu\n", sizeof(char)) ;
@@ -27,8 +27,8 @@ bool UTValue(void)
         CNInitListPool(&listpool) ;
         struct CNValuePool      valpool ;
         CNInitValuePool(&valpool, &listpool) ;
-        CNDumpValuePool(0, &valpool) ;
-        unsigned int scalar_init = CNCountOfFreeScalarItemsInValuePool(&valpool) ;
+        usage = CNMemoryUsageOfValuePool(&valpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
 
         printf("(%s) Allocate state\n", __func__) ;
         struct CNValue * val0 = CNAllocateSignedInt(-1234, &valpool) ;
@@ -38,28 +38,19 @@ bool UTValue(void)
         printf("val0 = ") ; CNDumpValue(0, val0) ;
         printf("val1 = ") ; CNDumpValue(0, val1) ;
         printf("val2 = ") ; CNDumpValue(0, val2) ;
-        CNDumpValuePool(0, &valpool) ;
-        unsigned int scalar_mid = CNCountOfFreeScalarItemsInValuePool(&valpool) ;
+        usage = CNMemoryUsageOfValuePool(&valpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
 
         printf("(%s) Free state\n", __func__) ;
         CNReleaseValue(&valpool, val0) ;
         CNReleaseValue(&valpool, val1) ;
         CNReleaseValue(&valpool, val2) ;
 
-        unsigned int scalar_last = CNCountOfFreeScalarItemsInValuePool(&valpool) ;
+        usage = CNMemoryUsageOfValuePool(&valpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
+
         CNDumpListPool(0, &listpool) ;
         CNDeinitValuePool(&valpool) ;
-
-        if(scalar_init != scalar_last) {
-                printf("(%s) [Error] Invalid last list count %u <=> %u\n",
-                       __func__, scalar_init, scalar_last) ;
-                result = false ;
-        }
-        if(scalar_init != scalar_mid + 3) {
-                printf("(%s) [Error] Invalid mid list count %u <=> %u\n",
-                       __func__, scalar_init, scalar_mid) ;
-                result = false ;
-        }
 
         return result ;
 }

@@ -11,47 +11,41 @@
 bool UTScalarPool(void)
 {
         bool result = true ;
+        struct CNMemoryUsage usage ;
 
         printf("(%s) Initial state\n", __func__) ;
         struct CNListPool lpool ;
         CNInitListPool(&lpool) ;
-        unsigned int lcount_init = CNCountOfFreeItemsInListPool(&lpool) ;
-
-        struct CNScalarPool spool ;
-        CNInitScalarPool(&spool, sizeof(struct CNValue), 1024, &lpool) ;
-        CNDumpScalarPool(0, &spool) ;
-        unsigned int freescaler_init = CNCountOfFreeItemsInScalarPool(&spool) ;
+        struct CNValuePool vpool ;
+        CNInitValuePool(&vpool, &lpool) ;
+        usage = CNMemoryUsageOfValuePool(&vpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
 
         printf("(%s) Allocate state\n", __func__) ;
 #       define VALUE_NUM        64
         struct CNValue * values[VALUE_NUM] ;
         for(unsigned int i=0 ; i<VALUE_NUM ; i++){
-                values[i] = CNAllocateScalar(&spool) ;
+                values[i] = CNAllocateUnsignedInt(i, &vpool) ;
         }
-        CNDumpScalarPool(0, &spool) ;
+        usage = CNMemoryUsageOfValuePool(&vpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
 
-        printf("(%s) Free state\n", __func__) ;
+        printf("(%s) Release state\n", __func__) ;
         for(unsigned int i=0 ; i<VALUE_NUM ; i++){
-                CNFreeScalar(&spool, values[i]) ;
+                CNReleaseValue(&vpool, values[i]) ;
         }
-        CNDumpScalarPool(0, &spool) ;
+        usage = CNMemoryUsageOfValuePool(&vpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
 
-        printf("(%s) Final state\n", __func__) ;
-        unsigned int freescaler_last = CNCountOfFreeItemsInScalarPool(&spool) ;
-        CNDeinitScalarPool(&spool) ;
-        unsigned int lcount_last = CNCountOfFreeItemsInListPool(&lpool) ;
+        if(usage.allocatedSize == usage.usableSize) {
+                printf("(%s) No memory leak\n", __func__) ;
+        } else {
+                printf("(%s) [Error] some memory leak\n", __func__) ;
+                result = false ;
+        }
+
+        CNDeinitValuePool(&vpool) ;
         CNDeinitListPool(&lpool) ;
-
-        if(lcount_init != lcount_last) {
-                printf("(%s) [Error] Invalid last count %u <=> %u\n",
-                       __func__, lcount_init, lcount_last) ;
-                result = false ;
-        }
-        if(freescaler_init != freescaler_last) {
-                printf("(%s) [Error] Invalid last count %u <=> %u\n",
-                       __func__, freescaler_init, freescaler_last) ;
-                result = false ;
-        }
 
         return result ;
 }

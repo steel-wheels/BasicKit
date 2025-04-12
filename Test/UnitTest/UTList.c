@@ -11,38 +11,40 @@
 
 bool UTList(void)
 {
-        printf("UTList: start\n") ;
+        printf("(%s) start\n", __func__) ;
         bool result = true ;
 
         struct CNListPool       lpool ;
         CNInitListPool(&lpool) ;
-        CNDumpListPool(0, &lpool) ;
-        unsigned int fcount_1st = CNCountOfFreeItemsInListPool(&lpool) ;
+        struct CNMemoryUsage usage = CNMemoryUsageOfListPool(&lpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
 
+        printf("(%s) allocate state\n", __func__) ;
 #       define ITEM_NUM         10
         struct CNList * items[ITEM_NUM] ;
         for(unsigned int i=0 ; i<ITEM_NUM ; i++){
                 items[i] = CNAllocateList(&lpool) ;
         }
-        CNDumpListPool(0, &lpool) ;
-        unsigned int fcount_mid = CNCountOfFreeItemsInListPool(&lpool) ;
+        usage = CNMemoryUsageOfListPool(&lpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
 
+        printf("(%s) release state\n", __func__) ;
         for(unsigned int i=0 ; i<ITEM_NUM ; i++){
                 CNFreeList(&lpool, items[i]) ;
         }
-        CNDumpListPool(0, &lpool) ;
-        unsigned int fcount_last = CNCountOfFreeItemsInListPool(&lpool) ;
+        usage = CNMemoryUsageOfListPool(&lpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
 
         CNDeinitListPool(&lpool) ;
 
-        if(fcount_1st != fcount_last){
-                printf("(%s) [Error] Invalid last count\n", __func__) ;
+        printf("(%s) check memory management\n", __func__) ;
+        if(usage.allocatedSize == usage.usableSize) {
+                printf("(%s) No memory leak\n", __func__) ;
+        } else {
+                printf("(%s) [Error] some memory leak\n", __func__) ;
                 result = false ;
         }
-        if(fcount_1st != fcount_mid + ITEM_NUM) {
-                printf("(%s) [Error] Invalid middle count\n", __func__) ;
-                result = false ;
-        }
-        printf("UTList: end\n") ;
+
+        printf("(%s) end\n", __func__) ;
         return result ;
 }

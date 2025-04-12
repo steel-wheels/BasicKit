@@ -105,12 +105,45 @@ CNFreeList(struct CNListPool * pool, struct CNList * dst)
         pool->freeList  = dst ;
 }
 
-unsigned int
-CNCountOfFreeItemsInListPool(const struct CNListPool * src)
+struct CNMemoryUsage
+CNMemoryUsageOfListPool(const struct CNListPool * src)
 {
-        unsigned int result = 0 ;
-        for(struct CNList * list = src->freeList ; list != NULL ; list = list->next){
-                result += 1 ;
+        struct CNListPage * page ;
+
+        /* allocated size */
+        size_t                  asize = 0 ;
+        struct CNListPage *     next ;
+        for(page = src->firstPage ; page != NULL ; page = next){
+                asize += sizeof(struct CNList) * CNLIST_PAGE_NUM ;
+                next = page->next ;
         }
+        /* free size */
+        size_t                  usize = 0 ;
+        struct CNList *         list ;
+        for(list = src->freeList ; list != NULL ; list = list->next){
+                usize += sizeof(struct CNList) ;
+        }
+        /* return result */
+        struct CNMemoryUsage result = {
+                .allocatedSize  = asize,
+                .usableSize     = usize
+        } ;
         return result ;
 }
+
+void
+CNDumpMemoryUsage(unsigned int indent, const struct CNMemoryUsage * src)
+{
+        CNDumpIndent(indent) ;
+
+        size_t usedsize ;
+        if(src->allocatedSize >= src->usableSize){
+                usedsize = src->allocatedSize - src->usableSize ;
+        } else {
+                CNInterface()->error("unexpected usableSize at %s", __func__) ;
+                usedsize = src->allocatedSize ;
+        }
+        CNInterface()->printf("memusage: {allocated_size: %ld, usable_size: %ld, used_size: %ld}\n",
+                              src->allocatedSize, src->usableSize, usedsize) ;
+}
+

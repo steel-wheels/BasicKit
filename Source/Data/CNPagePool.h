@@ -19,6 +19,7 @@ struct CNPagePool
          * data:        page data
          */
         struct CNList *         freeList ;
+        size_t                  allocatedSize ;
 } ;
 
 void
@@ -36,7 +37,7 @@ CNAllocatePage(struct CNPagePool * src, size_t reqsize) ;
 void
 CNFreePage(struct CNPagePool * src, size_t size, void * data) ;
 
-unsigned int
-CNCountOfFreeItemsInPagePool(const struct CNPagePool * src) ;
+struct CNMemoryUsage
+CNMemoryUsageOfPagePool(const struct CNPagePool * src) ;
 
 #endif /* CNPAGEPOOL_H */

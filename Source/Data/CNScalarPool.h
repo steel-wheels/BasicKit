@@ -33,7 +33,7 @@ CNAllocateScalarData(struct CNScalarPool * src) ;
 void
 CNFreeScalarData(struct CNScalarPool * src, void * data) ;
 
-unsigned int
-CNCountOfFreeItemsInScalarPool(const struct CNScalarPool * src) ;
+struct CNMemoryUsage
+CNMemoryUsageOfScalarPool(const struct CNScalarPool * src) ;
 
 #endif /* CNScalarPool_H */

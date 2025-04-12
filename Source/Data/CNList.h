@@ -23,6 +23,11 @@ struct CNListPool {
         struct CNListPage *     firstPage ;
 } ;
 
+struct CNMemoryUsage {
+        size_t  allocatedSize ;
+        size_t  usableSize ;
+} ;
+
 void
 CNInitListPool(struct CNListPool * dst) ;
 
@@ -38,7 +43,10 @@ CNAllocateList(struct CNListPool * pool) ;
 void
 CNFreeList(struct CNListPool * pool, struct CNList * dst) ;
 
-unsigned int
-CNCountOfFreeItemsInListPool(const struct CNListPool * src) ;
+struct CNMemoryUsage
+CNMemoryUsageOfListPool(const struct CNListPool * src) ;
+
+void
+CNDumpMemoryUsage(unsigned int indent, const struct CNMemoryUsage * src) ;
 
 #endif /* CNLIST_H */

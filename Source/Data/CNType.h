@@ -15,6 +15,4 @@
 struct CNValue ;
 struct CNValuePool ;
 
-#define CNDEBUG         1
-
 #endif /* CNTYPE_H */

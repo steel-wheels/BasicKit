@@ -13,8 +13,9 @@
 void
 CNInitPagePool(struct CNPagePool * dst, struct CNListPool * lpool)
 {
-        dst->listPool   = lpool ;
-        dst->freeList   = NULL ;
+        dst->listPool           = lpool ;
+        dst->freeList           = NULL ;
+        dst->allocatedSize      = 0 ;
 }
 
 void
@@ -60,6 +61,7 @@ CNAllocatePage(struct CNPagePool * src, size_t reqsize)
                 }
                 prev = list ;
         }
+        src->allocatedSize += reqsize ;
         return malloc(reqsize) ;
 }
 
@@ -73,12 +75,19 @@ CNFreePage(struct CNPagePool * src, size_t size, void * data)
         src->freeList   = list ;
 }
 
-unsigned int
-CNCountOfFreeItemsInPagePool(const struct CNPagePool * src)
+struct CNMemoryUsage
+CNMemoryUsageOfPagePool(const struct CNPagePool * src)
 {
-        unsigned int result = 0 ;
-        for(struct CNList * list = src->freeList ; list != NULL ; list = list->next){
-                result += 1 ;
+        /* used size */
+        size_t          usize = 0 ;
+        struct CNList * list ;
+        for(list = src->freeList ; list != NULL ; list = list->next){
+                usize += (size_t) list->attribute ;
         }
+        struct CNMemoryUsage result = {
+                .allocatedSize  = src->allocatedSize,
+                .usableSize     = usize
+        } ;
         return result ;
 }
+

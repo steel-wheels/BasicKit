@@ -11,6 +11,7 @@
 bool UTArrayPool(void)
 {
         bool result = true ;
+        struct CNMemoryUsage usage ;
 
         struct CNListPool lpool ;
         CNInitListPool(&lpool) ;
@@ -19,19 +20,27 @@ bool UTArrayPool(void)
         CNInitValuePool(&vpool, &lpool) ;
 
         printf("(%s) Initial state\n", __func__) ;
-        unsigned int freescalar_init = CNCountOfFreeScalarItemsInValuePool(&vpool) ;
-        unsigned int freearray_init  = CNCountOfFreeArrayItemsInValuePool(&vpool) ;
-        CNDumpValuePool(0, &vpool) ;
+        usage = CNMemoryUsageOfValuePool(&vpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
 
         printf("(%s) Allocate state\n", __func__) ;
         unsigned int elmnum = 256 ;
         struct CNValue * values ;
         values = CNAllocateArray(elmnum, &vpool) ;
-        CNDumpValuePool(0, &vpool) ;
+        usage = CNMemoryUsageOfValuePool(&vpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
 
         printf("(%s) Release state\n", __func__) ;
         CNReleaseValue(&vpool, values) ;
-        CNDumpValuePool(0, &vpool) ;
+        usage = CNMemoryUsageOfValuePool(&vpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
+
+        if(usage.allocatedSize == usage.usableSize) {
+                printf("(%s) No memory leak\n", __func__) ;
+        } else {
+                printf("(%s) [Error] some memory leak\n", __func__) ;
+                result = false ;
+        }
 
         printf("(%s) Allocate state (2nd)\n", __func__) ;
         struct CNValue * rvalues ;
@@ -43,33 +52,21 @@ bool UTArrayPool(void)
                 printf("(%s) notreused ... Error\n", __func__) ;
                 result = false ;
         }
-        CNDumpValuePool(0, &vpool) ;
 
         printf("(%s) Release state (2nd)\n", __func__) ;
         CNReleaseValue(&vpool, rvalues) ;
-        CNDumpValuePool(0, &vpool) ;
+        usage = CNMemoryUsageOfValuePool(&vpool) ;
+
+        if(usage.allocatedSize == usage.usableSize) {
+                printf("(%s) No memory leak\n", __func__) ;
+        } else {
+                printf("(%s) [Error] some memory leak\n", __func__) ;
+                result = false ;
+        }
 
         printf("(%s) Final state\n", __func__) ;
-        unsigned int freescalar_last = CNCountOfFreeScalarItemsInValuePool(&vpool) ;
-        unsigned int freearray_last  = CNCountOfFreeArrayItemsInValuePool(&vpool) ;
         CNDeinitValuePool(&vpool) ;
         CNDeinitListPool(&lpool) ;
-
-        if(freescalar_init != freescalar_last){
-                printf("(%s) [Error] Invalid free scalar count %u <=> %u\n",
-                       __func__, freescalar_init, freescalar_last) ;
-                result = false ;
-        }
-        if(freearray_init != 0){
-                printf("(%s) [Error] Invalid init free array count: %u\n",
-                       __func__, freearray_init) ;
-                result = false ;
-        }
-        if(freearray_last != 1) {
-                printf("(%s) [Error] Invalid last free array count: %u\n",
-                       __func__, freearray_last) ;
-                result = false ;
-        }
 
         return result ;
 }

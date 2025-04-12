@@ -92,12 +92,21 @@ CNFreeScalarData(struct CNScalarPool * src, void * data)
         src->freeList   = list ;
 }
 
-unsigned int
-CNCountOfFreeItemsInScalarPool(const struct CNScalarPool * src)
+struct CNMemoryUsage
+CNMemoryUsageOfScalarPool(const struct CNScalarPool * src)
 {
-        unsigned int result = 0 ;
-        for(struct CNList * list = src->freeList ; list != NULL ; list = list->next){
-                result += 1 ;
+        struct CNMemoryUsage pusage = CNMemoryUsageOfPagePool(&(src->pagePool)) ;
+
+        /* size of usable scalars */
+        size_t          usize = 0 ;
+        struct CNList * list ;
+        for(list = src->freeList ; list != NULL ; list = list->next){
+                usize += src->elementSize ;
         }
+
+        struct CNMemoryUsage result = {
+                .allocatedSize  = pusage.allocatedSize,
+                .usableSize     = pusage.usableSize + usize
+        } ;
         return result ;
 }
