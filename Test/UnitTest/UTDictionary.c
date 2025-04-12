@@ -50,6 +50,15 @@ UTDictionary(void)
 
         printf("(%s) Release state\n", __func__) ;
         CNReleaseValue(&vpool, dict0) ;
+        usage = CNMemoryUsageOfValuePool(&vpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
+
+        if(usage.allocatedSize == usage.usableSize) {
+                printf("(%s) No memory leak\n", __func__) ;
+        } else {
+                printf("(%s) [Error] some memory leak\n", __func__) ;
+                result = false ;
+        }
 
         printf("(%s) Final state\n", __func__) ;
         CNDeinitValuePool(&vpool) ;

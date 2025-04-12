@@ -23,12 +23,17 @@ UTArray(void)
         usage = CNMemoryUsageOfValuePool(&vpool) ;
         CNDumpMemoryUsage(0, &usage) ;
 
-        //CNDumpValue(0, val0) ;
-        //CNDumpValue(0, val1) ;
+        printf("(%s) Allocate state\n", __func__) ;
+        struct CNValue * val0 = CNAllocateSignedInt(123, &vpool) ;
+        struct CNValue * val1 = CNAllocateSignedInt(123, &vpool) ;
+        usage = CNMemoryUsageOfValuePool(&vpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
 
         printf("(%s) Release state\n", __func__) ;
-        //CNReleaseValue(&vpool, val0) ;
-        //CNReleaseValue(&vpool, val1) ;
+        CNReleaseValue(&vpool, val0) ;
+        CNReleaseValue(&vpool, val1) ;
+        usage = CNMemoryUsageOfValuePool(&vpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
 
         if(usage.allocatedSize == usage.usableSize) {
                 printf("(%s) No memory leak\n", __func__) ;

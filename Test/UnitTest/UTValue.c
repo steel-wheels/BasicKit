@@ -49,6 +49,13 @@ bool UTValue(void)
         usage = CNMemoryUsageOfValuePool(&valpool) ;
         CNDumpMemoryUsage(0, &usage) ;
 
+        if(usage.allocatedSize == usage.usableSize) {
+                printf("(%s) No memory leak\n", __func__) ;
+        } else {
+                printf("(%s) [Error] some memory leak\n", __func__) ;
+                result = false ;
+        }
+
         CNDumpListPool(0, &listpool) ;
         CNDeinitValuePool(&valpool) ;
 
