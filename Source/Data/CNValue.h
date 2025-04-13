@@ -65,6 +65,13 @@ CNValueAttributeToInt(const struct CNValueAttribute * attr) {
                 ;
 }
 
+static inline CNValueType
+CNTypeOfValue(const struct CNValue * src)
+{
+        unsigned int val = (src->attribute >> 56) & 0x7f ;
+        return (CNValueType) val ;
+}
+
 static inline uint32_t
 CNSizeOfValue(const struct CNValue * src)
 {
@@ -100,7 +107,7 @@ CNSetNullValue(struct CNValue * dst, bool releasable)
 }
 
 struct CNValue *
-CNAllocateNull(struct CNValuePool * pool) ;
+CNAllocateNull(void) ;
 
 struct CNValue *
 CNAllocateChar(char c, struct CNValuePool * pool) ;

@@ -21,7 +21,7 @@ CNAddDictionaryValueByKey(struct CNDictionary * dst, struct CNValue * key, struc
 static inline bool
 hasValidContextInElement(const struct CNDictionaryElement * src)
 {
-        return (src->key != NULL) && (src->value != NULL) ;
+        return CNTypeOfValue(src->key) != CNNullType ;
 }
 
 static unsigned int
@@ -56,9 +56,7 @@ CNReplaceDictionaryValueByKey(struct CNDictionary * dst, struct CNValue * key, s
                         struct CNDictionaryElement * elm = &(dst->elements[i]) ;
                         if(hasValidContextInElement(elm)){
                                 if(CNCompareValue(elm->key, key) == 0){
-                                        if(elm->value != NULL){
-                                                CNReleaseValue(pool, elm->value) ;
-                                        }
+                                        CNReleaseValue(pool, elm->value) ;
                                         elm->value = value ;
                                         CNRetainValue(value) ;
                                         return true ;

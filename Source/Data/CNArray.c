@@ -41,10 +41,7 @@ CNRetainArray(struct CNArray * dst)
         struct CNValue ** ptr    = values ;
         struct CNValue ** endptr = ptr + count ;
         for( ; ptr < endptr ; ptr++){
-                struct CNValue * value = *ptr ;
-                if(value != NULL){
-                        CNRetainValue(value) ;
-                }
+                CNRetainValue(*ptr) ;
         }
 }
 
@@ -56,10 +53,7 @@ CNReleaseArray(struct CNValuePool * pool, struct CNArray * dst)
         struct CNValue ** ptr    = values ;
         struct CNValue ** endptr = ptr + count ;
         for( ; ptr < endptr ; ptr++){
-                struct CNValue * value = *ptr ;
-                if(value != NULL){
-                        CNReleaseValue(pool, value) ;
-                }
+                CNReleaseValue(pool, *ptr) ;
         }
         CNFreeArrayElements(pool, count, values) ;
 }
@@ -71,9 +65,6 @@ CNArrayDump(unsigned int indent, uint32_t count, const struct CNArray * src)
         struct CNValue ** ptr     = values ;
         struct CNValue ** endptr  = ptr + count ;
         for( ; ptr < endptr ; ptr++){
-                const struct CNValue * value = *ptr ;
-                if(value != NULL){
-                        CNDumpValue(indent + 1, value) ;
-                }
+                CNDumpValue(indent + 1, *ptr) ;
         }
 }

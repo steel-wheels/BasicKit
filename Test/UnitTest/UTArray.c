@@ -29,6 +29,10 @@ UTArray(void)
         usage = CNMemoryUsageOfValuePool(&vpool) ;
         CNDumpMemoryUsage(0, &usage) ;
 
+        printf("(%s) Getter/Setter state\n", __func__) ;
+        usage = CNMemoryUsageOfValuePool(&vpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
+
         printf("(%s) Release state\n", __func__) ;
         CNReleaseValue(&vpool, val0) ;
         CNReleaseValue(&vpool, val1) ;

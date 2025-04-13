@@ -26,9 +26,15 @@ CNValueAllocate(CNValueType vtype, uint32_t size, struct CNValuePool * vpool)
 }
 
 struct CNValue *
-CNAllocateNull(struct CNValuePool * pool)
+CNAllocateNull(void)
 {
-        return CNValueAllocate(CNNullType, 0, pool) ;
+        static struct CNValue   s_null_value ;
+        static bool             s_initialized = false ;
+        if(!s_initialized){
+                CNSetNullValue(&s_null_value, false) ;
+                s_initialized = true ;
+        }
+        return &s_null_value ;
 }
 
 struct CNValue *
@@ -98,7 +104,7 @@ CNAllocateArray(uint32_t count, struct CNValuePool * pool)
         struct CNValue ** ptr    = data ;
         struct CNValue ** endptr = ptr + count ;
         for( ; ptr < endptr ; ptr++){
-                *ptr = CNAllocateNull(pool) ;
+                *ptr = CNAllocateNull() ;
         }
         struct CNArray array = {
                 .count  = count,
@@ -111,13 +117,14 @@ CNAllocateArray(uint32_t count, struct CNValuePool * pool)
 struct CNValue *
 CNAllocateDictionary(struct CNValuePool * pool)
 {
-        struct CNValue * val  = CNValueAllocate(CNDictionaryType, 0, pool) ;
+        struct CNValue * val   = CNValueAllocate(CNDictionaryType, 0, pool) ;
+        struct CNValue * nullp = CNAllocateNull() ;
 
         struct CNDictionary dict ;
         dict.next = NULL ;
         for(unsigned int i=0 ; i<CNDICTIONARY_ELEMENT_NUM ; i++){
-                dict.elements[i].key   = NULL ;
-                dict.elements[i].value = NULL ;
+                dict.elements[i].key   = nullp ;
+                dict.elements[i].value = nullp ;
         }
         val->dictionaryValue = dict ;
         return val ;
