@@ -41,6 +41,16 @@ bool UTValue(void)
         usage = CNMemoryUsageOfValuePool(&valpool) ;
         CNDumpMemoryUsage(0, &usage) ;
 
+        /* null value test */
+        struct CNValue * nullval = CNAllocateNull() ;
+        if(CNTypeOfValue(nullval) == CNNullType) {
+                CNReleaseValue(&valpool, nullval) ;
+        } else {
+                printf("(%s) [Error] failed to decode null value\n", __func__) ;
+                result = false ;
+        }
+
+
         printf("(%s) Free state\n", __func__) ;
         CNReleaseValue(&valpool, val0) ;
         CNReleaseValue(&valpool, val1) ;

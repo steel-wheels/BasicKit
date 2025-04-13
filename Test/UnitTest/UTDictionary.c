@@ -39,13 +39,22 @@ UTDictionary(void)
         usage = CNMemoryUsageOfValuePool(&vpool) ;
         CNDumpMemoryUsage(0, &usage) ;
 
-        struct CNValue * rev0 = searchValueInDictionary(&(dict0->dictionaryValue), "A", &vpool) ;
-        if(rev0 != NULL){
+        struct CNValue * rev ;
+        rev = searchValueInDictionary(&(dict0->dictionaryValue), "A", &vpool) ;
+        if(rev != NULL){
                 printf("(%s) search result ... ", __func__) ;
-                CNDumpValue(0, rev0) ;
+                CNDumpValue(0, rev) ;
         } else {
                 printf("(%s) [Error] Failed to search\n", __func__) ;
                 result = false ;
+        }
+
+        rev = searchValueInDictionary(&(dict0->dictionaryValue), "X", &vpool) ;
+        if(rev != NULL){
+                printf("(%s) [Error] Unexpected result\n", __func__) ;
+                result = false ;
+        } else {
+                printf("(%s) search result ... null\n", __func__) ;
         }
 
         printf("(%s) Release state\n", __func__) ;
