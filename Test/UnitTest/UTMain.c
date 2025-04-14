@@ -12,6 +12,7 @@
 #include "UTString.h"
 #include "UTDictionary.h"
 #include "UTValue.h"
+#include "UTIterator.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -29,9 +30,11 @@ int main(int argc, char * argv[])
         bool result4 = UTArray() ;
         bool result5 = UTDictionary() ;
         bool result6 = UTValue() ;
+        bool result7 = UTIterator() ;
 
         int ecode ;
-        bool result = result0 && result1 && result2 && result3 && result4 && result5 && result6 ;
+        bool result = result0 && result1 && result2 && result3 &&
+                      result4 && result5 && result6 && result7 ;
         if(result) {
                 printf("SUMMARY: OK\n") ;
                 ecode = 0 ;
