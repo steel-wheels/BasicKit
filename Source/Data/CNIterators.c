@@ -27,22 +27,29 @@ CNInitStringIterator(struct CNStringIterator * dst, struct CNValue * string)
 char
 CNGetCharacterFromStringIterator(struct CNStringIterator * src)
 {
+        struct CNValue * curval = src->sourceString ;
         unsigned int curidx = src->currentIndex ;
-        if(curidx >= src->sourceLength){
-                return EOF ;
-        }
-        struct CNValue * strval = src->sourceString ;
-        while(curidx >= CNSTRING_ELEMENT_NUM){
-                struct CNValue * next = (strval->stringValue).next ;
-                if(next == NULL){
-                        CNInterface()->error("[Error] Not enough string in %s\n", __func__) ;
-                        return EOF ;
+        unsigned int curlen = CNLengthOfString(curval) ;
+
+        char result ;
+        if(curidx < curlen){
+                if(curidx < CNSTRING_ELEMENT_NUM){
+                        result = (curval->stringValue).buffer[curidx] ;
+                        src->currentIndex += 1 ;
+                } else {
+                        struct CNValue * next = (curval->stringValue).next ;
+                        if(next != NULL){
+                                src->sourceString  = next ;
+                                src->currentIndex -= CNSTRING_ELEMENT_NUM ;
+                                result = CNGetCharacterFromStringIterator(src) ;
+                        } else {
+                                CNInterface()->error("[Error] Not enough string in %s\n", __func__) ;
+                                result = EOF ;
+                        }
                 }
-                curidx -= CNSTRING_ELEMENT_NUM ;
-                strval =  next ;
+        } else {
+                result = EOF ;
         }
-        char result = (strval->stringValue).buffer[curidx] ;
-        src->currentIndex += 1 ;
         return result ;
 }
 

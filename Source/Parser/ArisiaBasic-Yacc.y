@@ -1,14 +1,13 @@
 %{
 	/* ArisiaBasic-Yacc.y */
 #       include "CNInterface.h"
-#       include "CNProgram.h"
 
 static int yyerror(char const * str) ;
 
 static char
 yylex(void)
 {
-        return CNGetCharFromProgram() ;
+        return '\0' ;
 }
 
 %}

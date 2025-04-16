@@ -68,7 +68,7 @@ allocateString(struct CNValue ** newstr, struct CNValuePool * vpool, const char 
         unsigned int elmnum = 0 ;
         struct CNValue * next = str ;
         while(next != NULL){
-                printf("(%s) %u elm len=%u\n", __func__, elmnum, CNLengthOfString(next)) ;
+                //printf("(%s) %u elm len=%u\n", __func__, elmnum, CNLengthOfString(next)) ;
                 elmnum += 1 ;
                 next = (next->stringValue).next ;
         }
