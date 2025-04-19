@@ -54,10 +54,10 @@ CNGetCharacterFromStringIterator(struct CNStringIterator * src)
 }
 
 void
-CNInitStringListIterator(struct CNStringListIterator * dst, struct CNList * strings)
+CNInitStringListIterator(struct CNStringListIterator * dst, struct CNValueList * strings)
 {
-        struct CNValue * firststr = strings->data ;
-        dst->sourceStringList = strings->next ;
+        struct CNValue * firststr = CNPopFromValueList(strings) ;
+        dst->stringList = strings ;
         CNInitStringIterator(&(dst->stringIterator), firststr) ;
 }
 
@@ -68,11 +68,9 @@ CNGetCharacterFromStringListIterator(struct CNStringListIterator * src)
         if(c != EOF){
                 return c ;
         } else {
-                struct CNList * list = src->sourceStringList ;
-                if(list != NULL){
-                        struct CNValue * nextstr = list->data ;
-                        src->sourceStringList = list->next ;
-                        CNInitStringIterator(&(src->stringIterator), nextstr) ;
+                struct CNValue * firststr = CNPopFromValueList(src->stringList) ;
+                if(firststr != NULL){
+                        CNInitStringIterator(&(src->stringIterator), firststr) ;
                         return CNGetCharacterFromStringListIterator(src) ;
                 } else {
                         return EOF ;

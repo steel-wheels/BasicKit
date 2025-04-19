@@ -105,6 +105,22 @@ CNFreeList(struct CNListPool * pool, struct CNList * dst)
         pool->freeList  = dst ;
 }
 
+struct CNList *
+CNLastInList(struct CNList * list)
+{
+        if(list != NULL){
+                struct CNList * prev = list ;
+                struct CNList * next = prev->next ;
+                while(next != NULL){
+                        prev = next ;
+                        next = prev->next ;
+                }
+                return prev ;
+        } else {
+                return NULL ;
+        }
+}
+
 struct CNMemoryUsage
 CNMemoryUsageOfListPool(const struct CNListPool * src)
 {

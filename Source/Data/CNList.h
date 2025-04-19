@@ -43,6 +43,9 @@ CNAllocateList(struct CNListPool * pool) ;
 void
 CNFreeList(struct CNListPool * pool, struct CNList * dst) ;
 
+struct CNList *
+CNLastInList(struct CNList * list) ;
+
 struct CNMemoryUsage
 CNMemoryUsageOfListPool(const struct CNListPool * src) ;
 

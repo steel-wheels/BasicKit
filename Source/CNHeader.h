@@ -16,5 +16,6 @@
 #import <BasicKit/CNDictionary.h>
 #import <BasicKit/CNValue.h>
 #import <BasicKit/CNValuePool.h>
+#import <BasicKit/CNValueList.h>
 #import <BasicKit/CNIterators.h>
 

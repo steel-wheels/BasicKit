@@ -9,16 +9,12 @@
 #define CNIterators_h
 
 #import <BasicKit/CNValue.h>
+#import <BasicKit/CNValueList.h>
 
 struct CNStringIterator {
         struct CNValue *        sourceString ;
         struct CNValue *        currentString ;
         unsigned int            currentIndex ;
-} ;
-
-struct CNStringListIterator {
-        struct CNList *         sourceStringList ;
-        struct CNStringIterator stringIterator ;
 } ;
 
 void
@@ -36,8 +32,13 @@ CNDeinitStringIterator(struct CNValuePool * pool, struct CNStringIterator * dst)
 char
 CNGetCharacterFromStringIterator(struct CNStringIterator * src) ;
 
+struct CNStringListIterator {
+        struct CNValueList *    stringList ;
+        struct CNStringIterator stringIterator ;
+} ;
+
 void
-CNInitStringListIterator(struct CNStringListIterator * dst, struct CNList * strings) ;
+CNInitStringListIterator(struct CNStringListIterator * dst, struct CNValueList * strings) ;
 
 char
 CNGetCharacterFromStringListIterator(struct CNStringListIterator * src) ;

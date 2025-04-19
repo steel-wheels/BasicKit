@@ -31,6 +31,12 @@ CNDeinitValuePool(struct CNValuePool * dst)
         CNDeinitArrayPool(&(dst->arrayPool)) ;
 }
 
+static inline struct CNListPool *
+CNListPoolInValuePool(struct CNValuePool * src)
+{
+        return (src->arrayPool).pagePool.listPool ;
+}
+
 static inline struct CNValue *
 CNAllocateScalar(struct CNValuePool * src)
 {
