@@ -57,7 +57,6 @@ CNPopFromValueList(struct CNValueList * src)
         if(first != NULL){
                 src->firstItem = first->next ;
                 struct CNValue * result = first->data ;
-                CNReleaseValue(src->valuePool, result) ;
                 CNFreeList(CNListPoolInValuePool(src->valuePool), first) ;
                 return result ;
         } else {

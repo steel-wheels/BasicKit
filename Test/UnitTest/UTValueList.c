@@ -42,6 +42,14 @@ UTValueList(void)
         usage = CNMemoryUsageOfValuePool(&vpool) ;
         CNDumpMemoryUsage(0, &usage) ;
 
+        printf("(%s) Pop state\n", __func__) ;
+        struct CNValue * curval = CNPopFromValueList(&vlist) ;
+        while(curval != NULL){
+                CNDumpValue(0, curval) ;
+                CNReleaseValue(&vpool, curval) ;
+                curval = CNPopFromValueList(&vlist) ;
+        }
+
         printf("(%s) Deinit state\n", __func__) ;
         CNDeinitValueList(&vlist) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
