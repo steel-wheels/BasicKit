@@ -5,7 +5,9 @@
  *   Copyright (C) 2025 Steel Wheels Project
  */
 
-#include "CNValueList.h"
+#import <BasicKit/CNValueList.h>
+#import <BasicKit/CNInterface.h>
+#import <BasicKit/CNUtils.h>
 
 void
 CNDeinitValueList(struct CNValueList * dst)
@@ -61,4 +63,15 @@ CNPopFromValueList(struct CNValueList * src)
         } else {
                 return NULL ;
         }
+}
+
+void
+CNDumpValueList(unsigned int indent, const struct CNValueList * src)
+{
+        struct CNList * list = src->firstItem ;
+        CNDumpIndent(indent) ; CNInterface()->printf("{\n") ;
+        for( ; list != NULL ; list = list->next) {
+                CNDumpIndent(indent+1) ; CNDumpValue(0, list->data) ;
+        }
+        CNDumpIndent(indent) ; CNInterface()->printf("}\n") ;
 }
