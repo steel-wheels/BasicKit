@@ -219,7 +219,7 @@ CNRetainValue(struct CNValue * dst)
         }
 
         /* update reference count */
-        if(!attr.releasable){
+        if(attr.releasable){
                 attr.referenceCount += 1 ;
                 dst->attribute = CNValueAttributeToInt(&attr) ;
         }
@@ -228,32 +228,54 @@ CNRetainValue(struct CNValue * dst)
 void
 CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
 {
+        /* release elements */
         struct CNValueAttribute attr = CNIntToValueAttribute(dst->attribute) ;
-        if(attr.referenceCount > 1) {
-                dst->attribute = CNValueAttributeToInt(&attr) ;
-                return ;
-        }
-        switch(attr.valueType) {
+        switch(attr.valueType){
                 case CNNullType:
                 case CNCharType:
                 case CNSignedIntType:
                 case CNUnsignedIntType:
                 case CNFloatType: {
+                        /* no elements */
                 } break ;
                 case CNStringType: {
-                        CNReleaseString(pool, &(dst->stringValue)) ;
+                        CNReleaseNextString(pool, &(dst->stringValue)) ;
                 } break ;
                 case CNArrayType: {
-                        CNReleaseArray(pool, &(dst->arrayValue)) ;
+                        CNReleaseArrayElements(pool, &(dst->arrayValue)) ;
                 } break ;
                 case CNDictionaryType: {
-                        CNReleaseDictionary(pool, &(dst->dictionaryValue)) ;
+                        CNReleaseDictionaryElements(pool, &(dst->dictionaryValue)) ;
                 } break ;
         }
-        /* release the value itself */
-        CNSetNullValue(dst, attr.releasable) ;
-        if(attr.releasable){
-                CNFreeScalar(pool, dst) ;
+
+        if(attr.referenceCount > 1){
+                attr.referenceCount -= 1 ;
+                dst->attribute = CNValueAttributeToInt(&attr) ;
+        } else {
+                /* release context */
+                switch(attr.valueType){
+                        case CNNullType:
+                        case CNCharType:
+                        case CNSignedIntType:
+                        case CNUnsignedIntType:
+                        case CNFloatType: {
+                                /* no elements */
+                        } break ;
+                        case CNStringType: {
+                                CNDeinitString(pool, &(dst->stringValue)) ;
+                        } break ;
+                        case CNArrayType: {
+                                CNDeinitArray(pool, &(dst->arrayValue)) ;
+                        } break ;
+                        case CNDictionaryType: {
+                                CNDeinitDictionary(pool, &(dst->dictionaryValue)) ;
+                        }
+                }
+                CNSetNullValue(dst, attr.releasable) ;
+                if(attr.releasable){
+                        CNFreeScalar(pool, dst) ;
+                }
         }
 }
 

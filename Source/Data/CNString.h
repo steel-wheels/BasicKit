@@ -24,7 +24,14 @@ void
 CNRetainString(struct CNString * dst) ;
 
 void
-CNReleaseString(struct CNValuePool * pool, struct CNString * dst) ;
+CNReleaseNextString(struct CNValuePool * pool, struct CNString * dst) ;
+
+static inline void
+CNDeinitString(struct CNValuePool * pool, struct CNString * dst)
+{
+        /* Do nothing */
+        (void) pool ; (void) dst ;
+}
 
 void
 CNDumpString(uint32_t count, const struct CNString * src) ;

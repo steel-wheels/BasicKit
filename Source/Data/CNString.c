@@ -52,7 +52,7 @@ CNRetainString(struct CNString * dst)
 }
 
 void
-CNReleaseString(struct CNValuePool * pool, struct CNString * dst)
+CNReleaseNextString(struct CNValuePool * pool, struct CNString * dst)
 {
         struct CNValue * next = dst->next ;
         if(next != NULL){

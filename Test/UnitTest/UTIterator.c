@@ -10,17 +10,30 @@
 #include <string.h>
 
 static bool
-UTStringIterator(struct CNValuePool * vpool, const char * str) ;
+UTStringIterator(void) ;
 
 bool UTIterator(void)
+{
+        bool result = true ;
+        result &= UTStringIterator() ;
+        return result ;
+}
+
+static bool
+UTStringIteratorTest(struct CNValuePool * vpool, const char * str) ;
+
+static bool
+UTStringIterator(void)
 {
         bool result = true ;
         struct CNMemoryUsage usage ;
 
         printf("(%s) Initial state\n", __func__) ;
+
         struct CNListPool lpool ;
         CNInitListPool(&lpool) ;
         struct CNValuePool vpool ;
+
         CNInitValuePool(&vpool, &lpool) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
         CNDumpMemoryUsage(0, &usage) ;
@@ -28,7 +41,7 @@ bool UTIterator(void)
         printf("(%s) Test state\n", __func__) ;
 
         /* test1 */
-        result &= UTStringIterator(&vpool, "Hello, world !!") ;
+        result &= UTStringIteratorTest(&vpool, "Hello, world !!") ;
 
         /* test2 */
         char src1[256 + 1] ;
@@ -37,7 +50,7 @@ bool UTIterator(void)
                 src1[i] = '0' + (i % 10) ;
         }
         src1[i] = '\0' ;
-        result &= UTStringIterator(&vpool, src1) ;
+        result &= UTStringIteratorTest(&vpool, src1) ;
 
         printf("(%s) Release state\n", __func__) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
@@ -58,7 +71,7 @@ bool UTIterator(void)
 }
 
 static bool
-UTStringIterator(struct CNValuePool * vpool, const char * str)
+UTStringIteratorTest(struct CNValuePool * vpool, const char * str)
 {
         uint32_t len = (uint32_t) strlen(str) ;
 
@@ -80,6 +93,8 @@ UTStringIterator(struct CNValuePool * vpool, const char * str)
                 }
         }
         revstr[i] = '\0' ;
+
+        CNDeinitStringIterator(vpool, &iterator) ;
 
         CNReleaseValue(vpool, val) ;
 

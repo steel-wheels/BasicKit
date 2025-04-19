@@ -82,6 +82,8 @@ setDictionary(struct CNDictionary * dst, const char * key, double data, struct C
         struct CNValue * keyval = CNAllocateString(key, (uint32_t) strlen(key), vpool) ;
         struct CNValue * value  = CNAllocateFloat(data, vpool) ;
         CNSetKeyAndValueToDictionary(dst, keyval, value, vpool) ;
+        CNReleaseValue(vpool, keyval) ;
+        CNReleaseValue(vpool, value) ;
 
 }
 

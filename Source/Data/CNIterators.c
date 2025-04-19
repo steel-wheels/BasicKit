@@ -15,11 +15,11 @@ CNInitStringIterator(struct CNStringIterator * dst, struct CNValue * string)
         if(CNTypeOfValue(string) == CNStringType){
                 CNRetainValue(string) ;
                 dst->sourceString       = string ;
-                dst->sourceLength       = CNLengthOfString(string) ;
+                dst->currentString      = string ;
                 dst->currentIndex       = 0 ;
         } else {
                 CNInterface()->error("[Error] Invakid parameter type in %s\n", __func__) ;
-                dst->sourceString       = NULL ;
+                dst->currentString      = NULL ;
                 dst->currentIndex       = 0 ;
         }
 }
@@ -27,7 +27,7 @@ CNInitStringIterator(struct CNStringIterator * dst, struct CNValue * string)
 char
 CNGetCharacterFromStringIterator(struct CNStringIterator * src)
 {
-        struct CNValue * curval = src->sourceString ;
+        struct CNValue * curval = src->currentString ;
         unsigned int curidx = src->currentIndex ;
         unsigned int curlen = CNLengthOfString(curval) ;
 
@@ -39,7 +39,7 @@ CNGetCharacterFromStringIterator(struct CNStringIterator * src)
                 } else {
                         struct CNValue * next = (curval->stringValue).next ;
                         if(next != NULL){
-                                src->sourceString  = next ;
+                                src->currentString = next ;
                                 src->currentIndex -= CNSTRING_ELEMENT_NUM ;
                                 result = CNGetCharacterFromStringIterator(src) ;
                         } else {

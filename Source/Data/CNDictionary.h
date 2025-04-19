@@ -35,7 +35,14 @@ void
 CNRetainDictionary(struct CNDictionary * dst) ;
 
 void
-CNReleaseDictionary(struct CNValuePool * pool, struct CNDictionary * dst) ;
+CNReleaseDictionaryElements(struct CNValuePool * pool, struct CNDictionary * dst) ;
+
+static inline void
+CNDeinitDictionary(struct CNValuePool * pool, struct CNDictionary * dst)
+{
+        /* do nothing */
+        (void) pool ; (void) dst ;
+}
 
 void
 CNDumpDictionary(unsigned int indent, const struct CNDictionary * src) ;

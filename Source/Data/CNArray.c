@@ -46,7 +46,7 @@ CNRetainArray(struct CNArray * dst)
 }
 
 void
-CNReleaseArray(struct CNValuePool * pool, struct CNArray * dst)
+CNReleaseArrayElements(struct CNValuePool * pool, struct CNArray * dst)
 {
         uint32_t        count  = dst->count ;
         struct CNValue ** values = dst->values ;
@@ -55,6 +55,13 @@ CNReleaseArray(struct CNValuePool * pool, struct CNArray * dst)
         for( ; ptr < endptr ; ptr++){
                 CNReleaseValue(pool, *ptr) ;
         }
+}
+
+void
+CNDeinitArray(struct CNValuePool * pool, struct CNArray * dst)
+{
+        uint32_t count  = dst->count ;
+        struct CNValue ** values = dst->values ;
         CNFreeArrayElements(pool, count, values) ;
 }
 

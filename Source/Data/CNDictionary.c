@@ -158,7 +158,7 @@ CNRetainDictionary(struct CNDictionary * dst)
 }
 
 void
-CNReleaseDictionary(struct CNValuePool * pool, struct CNDictionary * dst)
+CNReleaseDictionaryElements(struct CNValuePool * pool, struct CNDictionary * dst)
 {
         struct CNValue * next ;
         if((next = dst->next) != NULL){

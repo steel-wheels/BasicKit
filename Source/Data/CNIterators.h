@@ -12,7 +12,7 @@
 
 struct CNStringIterator {
         struct CNValue *        sourceString ;
-        uint32_t                sourceLength ;
+        struct CNValue *        currentString ;
         unsigned int            currentIndex ;
 } ;
 
@@ -25,7 +25,7 @@ void
 CNInitStringIterator(struct CNStringIterator * dst, struct CNValue * string) ;
 
 static inline void
-CNDenitStringIterator(struct CNValuePool * pool, struct CNStringIterator * dst)
+CNDeinitStringIterator(struct CNValuePool * pool, struct CNStringIterator * dst)
 {
         struct CNValue * srcstr = dst->sourceString ;
         if(srcstr != NULL){
