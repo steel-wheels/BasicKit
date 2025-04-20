@@ -54,11 +54,17 @@ CNGetCharacterFromStringIterator(struct CNStringIterator * src)
 }
 
 void
-CNInitStringListIterator(struct CNStringListIterator * dst, struct CNValueList * strings)
+CNInitStringListIterator(struct CNStringListIterator * dst, struct CNValuePool * vpool,
+                         struct CNValueList * strings)
 {
+        dst->valuePool = vpool ;
         struct CNValue * firststr = CNPopFromValueList(strings) ;
+        if(firststr == NULL){
+                CNInterface()->error("[Error] No string is found") ;
+        }
         dst->stringList = strings ;
         CNInitStringIterator(&(dst->stringIterator), firststr) ;
+        CNReleaseValue(dst->valuePool, firststr) ;
 }
 
 char
@@ -70,7 +76,9 @@ CNGetCharacterFromStringListIterator(struct CNStringListIterator * src)
         } else {
                 struct CNValue * firststr = CNPopFromValueList(src->stringList) ;
                 if(firststr != NULL){
+                        CNDeinitStringIterator(src->valuePool, &(src->stringIterator)) ;
                         CNInitStringIterator(&(src->stringIterator), firststr) ;
+                        CNReleaseValue(src->valuePool, firststr) ;
                         return CNGetCharacterFromStringListIterator(src) ;
                 } else {
                         return EOF ;

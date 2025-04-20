@@ -11,11 +11,16 @@
 
 static bool
 UTStringIterator(void) ;
+static bool
+UTStringListIterator(void) ;
+static void
+appendString(struct CNValueList * dst, struct CNValuePool * vpool, const char * str) ;
 
 bool UTIterator(void)
 {
         bool result = true ;
         result &= UTStringIterator() ;
+        result &= UTStringListIterator() ;
         return result ;
 }
 
@@ -108,5 +113,79 @@ UTStringIteratorTest(struct CNValuePool * vpool, const char * str)
                 result = false ;
         }
         return result ;
+}
+
+static bool
+UTStringListIterator(void)
+{
+        bool result = true ;
+        struct CNMemoryUsage usage ;
+
+        printf("(%s) Initial state\n", __func__) ;
+
+        struct CNListPool lpool ;
+        CNInitListPool(&lpool) ;
+        struct CNValuePool vpool ;
+
+        CNInitValuePool(&vpool, &lpool) ;
+        usage = CNMemoryUsageOfValuePool(&vpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
+
+        printf("(%s) Allocate state\n", __func__) ;
+        struct CNValueList vlist ;
+        CNInitValueList(&vlist, &vpool) ;
+        appendString(&vlist, &vpool, "Hello, World !!") ;
+        char longstr[128 + 1] ;
+        for(unsigned int i=0 ; i<128 ; i++){
+                longstr[i] = '0' + (i % 10) ;
+        }
+        longstr[128] = '\0' ;
+        appendString(&vlist, &vpool, longstr) ;
+        CNDumpValueList(0, &vlist) ;
+
+        struct CNStringListIterator iter ;
+        CNInitStringListIterator(&iter, &vpool, &vlist) ;
+
+        usage = CNMemoryUsageOfValuePool(&vpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
+
+        printf("(%s) Operation state\n", __func__) ;
+        char resstr[256 + 1] ;
+        unsigned int i ;
+        char c ;
+        for(i=0 ; (c = CNGetCharacterFromStringListIterator(&iter)) != EOF && i<256 ; i++){
+                resstr[i] = c ;
+        }
+        resstr[i] = '\0' ;
+        printf("(%s) operation result = %u:%s\n", __func__, i, resstr) ;
+
+        printf("(%s) Release state\n", __func__) ;
+        CNDeinitStringListIterator(&iter) ;
+        CNDeinitValueList(&vlist) ;
+
+        usage = CNMemoryUsageOfValuePool(&vpool) ;
+        CNDumpMemoryUsage(0, &usage) ;
+
+        if(usage.allocatedSize == usage.usableSize) {
+                printf("(%s) No memory leak\n", __func__) ;
+        } else {
+                printf("(%s) [Error] some memory leak\n", __func__) ;
+                result = false ;
+        }
+
+        printf("(%s) Final state\n", __func__) ;
+        CNDeinitValuePool(&vpool) ;
+        CNDeinitListPool(&lpool) ;
+
+        return result ;
+
+}
+
+static void
+appendString(struct CNValueList * dst, struct CNValuePool * vpool, const char * str)
+{
+        struct CNValue * newval = CNAllocateString(str, (uint32_t) strlen(str), vpool) ;
+        CNAppendToValueList(dst, newval) ;
+        CNReleaseValue(vpool, newval) ;
 }
 

@@ -34,11 +34,19 @@ CNGetCharacterFromStringIterator(struct CNStringIterator * src) ;
 
 struct CNStringListIterator {
         struct CNValueList *    stringList ;
+        struct CNValuePool *    valuePool ;
         struct CNStringIterator stringIterator ;
 } ;
 
 void
-CNInitStringListIterator(struct CNStringListIterator * dst, struct CNValueList * strings) ;
+CNInitStringListIterator(struct CNStringListIterator * dst, struct CNValuePool * vpool,
+                         struct CNValueList * strings) ;
+
+static inline void
+CNDeinitStringListIterator(struct CNStringListIterator * dst)
+{
+        CNDeinitStringIterator(dst->valuePool, &(dst->stringIterator)) ;
+}
 
 char
 CNGetCharacterFromStringListIterator(struct CNStringListIterator * src) ;
