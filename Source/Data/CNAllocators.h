@@ -11,9 +11,9 @@
 #import <BasicKit/CNValueList.h>
 
 void
-CNInitStringAllocator(struct CNValueList * dst, struct CNValuePool * vpool) ;
+CNInitStringList(struct CNValueList * dst, struct CNValuePool * vpool) ;
 
 void
-CNPutCharIntoAllocator(struct CNValueList * dst, char c) ;
+CNPutCharIntoStringList(struct CNValueList * dst, char c) ;
 
 #endif /* CNAllocators_h */

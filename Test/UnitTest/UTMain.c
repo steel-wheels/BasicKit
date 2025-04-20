@@ -14,6 +14,7 @@
 #include "UTValue.h"
 #include "UTValueList.h"
 #include "UTIterator.h"
+#include "UTAllocator.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -33,11 +34,12 @@ int main(int argc, char * argv[])
         bool result6 = UTValue() ;
         bool result7 = UTValueList() ;
         bool result8 = UTIterator() ;
+        bool result9 = UTAllocator() ;
 
         int ecode ;
         bool result = result0 && result1 && result2 && result3 &&
                       result4 && result5 && result6 && result7 &&
-                      result8 ;
+                      result8 && result9 ;
         if(result) {
                 printf("SUMMARY: OK\n") ;
                 ecode = 0 ;

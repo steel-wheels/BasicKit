@@ -8,7 +8,7 @@
 #import <BasicKit/CNAllocators.h>
 
 void
-CNInitStringAllocator(struct CNValueList * dst, struct CNValuePool * vpool)
+CNInitStringList(struct CNValueList * dst, struct CNValuePool * vpool)
 {
         CNInitValueList(dst, vpool) ;
 }
@@ -28,7 +28,7 @@ putCharIntoString(struct CNValue * val, char c)
 }
 
 void
-CNPutCharIntoAllocator(struct CNValueList * dst, char c)
+CNPutCharIntoStringList(struct CNValueList * dst, char c)
 {
         /* append into current string elements */
         struct CNList * last = CNLastInList(CNFirstItemInValueList(dst)) ;
@@ -41,4 +41,5 @@ CNPutCharIntoAllocator(struct CNValueList * dst, char c)
         char str[2] ; str[0] = c ; str[1] = '\0' ;
         struct CNValue * newstr = CNAllocateString(str, 1, dst->valuePool) ;
         CNAppendToValueList(dst, newstr) ;
+        CNReleaseValue(dst->valuePool, newstr) ;
 }
