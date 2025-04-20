@@ -11,6 +11,9 @@ void
 CNInitStringList(struct CNValueList * dst, struct CNValuePool * vpool)
 {
         CNInitValueList(dst, vpool) ;
+        struct CNValue * newline = CNAllocateString("", 0, vpool) ;
+        CNAppendToValueList(dst, newline) ;
+        CNReleaseValue(vpool, newline) ;
 }
 
 static bool
@@ -30,16 +33,23 @@ putCharIntoString(struct CNValue * val, char c)
 void
 CNPutCharIntoStringList(struct CNValueList * dst, char c)
 {
-        /* append into current string elements */
-        struct CNList * last = CNLastInList(CNFirstItemInValueList(dst)) ;
-        if(last != NULL){
-                if(putCharIntoString(last->data, c)){
-                        return ;
+        if(c == '\n'){
+                /* add new empty line */
+                struct CNValue * newline = CNAllocateString("", 0, dst->valuePool) ;
+                CNAppendToValueList(dst, newline) ;
+                CNReleaseValue(dst->valuePool, newline) ;
+        } else {
+                /* append into current string elements */
+                struct CNList * last = CNLastInList(CNFirstItemInValueList(dst)) ;
+                if(last != NULL){
+                        if(putCharIntoString(last->data, c)){
+                                return ;
+                        }
                 }
+                /* append as new element */
+                char str[2] ; str[0] = c ; str[1] = '\0' ;
+                struct CNValue * newstr = CNAllocateString(str, 1, dst->valuePool) ;
+                CNAppendToValueList(dst, newstr) ;
+                CNReleaseValue(dst->valuePool, newstr) ;
         }
-        /* append as new element */
-        char str[2] ; str[0] = c ; str[1] = '\0' ;
-        struct CNValue * newstr = CNAllocateString(str, 1, dst->valuePool) ;
-        CNAppendToValueList(dst, newstr) ;
-        CNReleaseValue(dst->valuePool, newstr) ;
 }

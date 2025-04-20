@@ -39,11 +39,16 @@ UTStringAllocator(void)
 
         printf("(%s) allocate state\n", __func__) ;
 #       define STR_SIZE 777
+#       define LINE_NUM 3
         struct CNValueList strlist ;
         CNInitStringList(&strlist, &vpool) ;
-        for(unsigned int i=0; i<STR_SIZE ; i++){
-                CNPutCharIntoStringList(&strlist, int2char(i)) ;
+        for(unsigned int i=0 ; i<LINE_NUM ; i++){
+                for(unsigned int j=0; j<STR_SIZE ; j++){
+                        CNPutCharIntoStringList(&strlist, int2char(j)) ;
+                }
+                CNPutCharIntoStringList(&strlist, '\n') ;
         }
+
         usage = CNMemoryUsageOfValuePool(&vpool) ;
         CNDumpMemoryUsage(0, &usage) ;
         CNDumpValueList(0, &strlist) ;
@@ -51,13 +56,15 @@ UTStringAllocator(void)
         printf("(%s) compare state\n", __func__) ;
         struct CNStringListIterator iter ;
         CNInitStringListIterator(&iter, &vpool, &strlist) ;
-        for(unsigned int i=0; i<STR_SIZE ; i++){
-                char c = CNGetCharacterFromStringListIterator(&iter) ;
-                if(int2char(i) != c){
-                        printf("(%s) [Error] failed to compare %c <-> %c at %u\n", __func__,
-                               int2char(i), c, i) ;
-                        result = false ;
-                        break ;
+        for(unsigned int i=0 ; i<LINE_NUM ; i++){
+                for(unsigned int j=0; j<STR_SIZE ; j++){
+                        char c = CNGetCharacterFromStringListIterator(&iter) ;
+                        if(int2char(j) != c){
+                                printf("(%s) [Error] failed to compare %c <-> %c at %u\n", __func__,
+                                       int2char(j), c, j) ;
+                                result = false ;
+                                break ;
+                        }
                 }
         }
         if(CNGetCharacterFromStringListIterator(&iter) != EOF){
