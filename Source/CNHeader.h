@@ -19,4 +19,5 @@
 #import <BasicKit/CNValueList.h>
 #import <BasicKit/CNIterators.h>
 #import <BasicKit/CNAllocators.h>
+#import <BasicKit/CNFile.h>
 

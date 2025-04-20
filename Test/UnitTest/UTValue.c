@@ -19,7 +19,8 @@ bool UTValue(void)
         printf("int64_t:       %lu\n", sizeof(int64_t)) ;
         printf("double:        %lu\n", sizeof(double)) ;
         printf("CNString:      %lu (%u)\n", sizeof(struct CNString), CNSTRING_ELEMENT_NUM) ;
-        printf("CNDictionary   %lu (%u)\n", sizeof(struct CNDictionary), CNDICTIONARY_ELEMENT_NUM) ;
+        printf("CNDictionary:  %lu (%u)\n", sizeof(struct CNDictionary), CNDICTIONARY_ELEMENT_NUM) ;
+        printf("CNError:       %lu\n", sizeof(struct CNError)) ;
         printf("sizeOfCNValue: %lu\n", sizeof(struct CNValue)) ;
 
         printf("(%s) Initial state\n", __func__) ;

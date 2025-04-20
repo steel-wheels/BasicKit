@@ -130,6 +130,13 @@ CNAllocateDictionary(struct CNValuePool * pool)
         return val ;
 }
 
+struct CNValue *
+CNAllocateError(CNErrorCode ecode, struct CNValuePool * pool)
+{
+        struct CNValue * val   = CNValueAllocate(CNErrorType, 0, pool) ;
+        val->errorValue.errorCode = ecode ;
+        return val ;
+}
 int
 CNCompareValue(const struct CNValue * s0, const struct CNValue * s1)
 {
@@ -190,6 +197,9 @@ CNCompareValue(const struct CNValue * s0, const struct CNValue * s1)
                 case CNDictionaryType: {
                         result = CNCompareDictionary(&(s0->dictionaryValue), &(s1->dictionaryValue)) ;
                 } break ;
+                case CNErrorType: {
+                        result = CNCompareError(&(s0->errorValue), &(s1->errorValue)) ;
+                } break ;
         }
         return result ;
 }
@@ -215,6 +225,9 @@ CNRetainValue(struct CNValue * dst)
                 } break ;
                 case CNDictionaryType: {
                         CNRetainDictionary(&(dst->dictionaryValue)) ;
+                } break ;
+                case CNErrorType: {
+                        CNRetainError(&(dst->errorValue)) ;
                 } break ;
         }
 
@@ -247,6 +260,9 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
                 case CNDictionaryType: {
                         CNReleaseDictionaryElements(pool, &(dst->dictionaryValue)) ;
                 } break ;
+                case CNErrorType: {
+                        CNReleaseError(&(dst->errorValue)) ;
+                } break ;
         }
 
         if(attr.referenceCount > 1){
@@ -270,7 +286,10 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
                         } break ;
                         case CNDictionaryType: {
                                 CNDeinitDictionary(pool, &(dst->dictionaryValue)) ;
-                        }
+                        } break ;
+                        case CNErrorType: {
+                                CNDeinitError(&(dst->errorValue)) ;
+                        } break ;
                 }
                 CNSetNullValue(dst, attr.releasable) ;
                 if(attr.releasable){
@@ -326,6 +345,9 @@ CNDumpValue(unsigned int indent, const struct CNValue * src)
                         CNDumpIndent(indent) ; CNInterface()->printf("{\n") ;
                         CNDumpDictionary(indent+1, &(src->dictionaryValue)) ;
                         CNDumpIndent(indent) ; CNInterface()->printf("}\n") ;
+                } break ;
+                case CNErrorType: {
+                        CNDumpError(indent, &(src->errorValue)) ;
                 } break ;
         }
 }

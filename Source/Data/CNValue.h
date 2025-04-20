@@ -9,6 +9,7 @@
 #define CNVALUE_H
 
 #import <BasicKit/CNType.h>
+#import <BasicKit/CNError.h>
 #import <BasicKit/CNList.h>
 #import <BasicKit/CNString.h>
 #import <BasicKit/CNArray.h>
@@ -28,7 +29,8 @@ typedef enum {
         CNFloatType,
         CNStringType,
         CNArrayType,
-        CNDictionaryType
+        CNDictionaryType,
+        CNErrorType
 } CNValueType ;
 
 struct CNValueAttribute {
@@ -49,6 +51,7 @@ struct CNValue
                 struct CNString         stringValue ;
                 struct CNArray          arrayValue ;
                 struct CNDictionary     dictionaryValue ;
+                struct CNError          errorValue ;
         } ; // no name
 } ;
 
@@ -135,6 +138,9 @@ CNAllocateArray(uint32_t count, struct CNValuePool * pool) ;
 
 struct CNValue *
 CNAllocateDictionary(struct CNValuePool * pool) ;
+
+struct CNValue *
+CNAllocateError(CNErrorCode ecode, struct CNValuePool * pool) ;
 
 int
 CNCompareValue(const struct CNValue * s0, const struct CNValue * s1) ;
