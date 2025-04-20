@@ -18,4 +18,5 @@
 #import <BasicKit/CNValuePool.h>
 #import <BasicKit/CNValueList.h>
 #import <BasicKit/CNIterators.h>
+#import <BasicKit/CNAllocators.h>
 

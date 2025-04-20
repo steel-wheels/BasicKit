@@ -70,6 +70,10 @@
 		05E524E12DAB904E00E069EB /* CNIterators.h in Headers */ = {isa = PBXBuildFile; fileRef = 05E524DE2DAB904E00E069EB /* CNIterators.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05E524E22DAB904E00E069EB /* CNIterators.h in Headers */ = {isa = PBXBuildFile; fileRef = 05E524DE2DAB904E00E069EB /* CNIterators.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05E524E32DAB904E00E069EB /* CNIterators.c in Sources */ = {isa = PBXBuildFile; fileRef = 05E524DF2DAB904E00E069EB /* CNIterators.c */; };
+		05EFC6F92DB4AF3400D49B0E /* CNAllocators.h in Headers */ = {isa = PBXBuildFile; fileRef = 05EFC6F72DB4AF3400D49B0E /* CNAllocators.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05EFC6FA2DB4AF3400D49B0E /* CNAllocators.c in Sources */ = {isa = PBXBuildFile; fileRef = 05EFC6F82DB4AF3400D49B0E /* CNAllocators.c */; };
+		05EFC6FB2DB4AF3400D49B0E /* CNAllocators.c in Sources */ = {isa = PBXBuildFile; fileRef = 05EFC6F82DB4AF3400D49B0E /* CNAllocators.c */; };
+		05EFC6FC2DB4AF3400D49B0E /* CNAllocators.h in Headers */ = {isa = PBXBuildFile; fileRef = 05EFC6F72DB4AF3400D49B0E /* CNAllocators.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05F07E802DA12FBA00CDD7B6 /* CNInterface.c in Sources */ = {isa = PBXBuildFile; fileRef = 05F07E7F2DA12FBA00CDD7B6 /* CNInterface.c */; };
 		05F07E812DA12FBA00CDD7B6 /* CNInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 05F07E7E2DA12FBA00CDD7B6 /* CNInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05F07E822DA12FBA00CDD7B6 /* CNInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 05F07E7E2DA12FBA00CDD7B6 /* CNInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -141,6 +145,8 @@
 		05E524CE2DAB5CA000E069EB /* ArisiaBasic-Yacc.y */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.yacc; path = "ArisiaBasic-Yacc.y"; sourceTree = "<group>"; };
 		05E524DE2DAB904E00E069EB /* CNIterators.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNIterators.h; sourceTree = "<group>"; };
 		05E524DF2DAB904E00E069EB /* CNIterators.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNIterators.c; sourceTree = "<group>"; };
+		05EFC6F72DB4AF3400D49B0E /* CNAllocators.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNAllocators.h; sourceTree = "<group>"; };
+		05EFC6F82DB4AF3400D49B0E /* CNAllocators.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNAllocators.c; sourceTree = "<group>"; };
 		05F07E7E2DA12FBA00CDD7B6 /* CNInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNInterface.h; sourceTree = "<group>"; };
 		05F07E7F2DA12FBA00CDD7B6 /* CNInterface.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNInterface.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -215,6 +221,8 @@
 			isa = PBXGroup;
 			children = (
 				050BCEFC2D867F8800C05DE3 /* CNType.h */,
+				05EFC6F72DB4AF3400D49B0E /* CNAllocators.h */,
+				05EFC6F82DB4AF3400D49B0E /* CNAllocators.c */,
 				05E524DE2DAB904E00E069EB /* CNIterators.h */,
 				05E524DF2DAB904E00E069EB /* CNIterators.c */,
 				05AE4AF22D9453290095BD66 /* CNString.h */,
@@ -314,6 +322,7 @@
 				05E524C62DA9E21000E069EB /* CNValuePool.h in Headers */,
 				052A88C32D9ECC3200C93B31 /* CNDictionary.h in Headers */,
 				05E524E22DAB904E00E069EB /* CNIterators.h in Headers */,
+				05EFC6FC2DB4AF3400D49B0E /* CNAllocators.h in Headers */,
 				0517F7432DB3AFF5001BF46B /* CNValueList.h in Headers */,
 				050BCF032D86D07E00C05DE3 /* CNValue.h in Headers */,
 				05B2DA7B2D97F5C7006A75F1 /* CNUtils.h in Headers */,
@@ -338,6 +347,7 @@
 				05E524C92DA9E21000E069EB /* CNValuePool.h in Headers */,
 				05E524E12DAB904E00E069EB /* CNIterators.h in Headers */,
 				05AE4B062D959E410095BD66 /* CNHeader.h in Headers */,
+				05EFC6F92DB4AF3400D49B0E /* CNAllocators.h in Headers */,
 				050BCF042D86D07E00C05DE3 /* CNValue.h in Headers */,
 				0517F7412DB3AFF5001BF46B /* CNValueList.h in Headers */,
 				05B2DA792D97F5C7006A75F1 /* CNUtils.h in Headers */,
@@ -522,6 +532,7 @@
 				05B2DA842D98BAE3006A75F1 /* CNArrayPool.c in Sources */,
 				05E524C72DA9E21000E069EB /* CNValuePool.c in Sources */,
 				052A88C22D9ECC3200C93B31 /* CNDictionary.c in Sources */,
+				05EFC6FB2DB4AF3400D49B0E /* CNAllocators.c in Sources */,
 				05B2DA722D9769FF006A75F1 /* CNPagePool.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -552,6 +563,7 @@
 				05B2DA832D98BAE3006A75F1 /* CNArrayPool.c in Sources */,
 				05E524C82DA9E21000E069EB /* CNValuePool.c in Sources */,
 				052A88C02D9ECC3200C93B31 /* CNDictionary.c in Sources */,
+				05EFC6FA2DB4AF3400D49B0E /* CNAllocators.c in Sources */,
 				05B2DA742D9769FF006A75F1 /* CNPagePool.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
