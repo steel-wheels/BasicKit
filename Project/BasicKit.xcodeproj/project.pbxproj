@@ -82,6 +82,8 @@
 		05EFC72B2DB525EB00D49B0E /* CNError.h in Headers */ = {isa = PBXBuildFile; fileRef = 05EFC7282DB525EB00D49B0E /* CNError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05EFC72C2DB525EB00D49B0E /* CNError.h in Headers */ = {isa = PBXBuildFile; fileRef = 05EFC7282DB525EB00D49B0E /* CNError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05EFC72D2DB525EB00D49B0E /* CNError.c in Sources */ = {isa = PBXBuildFile; fileRef = 05EFC7292DB525EB00D49B0E /* CNError.c */; };
+		05EFC72F2DB7E54300D49B0E /* ArisiaBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = 05EFC72E2DB7E54300D49B0E /* ArisiaBasic.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05EFC7302DB7E54300D49B0E /* ArisiaBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = 05EFC72E2DB7E54300D49B0E /* ArisiaBasic.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05F07E802DA12FBA00CDD7B6 /* CNInterface.c in Sources */ = {isa = PBXBuildFile; fileRef = 05F07E7F2DA12FBA00CDD7B6 /* CNInterface.c */; };
 		05F07E812DA12FBA00CDD7B6 /* CNInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 05F07E7E2DA12FBA00CDD7B6 /* CNInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05F07E822DA12FBA00CDD7B6 /* CNInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 05F07E7E2DA12FBA00CDD7B6 /* CNInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -159,6 +161,7 @@
 		05EFC7232DB524F000D49B0E /* CNFile.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNFile.c; sourceTree = "<group>"; };
 		05EFC7282DB525EB00D49B0E /* CNError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNError.h; sourceTree = "<group>"; };
 		05EFC7292DB525EB00D49B0E /* CNError.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNError.c; sourceTree = "<group>"; };
+		05EFC72E2DB7E54300D49B0E /* ArisiaBasic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArisiaBasic.h; sourceTree = "<group>"; };
 		05F07E7E2DA12FBA00CDD7B6 /* CNInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNInterface.h; sourceTree = "<group>"; };
 		05F07E7F2DA12FBA00CDD7B6 /* CNInterface.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNInterface.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -301,6 +304,7 @@
 		05E524CA2DAB5B9A00E069EB /* Parser */ = {
 			isa = PBXGroup;
 			children = (
+				05EFC72E2DB7E54300D49B0E /* ArisiaBasic.h */,
 				05E524CE2DAB5CA000E069EB /* ArisiaBasic-Yacc.y */,
 				05E524CB2DAB5C1800E069EB /* ArisiaBasic-Lex.l */,
 			);
@@ -350,6 +354,7 @@
 				0517F7432DB3AFF5001BF46B /* CNValueList.h in Headers */,
 				05EFC7252DB524F000D49B0E /* CNFile.h in Headers */,
 				05EFC72B2DB525EB00D49B0E /* CNError.h in Headers */,
+				05EFC7302DB7E54300D49B0E /* ArisiaBasic.h in Headers */,
 				050BCF032D86D07E00C05DE3 /* CNValue.h in Headers */,
 				05B2DA7B2D97F5C7006A75F1 /* CNUtils.h in Headers */,
 			);
@@ -378,6 +383,7 @@
 				050BCF042D86D07E00C05DE3 /* CNValue.h in Headers */,
 				05EFC72C2DB525EB00D49B0E /* CNError.h in Headers */,
 				0517F7412DB3AFF5001BF46B /* CNValueList.h in Headers */,
+				05EFC72F2DB7E54300D49B0E /* ArisiaBasic.h in Headers */,
 				05B2DA792D97F5C7006A75F1 /* CNUtils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

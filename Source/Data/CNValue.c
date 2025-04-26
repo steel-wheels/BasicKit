@@ -137,6 +137,7 @@ CNAllocateError(CNErrorCode ecode, struct CNValuePool * pool)
         val->errorValue.errorCode = ecode ;
         return val ;
 }
+
 int
 CNCompareValue(const struct CNValue * s0, const struct CNValue * s1)
 {

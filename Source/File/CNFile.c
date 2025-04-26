@@ -5,4 +5,22 @@
  *   Copyright (C) 2025 Steel Wheels Project
  */
 
-#include "CNFile.h"
+#import <BasicKit/CNFile.h>
+#import <BasicKit/CNAllocators.h>
+#include <stdio.h>
+
+bool
+CNLoadFile(struct CNValueList * dst, const char * filename, struct CNValuePool * vpool)
+{
+        FILE *  file = fopen(filename, "r") ;
+        if(file != NULL){
+                int     c ;
+                CNInitValueList(dst, vpool) ;
+                while((c = fgetc(file)) != EOF){
+                        CNPutCharIntoStringList(dst, c) ;
+                }
+                return true ;
+        } else {
+                return false ;
+        }
+}
