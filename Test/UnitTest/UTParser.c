@@ -46,7 +46,7 @@ UTParser(void)
 }
 
 const char * program0[] = {
-        "let",
+        "print \"a\"",
         NULL
 } ;
 

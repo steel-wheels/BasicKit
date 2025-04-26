@@ -14,8 +14,11 @@ CNSetupParser(struct CNValuePool * vpool)
 
 %}
 
+/* reserved words */
+%token  LET
+%token  PRINT
+
 %token  IDENTIFIER
-%token	LET
 %token  STRING
 
 %start statement
@@ -23,7 +26,7 @@ CNSetupParser(struct CNValuePool * vpool)
 %%
 
 statement
-	: LET
+	: PRINT STRING
 	;
 
 %%

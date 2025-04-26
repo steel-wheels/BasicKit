@@ -59,6 +59,9 @@ IDENT           [a-zA-Z][_0-9a-zA-Z]*
 <CSTRING>[^\"]*
 <CSTRING>\"     {
         BEGIN(INITIAL) ;
+        const char * str = yytext ;
+        uint32_t     len = (uint32_t) strlen(str) ;
+        yylval.value = CNAllocateString(str, len, s_valuePool) ;
         return STRING ;
 }
 
@@ -91,12 +94,21 @@ getChar(void)
 static bool
 isReservedWord(int * rwordid, const char * str)
 {
-        bool result ;
-        if(strcasecmp(str, "let") == 0) {
-                *rwordid = LET ; result = true ;
-        } else {
-                result = false ;
+        struct RWord {
+                int             rId ;
+                const char *    rWord ;
+        } ;
+        const struct RWord words[] = {
+                { .rId = LET,   .rWord = "let"          },
+                { .rId = PRINT, .rWord = "print"        },
+                { .rId = -1,    .rWord = ""             }  // Terminal word
+        } ;
+        for(const struct RWord * word = words ; word->rId != -1 ; word++){
+                if(strcasecmp(str, word->rWord) == 0){
+                        *rwordid = word->rId ;
+                        return true ;
+                }
         }
-        return result ;
+        return false ;
 }
 
