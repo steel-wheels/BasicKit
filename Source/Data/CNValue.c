@@ -131,6 +131,14 @@ CNAllocateDictionary(struct CNValuePool * pool)
 }
 
 struct CNValue *
+CNAllocateOpCode(struct CNValuePool * pool, const struct CNOpCode * code)
+{
+        struct CNValue * val   = CNValueAllocate(CNOpCodeType, 0, pool) ;
+        val->opCodeValue = *code ;
+        return val ;
+}
+
+struct CNValue *
 CNAllocateError(CNErrorCode ecode, struct CNValuePool * pool)
 {
         struct CNValue * val   = CNValueAllocate(CNErrorType, 0, pool) ;
@@ -198,6 +206,9 @@ CNCompareValue(const struct CNValue * s0, const struct CNValue * s1)
                 case CNDictionaryType: {
                         result = CNCompareDictionary(&(s0->dictionaryValue), &(s1->dictionaryValue)) ;
                 } break ;
+                case CNOpCodeType: {
+                        result = CNCompareOpCode(&(s0->opCodeValue), &(s1->opCodeValue)) ;
+                } break ;
                 case CNErrorType: {
                         result = CNCompareError(&(s0->errorValue), &(s1->errorValue)) ;
                 } break ;
@@ -226,6 +237,9 @@ CNRetainValue(struct CNValue * dst)
                 } break ;
                 case CNDictionaryType: {
                         CNRetainDictionary(&(dst->dictionaryValue)) ;
+                } break ;
+                case CNOpCodeType: {
+                        CNRetainOpCode(&(dst->opCodeValue)) ;
                 } break ;
                 case CNErrorType: {
                         CNRetainError(&(dst->errorValue)) ;
@@ -261,6 +275,9 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
                 case CNDictionaryType: {
                         CNReleaseDictionaryElements(pool, &(dst->dictionaryValue)) ;
                 } break ;
+                case CNOpCodeType: {
+                        CNReleaseOpCode(pool, &(dst->opCodeValue)) ;
+                } break ;
                 case CNErrorType: {
                         CNReleaseError(&(dst->errorValue)) ;
                 } break ;
@@ -287,6 +304,9 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
                         } break ;
                         case CNDictionaryType: {
                                 CNDeinitDictionary(pool, &(dst->dictionaryValue)) ;
+                        } break ;
+                        case CNOpCodeType: {
+                                CNDeinitOpCode(pool, &(dst->opCodeValue)) ;
                         } break ;
                         case CNErrorType: {
                                 CNDeinitError(&(dst->errorValue)) ;
@@ -346,6 +366,9 @@ CNDumpValue(unsigned int indent, const struct CNValue * src)
                         CNDumpIndent(indent) ; CNInterface()->printf("{\n") ;
                         CNDumpDictionary(indent+1, &(src->dictionaryValue)) ;
                         CNDumpIndent(indent) ; CNInterface()->printf("}\n") ;
+                } break ;
+                case CNOpCodeType: {
+                        CNDumpOpCode(indent, &(src->opCodeValue)) ;
                 } break ;
                 case CNErrorType: {
                         CNDumpError(indent, &(src->errorValue)) ;

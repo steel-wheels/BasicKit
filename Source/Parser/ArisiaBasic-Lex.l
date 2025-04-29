@@ -72,12 +72,10 @@ IDENT           [a-zA-Z][_0-9a-zA-Z]*
         BEGIN(INITIAL) ;
         struct CNList * item = s_string_list.firstItem ;
         if(item != NULL){
-                CNInterface()->error("String\n") ;
                 struct CNValue * val = item->data ;
                 CNRetainValue(val) ;
                 yylval.value = val ;
         } else {
-                CNInterface()->error("Invalid string\n") ;
                 yylval.value = CNAllocateNull() ;
         }
         CNDeinitValueList(&s_string_list) ;

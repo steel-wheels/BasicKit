@@ -14,6 +14,7 @@
 #import <BasicKit/CNString.h>
 #import <BasicKit/CNArray.h>
 #import <BasicKit/CNDictionary.h>
+#import <BasicKit/CNOpCode.h>
 #import <BasicKit/CNScalarPool.h>
 #import <BasicKit/CNArrayPool.h>
 
@@ -30,6 +31,7 @@ typedef enum {
         CNStringType,
         CNArrayType,
         CNDictionaryType,
+        CNOpCodeType,
         CNErrorType
 } CNValueType ;
 
@@ -51,6 +53,7 @@ struct CNValue
                 struct CNString         stringValue ;
                 struct CNArray          arrayValue ;
                 struct CNDictionary     dictionaryValue ;
+                struct CNOpCode         opCodeValue ;
                 struct CNError          errorValue ;
         } ; // no name
 } ;
@@ -138,6 +141,9 @@ CNAllocateArray(uint32_t count, struct CNValuePool * pool) ;
 
 struct CNValue *
 CNAllocateDictionary(struct CNValuePool * pool) ;
+
+struct CNValue *
+CNAllocateOpCode(struct CNValuePool * pool, const struct CNOpCode * code) ;
 
 struct CNValue *
 CNAllocateError(CNErrorCode ecode, struct CNValuePool * pool) ;
