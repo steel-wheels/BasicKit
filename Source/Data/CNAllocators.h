@@ -16,4 +16,11 @@ CNInitStringList(struct CNValueList * dst, struct CNValuePool * vpool) ;
 void
 CNPutCharIntoStringList(struct CNValueList * dst, char c) ;
 
+static inline void
+CNPutStringIntoStringList(struct CNValueList * dst, const char * str) {
+        for( ; *str != '\0' ; str++){
+                CNPutCharIntoStringList(dst, *str) ;
+        }
+}
+
 #endif /* CNAllocators_h */

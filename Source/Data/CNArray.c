@@ -10,6 +10,14 @@
 #import <BasicKit/CNValuePool.h>
 #import <BasicKit/CNUtils.h>
 
+void
+CNSetElementToArray(struct CNValuePool * vpool, struct CNArray * dst, unsigned int index, struct CNValue * newval)
+{
+        CNReleaseValue(vpool, CNElementInArray(dst, index)) ;
+        CNRetainValue(newval) ;
+        dst->values[index] = newval ;
+}
+
 int
 CNCompareArray(const struct CNArray * s0, const struct CNArray * s1)
 {

@@ -18,6 +18,15 @@ struct CNArray {
 int
 CNCompareArray(const struct CNArray * s0, const struct CNArray * s1) ;
 
+static inline struct CNValue *
+CNElementInArray(struct CNArray * src, unsigned int index)
+{
+        return (src->values)[index] ;
+}
+
+void
+CNSetElementToArray(struct CNValuePool * cpool, struct CNArray * dst, unsigned int index, struct CNValue * newval) ;
+
 void
 CNRetainArray(struct CNArray * dst) ;
 

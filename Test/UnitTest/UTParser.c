@@ -78,8 +78,11 @@ testParsers(struct CNValuePool * vpool, unsigned int testid)
         CNDumpValueList(0, &lines) ;
 
         /* exec parser */
-        CNInitParser(vpool) ;
+        struct CNParserDB pdb ;
+        CNInitParserDB(&pdb, vpool) ;
+        CNInitParser(&pdb) ;
         CNExecParser(&lines) ;
+        CNDeinitParserDB(&pdb) ;
 
         CNDeinitValueList(&lines) ;
 

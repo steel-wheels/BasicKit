@@ -20,5 +20,7 @@
 #import <BasicKit/CNIterators.h>
 #import <BasicKit/CNAllocators.h>
 #import <BasicKit/CNFile.h>
+#import <BasicKit/CNParserDB.h>
+#import <BasicKit/CNRegisterFile.h>
 #import <BasicKit/ArisiaBasic.h>
 

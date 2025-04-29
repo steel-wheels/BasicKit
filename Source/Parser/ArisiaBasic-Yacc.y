@@ -1,16 +1,19 @@
 %{
-	/* ArisiaBasic-Yacc.y */
-#       include "ArisiaBasic.h"
 
-static struct CNValuePool *     s_valuePool = NULL ;
+/* ArisiaBasic-Yacc.y */
 
-static int yyerror(char const * str) ;
+#include "ArisiaBasic.h"
+#include "CNList.h"
+
+static struct CNParserDB * s_parser_db = NULL ;
 
 void
-CNSetupParser(struct CNValuePool * vpool)
+CNSetupParser(struct CNParserDB * pdb)
 {
-        s_valuePool = vpool ;
+        s_parser_db = pdb ;
 }
+
+static int yyerror(char const * str) ;
 
 %}
 
@@ -26,8 +29,20 @@ CNSetupParser(struct CNValuePool * vpool)
 %%
 
 statement
-	: PRINT STRING
-	;
+        : PRINT expression
+        {
+                CNReleaseValue(s_parser_db->valuePool, $2.value) ;
+        }
+        ;
+
+expression
+        : STRING
+        {
+                CNInterface()->printf("STRING = ") ;
+                CNDumpValue(0, $1.value) ;
+                $0 = $1 ;
+        }
+        ;
 
 %%
 

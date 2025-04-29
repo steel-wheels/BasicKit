@@ -9,4 +9,9 @@ The BASIC interpreter
   * Step by Step execution (REPL)
   * One liner. <code>print "Hello, world !!"</code>
 
+## Reference
+### Language
+#### BNF for BASIC
+* BASICintepreter: https://caml.inria.fr/pub/docs/oreilly-book/html/book-ora058.html
+* BNF of Commodore BASIC v2.0 (PET/C64): https://gist.github.com/rkalz/faf947006ef0f63d52dc4c1643770f6f
 
