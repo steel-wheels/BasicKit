@@ -6,11 +6,11 @@
 #include "CNByteCode.h"
 #include "CNList.h"
 
-static struct CNParserDB *      s_parser_db   = NULL ;
+static struct CNProgram *      s_parser_db   = NULL ;
 static unsigned int             s_uniq_reg_id = 0 ;
 
 void
-CNSetupParser(struct CNParserDB * pdb)
+CNSetupParser(struct CNProgram * pdb)
 {
         s_parser_db   = pdb ;
 }

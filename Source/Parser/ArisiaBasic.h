@@ -9,7 +9,7 @@
 #define ArisiaBasic_Yacc_h
 
 #import <BasicKit/CNType.h>
-#import <BasicKit/CNParserDB.h>
+#import <BasicKit/CNProgram.h>
 #import <BasicKit/CNValueList.h>
 #import <BasicKit/CNInterface.h>
 
@@ -28,8 +28,8 @@ typedef struct {
 extern int yylex(void) ;
 
 static inline void
-CNInitParser(struct CNParserDB * pdb) {
-        extern void CNSetupParser(struct CNParserDB * pdb) ; // defined in ArisiaBasic-Yacc.y
+CNInitParser(struct CNProgram * pdb) {
+        extern void CNSetupParser(struct CNProgram * pdb) ; // defined in ArisiaBasic-Yacc.y
         extern void CNSetupLexer(struct CNValuePool * vpool) ;  // defined in ArisiaBasic-Lex.l
         CNSetupLexer(pdb->valuePool) ;
         CNSetupParser(pdb) ;

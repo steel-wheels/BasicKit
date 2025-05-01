@@ -1,19 +1,19 @@
 /*
- * @file CNParserDB.h
- * @description Define CNParserDB data structure
+ * @file CNProgram.h
+ * @description Define CNProgtam data structure
  * @par Copyright
  *   Copyright (C) 2025 Steel Wheels Project
  */
 
-#ifndef CNParserDB_h
-#define CNParserDB_h
+#ifndef CNProgram_h
+#define CNProgram_h
 
 #import <BasicKit/CNType.h>
 #import <BasicKit/CNValueList.h>
 #import <BasicKit/CNValuePool.h>
 #import <BasicKit/CNValue.h>
 
-struct CNParserDB {
+struct CNProgram {
         struct CNValuePool *    valuePool ;
         /* List of CNDictionary
          *   key:   CNString
@@ -27,15 +27,15 @@ struct CNParserDB {
 } ;
 
 void
-CNInitParserDB(struct CNParserDB * pdb, struct CNValuePool * vpool) ;
+CNInitProgram(struct CNProgram * dst, struct CNValuePool * vpool) ;
 
 void
-CNDeinitParserDB(struct CNParserDB * pdb) ;
+CNDeinitProgram(struct CNProgram * dst) ;
 
 static inline void
-CNAppendCodeToProgram(struct CNParserDB * dst, struct CNValue * opcode)
+CNAppendCodeToProgram(struct CNProgram * dst, struct CNValue * opcode)
 {
         CNAppendToValueList(&(dst->program), opcode) ;
 }
 
-#endif /* CNParserDB_h */
+#endif /* CNProgram_h */
