@@ -11,10 +11,13 @@ void
 CNInitParserDB(struct CNParserDB * pdb, struct CNValuePool * vpool)
 {
         pdb->valuePool = vpool ;
+
         struct CNList * list = CNAllocateList(CNListPoolInValuePool(vpool)) ;
         list->next = NULL ;
         list->data = CNAllocateDictionary(vpool) ;
         pdb->variableTables = list ;
+
+        CNInitValueList(&(pdb->program), vpool) ;
 }
 
 void
@@ -29,6 +32,7 @@ CNDeinitParserDB(struct CNParserDB * pdb)
                 CNFreeList(lpool, list) ;
         }
         pdb->variableTables = NULL ;
+        CNDeinitValueList(&(pdb->program)) ;
 }
 
 

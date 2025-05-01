@@ -45,4 +45,11 @@ CNExecParser(struct CNValueList * strings) {
         CNDeinitSourceCode() ;
 }
 
+static inline void
+CNFreeParser(void)
+{
+        extern void CNDeinitParser(void) ;
+        CNDeinitParser() ;
+}
+
 #endif /* ArisiaBasic_Yacc_h */

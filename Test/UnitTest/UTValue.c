@@ -20,6 +20,7 @@ bool UTValue(void)
         printf("double:        %lu\n", sizeof(double)) ;
         printf("CNString:      %lu (%u)\n", sizeof(struct CNString), CNSTRING_ELEMENT_NUM) ;
         printf("CNDictionary:  %lu (%u)\n", sizeof(struct CNDictionary), CNDICTIONARY_ELEMENT_NUM) ;
+        printf("CNOpCode:      %lu\n", sizeof(struct CNOpCode)) ;
         printf("CNError:       %lu\n", sizeof(struct CNError)) ;
         printf("sizeOfCNValue: %lu\n", sizeof(struct CNValue)) ;
 

@@ -7,6 +7,7 @@
 
 #import <BasicKit/CNOpCode.h>
 #import <BasicKit/CNValue.h>
+#import <BasicKit/CNValuePool.h>
 #import <BasicKit/CNInterface.h>
 #import <BasicKit/CNUtils.h>
 
@@ -31,6 +32,12 @@ void
 CNReleaseOpCode(struct CNValuePool * vpool, struct CNOpCode * dst)
 {
         dst->attribute = 0 ;
+        struct CNList *list, *next ;
+        for(list = dst->children ; list != NULL ; list = next) {
+                next = list->next ;
+                CNReleaseValue(vpool, list->data) ;
+                CNFreeList(CNListPoolInValuePool(vpool), list) ;
+        }
         CNReleaseValue(vpool, dst->destination) ;
         CNReleaseValue(vpool, dst->source0) ;
         CNReleaseValue(vpool, dst->source1) ;

@@ -12,6 +12,7 @@
 
 struct CNOpCode {
         uint64_t                attribute ;
+        struct CNList *         children ;      // list of CNOpCode, will be null
         struct CNValue *        destination ;
         struct CNValue *        source0 ;
         struct CNValue *        source1 ;

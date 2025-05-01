@@ -6,3 +6,6 @@
  */
 
 #import <BasicKit/CNByteCode.h>
+#import <BasicKit/CNValuePool.h>
+#import <BasicKit/CNInterface.h>
+

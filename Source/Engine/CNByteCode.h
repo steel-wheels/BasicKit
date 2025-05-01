@@ -12,41 +12,60 @@
 
 /* The byte code must be 12 bit */
 typedef enum {
-        CNStoreStringOpCode     = 0x001,
-        CNPrintOpCode           = 0x002
-} CNByteOpCode ;
+        CNStoreStringByteCode   = 0x001,
+        CNPrintByteCode         = 0x002
+} CNByteCode ;
 
 static inline uint64_t
-CNMakeOpCodeAttribute(CNByteOpCode code)
+CNMakeByteCodeAttribute(CNByteCode code)
 {
         uint64_t codeval = code ;
         return (codeval & 0xfff) ;
 }
 
-static inline CNByteOpCode
-CNByteOpCodeInAttribute(uint64_t attr)
+static inline CNByteCode
+CNByteCodeInAttribute(uint64_t attr)
 {
-        return (CNByteOpCode) (attr & 0xfff) ;
+        return (CNByteCode) (attr & 0xfff) ;
+}
+
+static inline bool
+CNByteCodeInValue(CNByteCode * opcode, struct CNValue * src)
+{
+        bool result ;
+        switch(CNTypeOfValue(src)){
+                case CNOpCodeType: {
+                        uint64_t attr = (src->opCodeValue).attribute ;
+                        *opcode = CNByteCodeInAttribute(attr) ;
+                        result = true ;
+                } break ;
+                default: {
+                        result = false ;
+                } break ;
+        }
+        return result ;
 }
 
 static inline struct CNValue *
-CNAllocateStoreStringOpCode(struct CNValuePool * vpool, unsigned int dstregid, struct CNValue * str0)
+CNAllocateStoreStringByteCode(struct CNValuePool * vpool, struct CNValue * dstregid, struct CNValue * str0)
 {
-        CNRetainValue(str0) ;
         struct CNOpCode code = {
-                .attribute      = CNMakeOpCodeAttribute(CNStoreStringOpCode),
-                .destination    = CNAllocateUnsignedInt(dstregid, vpool),
+                .attribute      = CNMakeByteCodeAttribute(CNStoreStringByteCode),
+                .children       = NULL,
+                .destination    = dstregid,
                 .source0        = str0,
                 .source1        = CNAllocateNull()
         } ;
+        CNRetainValue(dstregid) ;
+        CNRetainValue(str0) ;
         return CNAllocateOpCode(vpool, &code) ;
 }
 
 static inline struct CNValue *
-CNAllocatePrintOpCode(struct CNValuePool * vpool, unsigned int srcregid)
+CNAllocatePrintByteCode(struct CNValuePool * vpool, unsigned int srcregid)
 {
         struct CNOpCode code = {
-                .attribute      = CNMakeOpCodeAttribute(CNPrintOpCode),
+                .attribute      = CNMakeByteCodeAttribute(CNPrintByteCode),
                 .destination    = CNAllocateUnsignedInt(srcregid, vpool),
                 .source0        = CNAllocateNull(),
                 .source1        = CNAllocateNull()
