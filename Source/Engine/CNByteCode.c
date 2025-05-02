@@ -24,9 +24,8 @@ opCodeName(CNByteCode code)
 static void
 dumpRegister(const struct CNValue * regid)
 {
-        CNInterface()->printf("$") ;
-        CNDumpValue(0, regid) ;
-        CNInterface()->printf(" ") ;
+        uint64_t regnum = CNUnsignedIntValue(regid) ;
+        CNInterface()->printf("$%lu ", regnum) ;
 }
 
 void
@@ -41,7 +40,7 @@ CNDumpByteCode(uint32_t indent, const struct CNValue * src)
         /* Dump opcode */
         const char * opstr = opCodeName(bcode) ;
         CNDumpIndent(indent) ;
-        CNInterface()->printf("%s\t", opstr) ;
+        CNInterface()->printf("%s ", opstr) ;
 
         /* dump parameters */
         const struct CNOpCode * opcode = &(src->opCodeValue) ;
@@ -55,7 +54,7 @@ CNDumpByteCode(uint32_t indent, const struct CNValue * src)
                 case CNPrintByteCode: {
                         /* dump source register */
                         dumpRegister(opcode->source0) ;
+                        CNInterface()->printf("\n") ;
                 } break ;
         }
-        CNInterface()->printf("\n") ;
 }

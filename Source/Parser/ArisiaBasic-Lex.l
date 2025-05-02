@@ -104,7 +104,7 @@ static int
 getChar(void)
 {
         char c = CNGetCharacterFromStringListIterator(&s_program_reader) ;
-        printf("getChar: \"%c\"\n", c) ;
+        //printf("getChar: \"%c\"\n", c) ;
         return c ;
 }
 

@@ -124,6 +124,9 @@ CNAllocateSignedInt(int64_t val, struct CNValuePool * pool) ;
 struct CNValue *
 CNAllocateUnsignedInt(uint64_t val, struct CNValuePool * pool) ;
 
+uint64_t
+CNUnsignedIntValue(const struct CNValue * src) ;
+
 struct CNValue *
 CNAllocateFloat(double val, struct CNValuePool * pool) ;
 

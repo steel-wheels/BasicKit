@@ -61,6 +61,22 @@ CNAllocateUnsignedInt(uint64_t num, struct CNValuePool * pool)
         return val ;
 }
 
+uint64_t
+CNUnsignedIntValue(const struct CNValue * src)
+{
+        uint64_t result ;
+        switch(CNTypeOfValue(src)) {
+                case CNUnsignedIntType: {
+                        result = src->uint64Value ;
+                } break ;
+                default: {
+                        CNInterface()->error("[Error] Not unsigned int value\n") ;
+                        result = 0 ;
+                } break ;
+        }
+        return result ;
+}
+
 struct CNValue *
 CNAllocateFloat(double num, struct CNValuePool * pool)
 {

@@ -23,6 +23,5 @@
 #import <BasicKit/CNOpCode.h>
 #import <BasicKit/CNByteCode.h>
 #import <BasicKit/CNProgram.h>
-#import <BasicKit/CNRegisterFile.h>
 #import <BasicKit/ArisiaBasic.h>
 

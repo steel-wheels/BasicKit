@@ -15,11 +15,6 @@
 
 struct CNProgram {
         struct CNValuePool *    valuePool ;
-        /* List of CNDictionary
-         *   key:   CNString
-         *   value: CNUnsignedInt
-         */
-        struct CNList *         variableTables ;
         /*
          * List of CNByteCode
          */
