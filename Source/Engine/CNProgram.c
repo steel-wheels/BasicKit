@@ -6,6 +6,7 @@
  */
 
 #import <BasicKit/CNProgram.h>
+#import <BasicKit/CNByteCode.h>
 
 void
 CNInitProgram(struct CNProgram * dst, struct CNValuePool * vpool)
@@ -35,4 +36,12 @@ CNDeinitProgram(struct CNProgram * dst)
         CNDeinitValueList(&(dst->program)) ;
 }
 
+void
+CNDumpProgram(unsigned int indent, struct CNProgram * src)
+{
+        struct CNList * list = (src->program).firstItem ;
+        for( ; list != NULL ; list = list->next) {
+                CNDumpByteCode(indent, list->data) ;
+        }
+}
 

@@ -12,7 +12,6 @@
 
 struct CNOpCode {
         uint64_t                attribute ;
-        struct CNList *         children ;      // list of CNOpCode, will be null
         struct CNValue *        destination ;
         struct CNValue *        source0 ;
         struct CNValue *        source1 ;
@@ -25,10 +24,10 @@ void
 CNReleaseOpCode(struct CNValuePool * pool, struct CNOpCode * dst) ;
 
 static inline void
-CNDeinitOpCode(struct CNValuePool * pool, struct CNOpCode * dst)
+CNDeinitOpCode(struct CNValuePool * vpool, struct CNOpCode * dst)
 {
-        /* do nothing */
-        (void) pool ; (void) dst ;
+        (void) vpool ;
+        dst->attribute = 0 ;
 }
 
 int

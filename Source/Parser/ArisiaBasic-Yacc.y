@@ -6,19 +6,19 @@
 #include "CNByteCode.h"
 #include "CNList.h"
 
-static struct CNProgram *      s_parser_db   = NULL ;
-static unsigned int             s_uniq_reg_id = 0 ;
+static struct CNProgram *      s_program     = NULL ;
+static unsigned int            s_uniq_reg_id = 0 ;
 
 void
-CNSetupParser(struct CNProgram * pdb)
+CNSetupParser(struct CNProgram * prg)
 {
-        s_parser_db   = pdb ;
+        s_program = prg ;
 }
 
 void
 CNDeinitParser(void)
 {
-        s_parser_db   = NULL ;
+        s_program = NULL ;
 }
 
 static inline unsigned int
@@ -32,21 +32,29 @@ uniqueRegId(void)
 static struct CNValue *
 registerId(unsigned int regid)
 {
-        return CNAllocateUnsignedInt(regid, s_parser_db->valuePool) ;
+        return CNAllocateUnsignedInt(regid, s_program->valuePool) ;
 }
 
 static struct CNValue *
-storeString(struct CNValue * dstreg, struct CNValue * srcstr)
+storeStringCode(struct CNValue * dstreg, struct CNValue * srcstr)
 {
         struct CNValue * opcode = CNAllocateStoreStringByteCode(
-                s_parser_db->valuePool, dstreg, srcstr) ;
+                s_program->valuePool, dstreg, srcstr) ;
+        return opcode ;
+}
+
+static struct CNValue *
+printCode(struct CNValue * srcregid)
+{
+        struct CNValue * opcode = CNAllocatePrintByteCode(
+                s_program->valuePool, srcregid) ;
         return opcode ;
 }
 
 static inline void
 appendToBlock(struct CNValue * opcode)
 {
-        CNAppendCodeToProgram(s_parser_db, opcode) ;
+        CNAppendCodeToProgram(s_program, opcode) ;
 }
 
 static int yyerror(char const * str) ;
@@ -67,7 +75,10 @@ static int yyerror(char const * str) ;
 statement
         : PRINT expression
         {
-                CNReleaseValue(s_parser_db->valuePool, $2.value) ;
+                struct CNValue * opcode = printCode($2.value) ;
+                appendToBlock(opcode) ;
+                CNReleaseValue(s_program->valuePool, $2.value) ;
+                CNReleaseValue(s_program->valuePool, opcode) ;
         }
         ;
 
@@ -75,11 +86,11 @@ expression
         : STRING
         {
                 struct CNValue * regid  = registerId(uniqueRegId()) ;
-                struct CNValue * opcode = storeString(regid, $1.value) ;
+                struct CNValue * opcode = storeStringCode(regid, $1.value) ;
                 appendToBlock(opcode) ;
-                CNReleaseValue(s_parser_db->valuePool, $1.value) ;
-                CNReleaseValue(s_parser_db->valuePool, opcode) ;
-                $0.value = regid ;
+                CNReleaseValue(s_program->valuePool, $1.value) ;
+                CNReleaseValue(s_program->valuePool, opcode) ;
+                $$.value = regid ;
         }
         ;
 

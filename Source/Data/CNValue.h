@@ -143,7 +143,8 @@ struct CNValue *
 CNAllocateDictionary(struct CNValuePool * pool) ;
 
 struct CNValue *
-CNAllocateOpCode(struct CNValuePool * pool, const struct CNOpCode * code) ;
+CNAllocateOpCode(struct CNValuePool * pool, uint64_t addr, struct CNValue * dst,
+                 struct CNValue * src0, struct CNValue * src1) ;
 
 struct CNValue *
 CNAllocateError(CNErrorCode ecode, struct CNValuePool * pool) ;

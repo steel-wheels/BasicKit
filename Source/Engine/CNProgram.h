@@ -38,4 +38,7 @@ CNAppendCodeToProgram(struct CNProgram * dst, struct CNValue * opcode)
         CNAppendToValueList(&(dst->program), opcode) ;
 }
 
+void
+CNDumpProgram(unsigned int indent, struct CNProgram * src) ;
+
 #endif /* CNProgram_h */

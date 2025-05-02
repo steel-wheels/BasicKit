@@ -131,10 +131,20 @@ CNAllocateDictionary(struct CNValuePool * pool)
 }
 
 struct CNValue *
-CNAllocateOpCode(struct CNValuePool * pool, const struct CNOpCode * code)
+CNAllocateOpCode(struct CNValuePool * pool, uint64_t attr, struct CNValue * dst,
+                 struct CNValue * src0, struct CNValue * src1)
 {
         struct CNValue * val   = CNValueAllocate(CNOpCodeType, 0, pool) ;
-        val->opCodeValue = *code ;
+        struct CNOpCode opcode = {
+                .attribute      = attr,
+                .destination    = dst,
+                .source0        = src0,
+                .source1        = src1
+        } ;
+        val->opCodeValue = opcode ;
+        CNRetainValue(opcode.destination) ;
+        CNRetainValue(opcode.source0) ;
+        CNRetainValue(opcode.source1) ;
         return val ;
 }
 
@@ -283,10 +293,12 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
                 } break ;
         }
 
-        if(attr.referenceCount > 1){
+        if(attr.referenceCount == 0){
+                CNInterface()->error("[Error] Too much release operation\n") ;
+        } else if(attr.referenceCount > 1){
                 attr.referenceCount -= 1 ;
                 dst->attribute = CNValueAttributeToInt(&attr) ;
-        } else {
+        } else { // attr.referenceCount == 0
                 /* release context */
                 switch(attr.valueType){
                         case CNNullType:

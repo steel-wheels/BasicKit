@@ -30,7 +30,7 @@ CNByteCodeInAttribute(uint64_t attr)
 }
 
 static inline bool
-CNByteCodeInValue(CNByteCode * opcode, struct CNValue * src)
+CNByteCodeInValue(CNByteCode * opcode, const struct CNValue * src)
 {
         bool result ;
         switch(CNTypeOfValue(src)){
@@ -49,28 +49,19 @@ CNByteCodeInValue(CNByteCode * opcode, struct CNValue * src)
 static inline struct CNValue *
 CNAllocateStoreStringByteCode(struct CNValuePool * vpool, struct CNValue * dstregid, struct CNValue * str0)
 {
-        struct CNOpCode code = {
-                .attribute      = CNMakeByteCodeAttribute(CNStoreStringByteCode),
-                .children       = NULL,
-                .destination    = dstregid,
-                .source0        = str0,
-                .source1        = CNAllocateNull()
-        } ;
-        CNRetainValue(dstregid) ;
-        CNRetainValue(str0) ;
-        return CNAllocateOpCode(vpool, &code) ;
+        uint64_t attr = CNMakeByteCodeAttribute(CNStoreStringByteCode) ;
+        struct CNValue * result = CNAllocateOpCode(vpool, attr, dstregid, str0, CNAllocateNull()) ;
+        return result ;
 }
 
 static inline struct CNValue *
-CNAllocatePrintByteCode(struct CNValuePool * vpool, unsigned int srcregid)
+CNAllocatePrintByteCode(struct CNValuePool * vpool, struct CNValue * srcregid)
 {
-        struct CNOpCode code = {
-                .attribute      = CNMakeByteCodeAttribute(CNPrintByteCode),
-                .destination    = CNAllocateUnsignedInt(srcregid, vpool),
-                .source0        = CNAllocateNull(),
-                .source1        = CNAllocateNull()
-        } ;
-        return CNAllocateOpCode(vpool, &code) ;
+        uint64_t attr = CNMakeByteCodeAttribute(CNPrintByteCode) ;
+        return CNAllocateOpCode(vpool, attr, CNAllocateNull(), srcregid, CNAllocateNull()) ;
 }
+
+void
+CNDumpByteCode(uint32_t count, const struct CNValue * src) ;
 
 #endif /* CNByteCode_h */

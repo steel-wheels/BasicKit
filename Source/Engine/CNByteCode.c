@@ -8,4 +8,54 @@
 #import <BasicKit/CNByteCode.h>
 #import <BasicKit/CNValuePool.h>
 #import <BasicKit/CNInterface.h>
+#import <BasicKit/CNUtils.h>
 
+static const char *
+opCodeName(CNByteCode code)
+{
+        const char * result = "?" ;
+        switch(code){
+                case CNStoreStringByteCode:     result = "store.s" ;    break ;
+                case CNPrintByteCode:           result = "print" ;      break ;
+        }
+        return result ;
+}
+
+static void
+dumpRegister(const struct CNValue * regid)
+{
+        CNInterface()->printf("$") ;
+        CNDumpValue(0, regid) ;
+        CNInterface()->printf(" ") ;
+}
+
+void
+CNDumpByteCode(uint32_t indent, const struct CNValue * src)
+{
+        CNByteCode bcode ;
+        if(!CNByteCodeInValue(&bcode, src)){
+                CNInterface()->error("[Error] This is not byte code\n") ;
+                return ;
+        }
+
+        /* Dump opcode */
+        const char * opstr = opCodeName(bcode) ;
+        CNDumpIndent(indent) ;
+        CNInterface()->printf("%s\t", opstr) ;
+
+        /* dump parameters */
+        const struct CNOpCode * opcode = &(src->opCodeValue) ;
+        switch(bcode){
+                case CNStoreStringByteCode: {
+                        /* destination register */
+                        dumpRegister(opcode->destination) ;
+                        /* dump source string */
+                        CNDumpValue(0, opcode->source0) ;
+                } break ;
+                case CNPrintByteCode: {
+                        /* dump source register */
+                        dumpRegister(opcode->source0) ;
+                } break ;
+        }
+        CNInterface()->printf("\n") ;
+}
