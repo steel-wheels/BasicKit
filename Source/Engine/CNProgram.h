@@ -9,16 +9,15 @@
 #define CNProgram_h
 
 #import <BasicKit/CNType.h>
+#import <BasicKit/CNRegisters.h>
 #import <BasicKit/CNValueList.h>
 #import <BasicKit/CNValuePool.h>
-#import <BasicKit/CNValue.h>
 
 struct CNProgram {
         struct CNValuePool *    valuePool ;
-        /*
-         * List of CNByteCode
-         */
-        struct CNValueList      program ;
+        unsigned int            uniqueRegisterId ;
+        struct CNRegisters      registers ;
+        struct CNValueList      program ;       // List of CNByteCode
 } ;
 
 void
@@ -26,6 +25,9 @@ CNInitProgram(struct CNProgram * dst, struct CNValuePool * vpool) ;
 
 void
 CNDeinitProgram(struct CNProgram * dst) ;
+
+unsigned int
+CNUniqueRegisterIdInProgram(struct CNProgram * src) ;
 
 static inline void
 CNAppendCodeToProgram(struct CNProgram * dst, struct CNValue * opcode)

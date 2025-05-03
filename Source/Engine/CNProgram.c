@@ -7,18 +7,30 @@
 
 #import <BasicKit/CNProgram.h>
 #import <BasicKit/CNByteCode.h>
+#import <BasicKit/CNValue.h>
 
 void
 CNInitProgram(struct CNProgram * dst, struct CNValuePool * vpool)
 {
-        dst->valuePool = vpool ;
+        dst->valuePool          = vpool ;
+        dst->uniqueRegisterId   = 0 ;
+        CNInitRegisters(&(dst->registers), vpool) ;
         CNInitValueList(&(dst->program), vpool) ;
 }
 
 void
 CNDeinitProgram(struct CNProgram * dst)
 {
+        CNDeinitRegisters(&(dst->registers)) ;
         CNDeinitValueList(&(dst->program)) ;
+}
+
+unsigned int
+CNUniqueRegisterIdInProgram(struct CNProgram * src)
+{
+        unsigned int regid = src->uniqueRegisterId ;
+        src->uniqueRegisterId += 1 ;
+        return regid ;
 }
 
 void

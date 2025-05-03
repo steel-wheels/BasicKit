@@ -7,7 +7,6 @@
 #include "CNList.h"
 
 static struct CNProgram *      s_program     = NULL ;
-static unsigned int            s_uniq_reg_id = 0 ;
 
 void
 CNSetupParser(struct CNProgram * prg)
@@ -19,14 +18,6 @@ void
 CNDeinitParser(void)
 {
         s_program = NULL ;
-}
-
-static inline unsigned int
-uniqueRegId(void)
-{
-        unsigned int regid = s_uniq_reg_id ;
-        s_uniq_reg_id += 1 ;
-        return regid ;
 }
 
 static struct CNValue *
@@ -85,12 +76,13 @@ statement
 expression
         : STRING
         {
-                struct CNValue * regid  = registerId(uniqueRegId()) ;
-                struct CNValue * opcode = storeStringCode(regid, $1.value) ;
+                unsigned int regid= CNUniqueRegisterIdInProgram(s_program) ;
+                struct CNValue * regval = registerId(regid) ;
+                struct CNValue * opcode = storeStringCode(regval, $1.value) ;
                 appendToBlock(opcode) ;
                 CNReleaseValue(s_program->valuePool, $1.value) ;
                 CNReleaseValue(s_program->valuePool, opcode) ;
-                $$.value = regid ;
+                $$.value = regval ;
         }
         ;
 
