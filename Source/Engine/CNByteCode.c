@@ -48,7 +48,9 @@ _CNPrintByteCode(const struct CNValue * src)
                         /* destination register */
                         printRegister(opcode->destination) ;
                         /* dump source string */
+                        CNInterface()->printf("\"") ;
                         CNPrintValue(opcode->source0) ;
+                        CNInterface()->printf("\"") ;
                 } break ;
                 case CNPrintByteCode: {
                         /* dump source register */

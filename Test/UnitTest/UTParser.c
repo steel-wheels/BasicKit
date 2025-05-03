@@ -85,6 +85,8 @@ testParsers(struct CNValuePool * vpool, unsigned int testid)
         CNExecParser(&lines) ;
         printf("(%s) generated code\n", __func__) ;
         CNDumpProgram(0, &prg) ;
+        printf("(%s) exec code\n", __func__) ;
+        CNExecuteProgram(&prg) ;
         CNFreeParser() ;
         CNDeinitProgram(&prg) ;
 

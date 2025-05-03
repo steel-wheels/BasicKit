@@ -368,9 +368,9 @@ CNPrintValue(const struct CNValue * src)
                         CNInterface()->printf("%lf", (src->floatValue)) ;
                 } break ;
                 case CNStringType: {
-                        CNInterface()->printf("\"") ;
+                        //CNInterface()->printf("\"") ;
                         CNPrintString(CNLengthOfString(src), &(src->stringValue)) ;
-                        CNInterface()->printf("\"") ;
+                        //CNInterface()->printf("\"") ;
                 } break ;
                 case CNArrayType: {
                         CNInterface()->printf("{") ;
