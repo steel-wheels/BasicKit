@@ -24,4 +24,10 @@ CNInitRegisters(struct CNRegisters * dst, struct CNValuePool * vpool) ;
 void
 CNDeinitRegisters(struct CNRegisters * dst) ;
 
+struct CNValue *
+CNValueInRegisters(struct CNRegisters * src, unsigned int index) ;
+
+void
+CNSetValueToRegisters(struct CNRegisters * dst, unsigned int index, struct CNValue * src) ;
+
 #endif /* CNRegisters_h */
