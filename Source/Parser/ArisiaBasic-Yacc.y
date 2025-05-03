@@ -27,10 +27,9 @@ registerId(unsigned int regid)
 }
 
 static struct CNValue *
-storeStringCode(struct CNValue * dstreg, struct CNValue * srcstr)
+storeCode(struct CNValue * dstreg, struct CNValue * srcval)
 {
-        struct CNValue * opcode = CNAllocateStoreStringByteCode(
-                s_program->valuePool, dstreg, srcstr) ;
+        struct CNValue * opcode = CNAllocateStoreByteCode(s_program->valuePool, dstreg, srcval) ;
         return opcode ;
 }
 
@@ -78,7 +77,7 @@ expression
         {
                 unsigned int regid= CNUniqueRegisterIdInProgram(s_program) ;
                 struct CNValue * regval = registerId(regid) ;
-                struct CNValue * opcode = storeStringCode(regval, $1.value) ;
+                struct CNValue * opcode = storeCode(regval, $1.value) ;
                 appendToBlock(opcode) ;
                 CNReleaseValue(s_program->valuePool, $1.value) ;
                 CNReleaseValue(s_program->valuePool, opcode) ;

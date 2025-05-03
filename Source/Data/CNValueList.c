@@ -65,12 +65,15 @@ CNPopFromValueList(struct CNValueList * src)
 }
 
 void
-CNDumpValueList(unsigned int indent, const struct CNValueList * src)
+CNPrintValueList(const struct CNValueList * src)
 {
         struct CNList * list = src->firstItem ;
-        CNDumpIndent(indent) ; CNInterface()->printf("{\n") ;
+        bool is1st = false ;
         for( ; list != NULL ; list = list->next) {
-                CNDumpIndent(indent+1) ; CNDumpValue(0, list->data) ;
+                if(!is1st){
+                        CNInterface()->printf(", ") ;
+                }
+                CNPrintValue(list->data) ;
+                is1st = false ;
         }
-        CNDumpIndent(indent) ; CNInterface()->printf("}\n") ;
 }

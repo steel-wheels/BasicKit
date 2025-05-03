@@ -348,58 +348,46 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
 }
 
 void
-CNDumpValue(unsigned int indent, const struct CNValue * src)
+CNPrintValue(const struct CNValue * src)
 {
         struct CNValueAttribute attr = CNIntToValueAttribute(src->attribute) ;
         switch(attr.valueType){
                 case CNNullType: {
-                        CNDumpIndent(indent) ; CNInterface()->printf("nil\n") ;
+                        CNInterface()->printf("nil") ;
                 } break ;
                 case CNCharType: {
-                        CNDumpIndent(indent) ;
-                        CNInterface()->printf("'%c'\n", (src->charValue)) ;
+                        CNInterface()->printf("'%c'", (src->charValue)) ;
                 } break ;
                 case CNSignedIntType: {
-                        CNDumpIndent(indent) ;
-                        CNInterface()->printf("%lld\n", (src->int64Value)) ;
+                        CNInterface()->printf("%lld", (src->int64Value)) ;
                 } break ;
                 case CNUnsignedIntType: {
-                        CNDumpIndent(indent) ;
-                        CNInterface()->printf("%llu\n", (src->uint64Value)) ;
+                        CNInterface()->printf("%llu", (src->uint64Value)) ;
                 } break ;
                 case CNFloatType: {
-                        CNDumpIndent(indent) ;
-                        CNInterface()->printf("%lf\n", (src->floatValue)) ;
+                        CNInterface()->printf("%lf", (src->floatValue)) ;
                 } break ;
                 case CNStringType: {
-                        CNDumpIndent(indent) ;
                         CNInterface()->printf("\"") ;
-                        CNDumpString(attr.size, &(src->stringValue)) ;
-                        CNInterface()->printf("\"\n") ;
+                        CNPrintString(CNLengthOfString(src), &(src->stringValue)) ;
+                        CNInterface()->printf("\"") ;
                 } break ;
                 case CNArrayType: {
-                        unsigned int num = attr.size ;
-                        CNDumpIndent(indent) ; CNInterface()->printf("%u [\n", num) ;
-                        struct CNValue ** ptr    = (src->arrayValue).values ;
-                        struct CNValue ** endptr = ptr + num ;
-                        for( ; ptr < endptr ; ptr++){
-                                struct CNValue * value = *ptr ;
-                                if(value != NULL){
-                                        CNDumpValue(indent+1, value) ;
-                                }
-                        }
-                        CNDumpIndent(indent) ; CNInterface()->printf("]\n") ;
+                        CNInterface()->printf("{") ;
+                        uint32_t elmnum = CNNumberOfElementsInArray(src) ;
+                        CNPrintArray(elmnum, &(src->arrayValue)) ;
+                        CNInterface()->printf("}") ;
                 } break ;
                 case CNDictionaryType: {
-                        CNDumpIndent(indent) ; CNInterface()->printf("{\n") ;
-                        CNDumpDictionary(indent+1, &(src->dictionaryValue)) ;
-                        CNDumpIndent(indent) ; CNInterface()->printf("}\n") ;
+                        CNInterface()->printf("{") ;
+                        CNPrintDictionary(&(src->dictionaryValue)) ;
+                        CNInterface()->printf("}") ;
                 } break ;
                 case CNOpCodeType: {
-                        CNDumpOpCode(indent, &(src->opCodeValue)) ;
+                        CNPrintOpCode(&(src->opCodeValue)) ;
                 } break ;
                 case CNErrorType: {
-                        CNDumpError(indent, &(src->errorValue)) ;
+                        CNPrintError(&(src->errorValue)) ;
                 } break ;
         }
 }

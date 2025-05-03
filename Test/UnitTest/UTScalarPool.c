@@ -19,7 +19,7 @@ bool UTScalarPool(void)
         struct CNValuePool vpool ;
         CNInitValuePool(&vpool, &lpool) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) Allocate state\n", __func__) ;
 #       define VALUE_NUM        64
@@ -28,14 +28,14 @@ bool UTScalarPool(void)
                 values[i] = CNAllocateUnsignedInt(i, &vpool) ;
         }
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) Release state\n", __func__) ;
         for(unsigned int i=0 ; i<VALUE_NUM ; i++){
                 CNReleaseValue(&vpool, values[i]) ;
         }
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         if(usage.allocatedSize == usage.usableSize) {
                 printf("(%s) No memory leak\n", __func__) ;

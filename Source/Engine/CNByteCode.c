@@ -15,21 +15,21 @@ opCodeName(CNByteCode code)
 {
         const char * result = "?" ;
         switch(code){
-                case CNStoreStringByteCode:     result = "store.s" ;    break ;
-                case CNPrintByteCode:           result = "print" ;      break ;
+                case CNStoreByteCode:   result = "store" ;      break ;
+                case CNPrintByteCode:   result = "print" ;      break ;
         }
         return result ;
 }
 
 static void
-dumpRegister(const struct CNValue * regid)
+printRegister(const struct CNValue * regid)
 {
         uint64_t regnum = CNUnsignedIntValue(regid) ;
         CNInterface()->printf("$%lu ", regnum) ;
 }
 
 void
-CNDumpByteCode(uint32_t indent, const struct CNValue * src)
+_CNPrintByteCode(const struct CNValue * src)
 {
         CNByteCode bcode ;
         if(!CNByteCodeInValue(&bcode, src)){
@@ -39,22 +39,20 @@ CNDumpByteCode(uint32_t indent, const struct CNValue * src)
 
         /* Dump opcode */
         const char * opstr = opCodeName(bcode) ;
-        CNDumpIndent(indent) ;
         CNInterface()->printf("%s ", opstr) ;
 
         /* dump parameters */
         const struct CNOpCode * opcode = &(src->opCodeValue) ;
         switch(bcode){
-                case CNStoreStringByteCode: {
+                case CNStoreByteCode: {
                         /* destination register */
-                        dumpRegister(opcode->destination) ;
+                        printRegister(opcode->destination) ;
                         /* dump source string */
-                        CNDumpValue(0, opcode->source0) ;
+                        CNPrintValue(opcode->source0) ;
                 } break ;
                 case CNPrintByteCode: {
                         /* dump source register */
-                        dumpRegister(opcode->source0) ;
-                        CNInterface()->printf("\n") ;
+                        printRegister(opcode->source0) ;
                 } break ;
         }
 }

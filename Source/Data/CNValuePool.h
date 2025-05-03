@@ -56,7 +56,7 @@ CNAllocateArrayElements(struct CNValuePool * src, unsigned int elmnum)
 }
 
 static inline void
-CNFreeArrayElements(struct CNValuePool * src, unsigned int elmnum, struct CNValue ** data)
+CNFreeArrayElements(struct CNValuePool * src, uint64_t elmnum, struct CNValue ** data)
 {
         CNFreeArrayData(&(src->arrayPool), elmnum, data) ;
 }

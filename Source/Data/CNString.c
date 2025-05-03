@@ -61,11 +61,11 @@ CNReleaseNextString(struct CNValuePool * pool, struct CNString * dst)
 }
 
 static inline void
-CNDumpStringElement(uint32_t count, const struct CNString * src)
+CNPrintStringElement(uint32_t length, const struct CNString * src)
 {
-        unsigned int i ;
+        uint32_t i ;
         char buffer[CNSTRING_ELEMENT_NUM+1] ;
-        for(i=0 ; i<count ; i++){
+        for(i=0 ; i<length ; i++){
                 buffer[i] = src->buffer[i] ;
         }
         buffer[i] = '\0' ;
@@ -73,17 +73,17 @@ CNDumpStringElement(uint32_t count, const struct CNString * src)
 }
 
 void
-CNDumpString(uint32_t count, const struct CNString * src)
+CNPrintString(uint32_t length, const struct CNString * src)
 {
-        if(count > CNSTRING_ELEMENT_NUM) {
-                CNDumpStringElement(CNSTRING_ELEMENT_NUM, src) ;
+        if(length > CNSTRING_ELEMENT_NUM) {
+                CNPrintStringElement(CNSTRING_ELEMENT_NUM, src) ;
                 struct CNValue * next = src->next ;
                 if(next != NULL){
-                        CNDumpString(count - CNSTRING_ELEMENT_NUM, &(next->stringValue)) ;
+                        CNPrintString(length - CNSTRING_ELEMENT_NUM, &(next->stringValue)) ;
                 } else {
                         CNInterface()->error("[Error] at %s", __func__) ;
                 }
         } else {
-                CNDumpStringElement(count, src) ;
+                CNPrintStringElement(length, src) ;
         }
 }

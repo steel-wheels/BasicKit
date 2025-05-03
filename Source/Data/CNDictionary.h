@@ -45,6 +45,6 @@ CNDeinitDictionary(struct CNValuePool * pool, struct CNDictionary * dst)
 }
 
 void
-CNDumpDictionary(unsigned int indent, const struct CNDictionary * src) ;
+CNPrintDictionary(const struct CNDictionary * src) ;
 
 #endif /* CNDictionary_h */

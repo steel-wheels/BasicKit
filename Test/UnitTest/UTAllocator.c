@@ -35,7 +35,7 @@ UTStringAllocator(void)
         struct CNValuePool vpool ;
         CNInitValuePool(&vpool, &lpool) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) allocate state\n", __func__) ;
 #       define STR_SIZE 777
@@ -50,9 +50,10 @@ UTStringAllocator(void)
         }
 
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
-        CNDumpValueList(0, &strlist) ;
-
+        CNPrintMemoryUsage(&usage) ;
+        CNPrintValueList(&strlist) ;
+        printf("\n") ;
+        
         printf("(%s) compare state\n", __func__) ;
         struct CNStringListIterator iter ;
         CNInitStringListIterator(&iter, &vpool, &strlist) ;
@@ -75,7 +76,7 @@ UTStringAllocator(void)
         CNDeinitValueList(&strlist) ;
 
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) check state\n", __func__) ;
         if(usage.allocatedSize == usage.usableSize) {

@@ -30,18 +30,18 @@ bool UTValue(void)
         struct CNValuePool      valpool ;
         CNInitValuePool(&valpool, &listpool) ;
         usage = CNMemoryUsageOfValuePool(&valpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) Allocate state\n", __func__) ;
         struct CNValue * val0 = CNAllocateSignedInt(-1234, &valpool) ;
         struct CNValue * val1 = CNAllocateUnsignedInt(12345, &valpool) ;
         struct CNValue * val2 = CNAllocateFloat(12.34, &valpool) ;
 
-        printf("val0 = ") ; CNDumpValue(0, val0) ;
-        printf("val1 = ") ; CNDumpValue(0, val1) ;
-        printf("val2 = ") ; CNDumpValue(0, val2) ;
+        printf("val0 = ") ; CNPrintValue(val0) ; printf("\n") ;
+        printf("val1 = ") ; CNPrintValue(val1) ; printf("\n") ;
+        printf("val2 = ") ; CNPrintValue(val2) ; printf("\n") ;
         usage = CNMemoryUsageOfValuePool(&valpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         /* null value test */
         struct CNValue * nullval = CNAllocateNull() ;
@@ -59,7 +59,7 @@ bool UTValue(void)
         CNReleaseValue(&valpool, val2) ;
 
         usage = CNMemoryUsageOfValuePool(&valpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         if(usage.allocatedSize == usage.usableSize) {
                 printf("(%s) No memory leak\n", __func__) ;

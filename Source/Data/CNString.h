@@ -34,6 +34,6 @@ CNDeinitString(struct CNValuePool * pool, struct CNString * dst)
 }
 
 void
-CNDumpString(uint32_t count, const struct CNString * src) ;
+CNPrintString(uint32_t length, const struct CNString * src) ;
 
 #endif /* CNSTRING_H */

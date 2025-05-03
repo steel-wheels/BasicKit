@@ -42,6 +42,6 @@ struct CNValue *
 CNPopFromValueList(struct CNValueList * dst) ;
 
 void
-CNDumpValueList(unsigned int indent, const struct CNValueList * src) ;
+CNPrintValueList(const struct CNValueList * src) ;
 
 #endif /* CNVALUELIST_H */

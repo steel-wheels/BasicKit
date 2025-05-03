@@ -8,6 +8,7 @@
 #import <BasicKit/CNProgram.h>
 #import <BasicKit/CNByteCode.h>
 #import <BasicKit/CNValue.h>
+#import <BasicKit/CNInterface.h>
 
 void
 CNInitProgram(struct CNProgram * dst, struct CNValuePool * vpool)
@@ -38,7 +39,8 @@ CNDumpProgram(unsigned int indent, struct CNProgram * src)
 {
         struct CNList * list = (src->program).firstItem ;
         for( ; list != NULL ; list = list->next) {
-                CNDumpByteCode(indent, list->data) ;
+                _CNPrintByteCode(list->data) ;
+                CNInterface()->printf("\n") ;
         }
 }
 

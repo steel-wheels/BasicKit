@@ -142,6 +142,12 @@ CNLengthOfString(const struct CNValue * src)
 struct CNValue *
 CNAllocateArray(uint32_t count, struct CNValuePool * pool) ;
 
+static inline uint32_t
+CNNumberOfElementsInArray(const struct CNValue * src)
+{
+        return CNSizeOfValue(src) ;
+}
+
 struct CNValue *
 CNAllocateDictionary(struct CNValuePool * pool) ;
 
@@ -162,6 +168,6 @@ void
 CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst) ;
 
 void
-CNDumpValue(unsigned int indent, const struct CNValue * src) ;
+CNPrintValue(const struct CNValue * src) ;
 
 #endif /* CNVALUE_H */

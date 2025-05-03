@@ -28,9 +28,8 @@ CNCompareError(const struct CNError * e0, const struct CNError * e1)
 }
 
 void
-CNDumpError(unsigned int indent, const struct CNError * src)
+CNPrintError(const struct CNError * src)
 {
-        CNDumpIndent(indent) ;
         const char * estr = CNErrorCodeToString(src->errorCode) ;
         CNInterface()->printf("error: { code:0x%x, message: \"%s\"}\n",
                               src->errorCode, estr) ;

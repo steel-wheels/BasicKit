@@ -25,9 +25,9 @@ void
 CNDeinitRegisters(struct CNRegisters * dst) ;
 
 struct CNValue *
-CNValueInRegisters(struct CNRegisters * src, unsigned int index) ;
+CNValueInRegisters(struct CNRegisters * src, uint64_t index) ;
 
 void
-CNSetValueToRegisters(struct CNRegisters * dst, unsigned int index, struct CNValue * src) ;
+CNSetValueToRegisters(struct CNRegisters * dst, uint64_t index, struct CNValue * src) ;
 
 #endif /* CNRegisters_h */

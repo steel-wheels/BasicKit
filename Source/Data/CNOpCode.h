@@ -34,6 +34,6 @@ int
 CNCompareOpCode(const struct CNOpCode * s0, const struct CNOpCode * s1) ;
 
 void
-CNDumpOpCode(uint32_t indent, const struct CNOpCode * src) ;
+CNPrintOpCode(const struct CNOpCode * src) ;
 
 #endif /* CNOpCode_h */

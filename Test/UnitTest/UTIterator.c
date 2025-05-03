@@ -41,7 +41,7 @@ UTStringIterator(void)
 
         CNInitValuePool(&vpool, &lpool) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) Test state\n", __func__) ;
 
@@ -59,7 +59,7 @@ UTStringIterator(void)
 
         printf("(%s) Release state\n", __func__) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         if(usage.allocatedSize == usage.usableSize) {
                 printf("(%s) No memory leak\n", __func__) ;
@@ -129,7 +129,7 @@ UTStringListIterator(void)
 
         CNInitValuePool(&vpool, &lpool) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) Allocate state\n", __func__) ;
         struct CNValueList vlist ;
@@ -141,13 +141,14 @@ UTStringListIterator(void)
         }
         longstr[128] = '\0' ;
         appendString(&vlist, &vpool, longstr) ;
-        CNDumpValueList(0, &vlist) ;
+        CNPrintValueList(&vlist) ;
+        printf("\n") ;
 
         struct CNStringListIterator iter ;
         CNInitStringListIterator(&iter, &vpool, &vlist) ;
 
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) Operation state\n", __func__) ;
         char resstr[256 + 1] ;
@@ -164,7 +165,7 @@ UTStringListIterator(void)
         CNDeinitValueList(&vlist) ;
 
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         if(usage.allocatedSize == usage.usableSize) {
                 printf("(%s) No memory leak\n", __func__) ;

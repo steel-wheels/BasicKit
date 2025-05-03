@@ -21,19 +21,19 @@ bool UTArrayPool(void)
 
         printf("(%s) Initial state\n", __func__) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) Allocate state\n", __func__) ;
         unsigned int elmnum = 256 ;
         struct CNValue * values ;
         values = CNAllocateArray(elmnum, &vpool) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) Release state\n", __func__) ;
         CNReleaseValue(&vpool, values) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         if(usage.allocatedSize == usage.usableSize) {
                 printf("(%s) No memory leak\n", __func__) ;

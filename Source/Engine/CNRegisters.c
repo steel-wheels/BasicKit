@@ -28,7 +28,7 @@ CNDeinitRegisters(struct CNRegisters * dst)
 }
 
 static inline bool
-checkIndex(unsigned int * page, unsigned int * offset, unsigned int index)
+checkIndex(uint64_t * page, uint64_t * offset, uint64_t index)
 {
         *page   = index / CNRegisterElementsInPage ;
         *offset = index % CNRegisterElementsInPage ;
@@ -41,9 +41,9 @@ checkIndex(unsigned int * page, unsigned int * offset, unsigned int index)
 }
 
 struct CNValue *
-CNValueInRegisters(struct CNRegisters * src, unsigned int index)
+CNValueInRegisters(struct CNRegisters * src, uint64_t index)
 {
-        unsigned int page, offset ;
+        uint64_t page, offset ;
         if(!checkIndex(&page, &offset, index)) {
                 return CNAllocateNull() ;
         }
@@ -56,9 +56,9 @@ CNValueInRegisters(struct CNRegisters * src, unsigned int index)
 }
 
 void
-CNSetValueToRegisters(struct CNRegisters * dst, unsigned int index, struct CNValue * src)
+CNSetValueToRegisters(struct CNRegisters * dst, uint64_t index, struct CNValue * src)
 {
-        unsigned int page, offset ;
+        uint64_t page, offset ;
         if(!checkIndex(&page, &offset, index)) {
                 return ;
         }

@@ -50,12 +50,12 @@ CNCompareOpCode(const struct CNOpCode * s0, const struct CNOpCode * s1)
 }
 
 void
-CNDumpOpCode(uint32_t indent, const struct CNOpCode * src)
+CNPrintOpCode(const struct CNOpCode * src)
 {
-        CNDumpIndent(indent  ) ; CNInterface()->printf("{\n") ;
-        CNDumpIndent(indent+1) ; CNInterface()->printf("opcode:      0x%x\n", src->attribute) ;
-        CNDumpIndent(indent+1) ; CNInterface()->printf("destination: ") ; CNDumpValue(0, src->destination) ;
-        CNDumpIndent(indent+1) ; CNInterface()->printf("source0:     ") ; CNDumpValue(0, src->source0) ;
-        CNDumpIndent(indent+1) ; CNInterface()->printf("source1:     ") ; CNDumpValue(0, src->source1) ;
-        CNDumpIndent(indent  ) ; CNInterface()->printf("}\n") ;
+        CNInterface()->printf("{\n") ;
+        CNInterface()->printf("  opcode:      0x%x\n", src->attribute) ;
+        CNInterface()->printf("  destination: ") ; CNPrintValue(src->destination) ;
+        CNInterface()->printf("  source0:     ") ; CNPrintValue(src->source0) ;
+        CNInterface()->printf("  source1:     ") ; CNPrintValue(src->source1) ;
+        CNInterface()->printf("}\n") ;
 }

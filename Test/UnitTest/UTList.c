@@ -17,7 +17,7 @@ bool UTList(void)
         struct CNListPool       lpool ;
         CNInitListPool(&lpool) ;
         struct CNMemoryUsage usage = CNMemoryUsageOfListPool(&lpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) allocate state\n", __func__) ;
 #       define ITEM_NUM         10
@@ -26,14 +26,14 @@ bool UTList(void)
                 items[i] = CNAllocateList(&lpool) ;
         }
         usage = CNMemoryUsageOfListPool(&lpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) release state\n", __func__) ;
         for(unsigned int i=0 ; i<ITEM_NUM ; i++){
                 CNFreeList(&lpool, items[i]) ;
         }
         usage = CNMemoryUsageOfListPool(&lpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         CNDeinitListPool(&lpool) ;
 

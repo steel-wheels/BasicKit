@@ -27,7 +27,7 @@ UTDictionary(void)
         struct CNValuePool vpool ;
         CNInitValuePool(&vpool, &lpool) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) Allocate state\n", __func__) ;
         struct CNValue * dict0 = CNAllocateDictionary(&vpool) ;
@@ -37,13 +37,14 @@ UTDictionary(void)
         setDictionary(&(dict0->dictionaryValue), "D", 45.6, &vpool) ;
         setDictionary(&(dict0->dictionaryValue), "E", 56.7, &vpool) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         struct CNValue * rev ;
         rev = searchValueInDictionary(&(dict0->dictionaryValue), "A", &vpool) ;
         if(rev != NULL){
                 printf("(%s) search result ... ", __func__) ;
-                CNDumpValue(0, rev) ;
+                CNPrintValue(rev) ;
+                printf("\n") ;
         } else {
                 printf("(%s) [Error] Failed to search\n", __func__) ;
                 result = false ;
@@ -60,7 +61,7 @@ UTDictionary(void)
         printf("(%s) Release state\n", __func__) ;
         CNReleaseValue(&vpool, dict0) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         if(usage.allocatedSize == usage.usableSize) {
                 printf("(%s) No memory leak\n", __func__) ;

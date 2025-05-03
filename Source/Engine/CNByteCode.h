@@ -12,8 +12,8 @@
 
 /* The byte code must be 12 bit */
 typedef enum {
-        CNStoreStringByteCode   = 0x001,
-        CNPrintByteCode         = 0x002
+        CNStoreByteCode        = 0x001,
+        CNPrintByteCode        = 0x002
 } CNByteCode ;
 
 static inline uint64_t
@@ -47,10 +47,10 @@ CNByteCodeInValue(CNByteCode * opcode, const struct CNValue * src)
 }
 
 static inline struct CNValue *
-CNAllocateStoreStringByteCode(struct CNValuePool * vpool, struct CNValue * dstregid, struct CNValue * str0)
+CNAllocateStoreByteCode(struct CNValuePool * vpool, struct CNValue * dstregid, struct CNValue * src)
 {
-        uint64_t attr = CNMakeByteCodeAttribute(CNStoreStringByteCode) ;
-        struct CNValue * result = CNAllocateOpCode(vpool, attr, dstregid, str0, CNAllocateNull()) ;
+        uint64_t attr = CNMakeByteCodeAttribute(CNStoreByteCode) ;
+        struct CNValue * result = CNAllocateOpCode(vpool, attr, dstregid, src, CNAllocateNull()) ;
         return result ;
 }
 
@@ -62,6 +62,6 @@ CNAllocatePrintByteCode(struct CNValuePool * vpool, struct CNValue * srcregid)
 }
 
 void
-CNDumpByteCode(uint32_t count, const struct CNValue * src) ;
+_CNPrintByteCode(const struct CNValue * src) ;
 
 #endif /* CNByteCode_h */

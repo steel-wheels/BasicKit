@@ -25,7 +25,7 @@ UTValueList(void)
         struct CNValuePool vpool ;
         CNInitValuePool(&vpool, &lpool) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) Allocate state\n", __func__) ;
         struct CNValueList vlist ;
@@ -37,15 +37,17 @@ UTValueList(void)
         }
         atoz[128] = '\0' ;
         appendString(&vlist, atoz, &vpool) ;
-        CNDumpValueList(0, &vlist) ;
+        CNPrintValueList(&vlist) ;
+        printf("\n") ;
 
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) Pop state\n", __func__) ;
         struct CNValue * curval = CNPopFromValueList(&vlist) ;
         while(curval != NULL){
-                CNDumpValue(0, curval) ;
+                CNPrintValue(curval) ;
+                printf("\n") ;
                 CNReleaseValue(&vpool, curval) ;
                 curval = CNPopFromValueList(&vlist) ;
         }
@@ -53,7 +55,7 @@ UTValueList(void)
         printf("(%s) Deinit state\n", __func__) ;
         CNDeinitValueList(&vlist) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         if(usage.allocatedSize == usage.usableSize) {
                 printf("(%s) No memory leak\n", __func__) ;

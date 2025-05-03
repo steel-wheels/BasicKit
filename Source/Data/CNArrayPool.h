@@ -30,7 +30,7 @@ CNDeinitArrayPool(struct CNArrayPool * dst)
 }
 
 static inline size_t
-CNArrayPageSize(size_t elmsize, unsigned int elmnum)
+CNArrayPageSize(size_t elmsize, uint64_t elmnum)
 {
         static const size_t UNIT_SIZE = 512 ;
         size_t unum = (elmsize * elmnum + UNIT_SIZE - 1) / UNIT_SIZE ;
@@ -46,7 +46,7 @@ CNAllocateArrayData(struct CNArrayPool * src, unsigned int elmnum)
 }
 
 static inline void
-CNFreeArrayData(struct CNArrayPool * src, unsigned int elmnum, void * data)
+CNFreeArrayData(struct CNArrayPool * src, uint64_t elmnum, void * data)
 {
         size_t size = CNArrayPageSize(src->elementSize, elmnum) ;
         CNFreePage(&(src->pagePool), size, data) ;

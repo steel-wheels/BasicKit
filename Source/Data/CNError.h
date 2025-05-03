@@ -46,6 +46,6 @@ int
 CNCompareError(const struct CNError * e0, const struct CNError * e1) ;
 
 void
-CNDumpError(unsigned int indent, const struct CNError * src) ;
+CNPrintError(const struct CNError * src) ;
 
 #endif /* CNError_h */

@@ -50,6 +50,6 @@ struct CNMemoryUsage
 CNMemoryUsageOfListPool(const struct CNListPool * src) ;
 
 void
-CNDumpMemoryUsage(unsigned int indent, const struct CNMemoryUsage * src) ;
+CNPrintMemoryUsage(const struct CNMemoryUsage * src) ;
 
 #endif /* CNLIST_H */

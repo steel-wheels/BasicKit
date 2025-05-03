@@ -22,14 +22,14 @@ UTParser(void)
         struct CNValuePool vpool ;
         CNInitValuePool(&vpool, &lpool) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) Parse state\n", __func__) ;
         result &= testParsers(&vpool, 0) ;
 
         printf("(%s) Check state\n", __func__) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         if(usage.allocatedSize == usage.usableSize) {
                 printf("(%s) No memory leak\n", __func__) ;
@@ -75,13 +75,15 @@ testParsers(struct CNValuePool * vpool, unsigned int testid)
                 CNAppendToValueList(&lines, line) ;
                 CNReleaseValue(vpool, line) ;
         }
-        CNDumpValueList(0, &lines) ;
-
+        CNPrintValueList(&lines) ;
+        printf("\n") ;
+        
         /* exec parser */
         struct CNProgram prg ;
         CNInitProgram(&prg, vpool) ;
         CNInitParser(&prg) ;
         CNExecParser(&lines) ;
+        printf("(%s) generated code\n", __func__) ;
         CNDumpProgram(0, &prg) ;
         CNFreeParser() ;
         CNDeinitProgram(&prg) ;
@@ -90,7 +92,7 @@ testParsers(struct CNValuePool * vpool, unsigned int testid)
 
         printf("(%s) Check state\n", __func__) ;
         struct CNMemoryUsage usage = CNMemoryUsageOfValuePool(vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         if(usage.allocatedSize == usage.usableSize) {
                 printf("(%s) No memory leak\n", __func__) ;

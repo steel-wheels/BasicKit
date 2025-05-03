@@ -23,5 +23,6 @@
 #import <BasicKit/CNOpCode.h>
 #import <BasicKit/CNByteCode.h>
 #import <BasicKit/CNProgram.h>
+#import <BasicKit/CNEngine.h>
 #import <BasicKit/ArisiaBasic.h>
 

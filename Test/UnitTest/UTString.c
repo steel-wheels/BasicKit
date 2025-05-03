@@ -23,7 +23,7 @@ bool UTString(void)
         struct CNValuePool vpool ;
         CNInitValuePool(&vpool, &lpool) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) Allocate state\n", __func__) ;
         struct CNValue * str0 ;
@@ -41,7 +41,7 @@ bool UTString(void)
         CNReleaseValue(&vpool, str0) ;
         CNReleaseValue(&vpool, str1) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         if(usage.allocatedSize == usage.usableSize) {
                 printf("(%s) No memory leak\n", __func__) ;
@@ -88,7 +88,7 @@ allocateString(struct CNValue ** newstr, struct CNValuePool * vpool, const char 
         }
 
         struct CNMemoryUsage usage = CNMemoryUsageOfValuePool(vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
         *newstr = str ;
         return result ;
 }

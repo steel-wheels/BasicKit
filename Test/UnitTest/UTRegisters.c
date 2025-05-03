@@ -24,7 +24,7 @@ UTRegisters(void)
         struct CNValuePool vpool ;
         CNInitValuePool(&vpool, &lpool) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) Allocate state\n", __func__) ;
         struct CNRegisters regs ;
@@ -35,16 +35,16 @@ UTRegisters(void)
         result &= get(&regs, 0) ;
 
         result &= get(&regs, 1024) ;
-        result &= set(&regs, 102, 123, &vpool) ;
-        result &= get(&regs, 0) ;
+        result &= set(&regs, 1024, 456, &vpool) ;
+        result &= get(&regs, 1024) ;
 
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) Release state\n", __func__) ;
         CNDeinitRegisters(&regs) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
-        CNDumpMemoryUsage(0, &usage) ;
+        CNPrintMemoryUsage(&usage) ;
         if(usage.allocatedSize == usage.usableSize) {
                 printf("(%s) No memory leak\n", __func__) ;
         } else {
@@ -65,7 +65,8 @@ get(struct CNRegisters * src, unsigned int index)
 
         struct CNValue * result ;
         result = CNValueInRegisters(src, index) ;
-        CNDumpValue(0, result) ;
+        CNPrintValue(result) ;
+        printf("\n") ;
 
         return true ;
 }
@@ -76,8 +77,9 @@ set(struct CNRegisters * dst, unsigned int index, unsigned int data, struct CNVa
         struct CNValue * newval = CNAllocateUnsignedInt(data, vpool) ;
 
         printf("(%s) set %u <- ", __func__, index) ;
-        CNDumpValue(0, newval) ;
-
+        CNPrintValue(newval) ;
+        printf("\n") ;
+        
         CNSetValueToRegisters(dst, index, newval) ;
         CNReleaseValue(vpool, newval) ;
         return true ;

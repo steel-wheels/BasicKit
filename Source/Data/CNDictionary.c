@@ -177,20 +177,19 @@ CNReleaseDictionaryElements(struct CNValuePool * pool, struct CNDictionary * dst
 }
 
 void
-CNDumpDictionary(unsigned int indent, const struct CNDictionary * src)
+CNPrintDictionary(const struct CNDictionary * src)
 {
         for(unsigned int i=0 ; i < CNDICTIONARY_ELEMENT_NUM ; i++){
                 const struct CNDictionaryElement * elm = &(src->elements[i]) ;
                 if(elm->key != NULL && elm->value) {
-                        CNDumpIndent(indent) ; CNInterface()->printf("key:   ") ;
-                        CNDumpValue(0, elm->key) ;
-                        CNDumpIndent(indent) ; CNInterface()->printf("value: ") ;
-                        CNDumpValue(0, elm->value) ;
+                        CNPrintValue(elm->key) ;
+                        CNInterface()->printf(":") ;
+                        CNPrintValue(elm->value) ;
                 }
 
         }
         const struct CNValue * next ;
         if((next = src->next) != NULL) {
-                CNDumpValue(indent, next) ;
+                CNPrintDictionary(&(next->dictionaryValue)) ;
         }
 }
