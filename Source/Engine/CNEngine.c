@@ -20,15 +20,21 @@ CNExecuteProgram(struct CNProgram * program)
                 struct CNOpCode * curcode = &(curval->opCodeValue) ;
                 struct CNList   * next    = NULL ;
                 switch(CNByteCodeInAttribute(curcode->attribute)){
+                        case CNMoveByteCode: {
+                                uint64_t  dstregid = CNUnsignedIntValue(curcode->destination) ;
+                                uint64_t  srcregid = CNUnsignedIntValue(curcode->source0) ;
+                                struct CNValue * srcval   = CNValueInRegisters(registers, srcregid) ;
+                                CNSetValueToRegisters(registers, dstregid, srcval) ;
+                        } break ;
                         case CNStoreByteCode: {
-                                uint64_t dstid = CNUnsignedIntValue(curcode->destination) ;
+                                uint64_t dstregid = CNUnsignedIntValue(curcode->destination) ;
                                 struct CNValue * srcval = curcode->source0 ;
-                                CNSetValueToRegisters(registers, dstid, srcval) ;
+                                CNSetValueToRegisters(registers, dstregid, srcval) ;
                         } break ;
                         case CNPrintByteCode: {
-                                uint64_t regid = CNUnsignedIntValue(curcode->source0) ;
-                                struct CNValue * regval = CNValueInRegisters(registers, regid) ;
-                                CNPrintValue(regval) ;
+                                uint64_t srcregid = CNUnsignedIntValue(curcode->source0) ;
+                                struct CNValue * srcval = CNValueInRegisters(registers, srcregid) ;
+                                CNPrintValue(srcval) ;
                         } break ;
                 }
                 curlist = next != NULL ? next : curlist->next ;

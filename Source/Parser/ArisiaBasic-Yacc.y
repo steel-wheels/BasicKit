@@ -27,6 +27,13 @@ registerId(unsigned int regid)
 }
 
 static struct CNValue *
+moveCode(struct CNValue * dstreg, struct CNValue * srcreg)
+{
+        struct CNValue * opcode = CNAllocateMoveByteCode(s_program->valuePool, dstreg, srcreg) ;
+        return opcode ;
+}
+
+static struct CNValue *
 storeCode(struct CNValue * dstreg, struct CNValue * srcval)
 {
         struct CNValue * opcode = CNAllocateStoreByteCode(s_program->valuePool, dstreg, srcval) ;
@@ -63,13 +70,31 @@ static int yyerror(char const * str) ;
 %%
 
 statement
-        : PRINT expression
-        {
+        : IDENTIFIER '=' expression
+          {
+                struct CNValue * identstr = $1.value ;  // string
+                struct CNValue * srcid    = $3.value ;  // unsigned int
+
+                struct CNValue * dstid ;
+                if((dstid = CNRegisterIdForIdentifier(s_program, identstr)) == NULL){
+                        /* the identifier is not found */
+                        dstid = CNAllocateRegisterIdForIdentifier(s_program, identstr) ;
+                }
+                struct CNValue * opcode = moveCode(dstid, srcid) ;
+                appendToBlock(opcode) ;
+                
+                CNReleaseValue(s_program->valuePool, identstr) ;
+                CNReleaseValue(s_program->valuePool, dstid) ;
+                CNReleaseValue(s_program->valuePool, srcid) ;
+                CNReleaseValue(s_program->valuePool, opcode) ;
+          }
+        | PRINT expression
+          {
                 struct CNValue * opcode = printCode($2.value) ;
                 appendToBlock(opcode) ;
                 CNReleaseValue(s_program->valuePool, $2.value) ;
                 CNReleaseValue(s_program->valuePool, opcode) ;
-        }
+          }
         ;
 
 expression

@@ -68,7 +68,7 @@ void
 CNPrintValueList(const struct CNValueList * src)
 {
         struct CNList * list = src->firstItem ;
-        bool is1st = false ;
+        bool is1st = true ;
         for( ; list != NULL ; list = list->next) {
                 if(!is1st){
                         CNInterface()->printf(", ") ;

@@ -26,6 +26,7 @@ UTParser(void)
 
         printf("(%s) Parse state\n", __func__) ;
         result &= testParsers(&vpool, 0) ;
+        result &= testParsers(&vpool, 1) ;
 
         printf("(%s) Check state\n", __func__) ;
         usage = CNMemoryUsageOfValuePool(&vpool) ;
@@ -50,6 +51,11 @@ const char * program0[] = {
         NULL
 } ;
 
+const char * program1[] = {
+        "var0 = \"s\"",
+        NULL
+} ;
+
 static bool
 testParsers(struct CNValuePool * vpool, unsigned int testid)
 {
@@ -63,6 +69,9 @@ testParsers(struct CNValuePool * vpool, unsigned int testid)
         switch(testid) {
                 case 0: {
                         program = program0 ;
+                } break ;
+                case 1: {
+                        program = program1 ;
                 } break ;
                 default: {
                         printf("(%s) [Error] Unknown test id: %u\n", __func__, testid) ;

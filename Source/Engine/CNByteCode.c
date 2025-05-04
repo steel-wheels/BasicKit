@@ -15,6 +15,7 @@ opCodeName(CNByteCode code)
 {
         const char * result = "?" ;
         switch(code){
+                case CNMoveByteCode:    result = "move" ;       break ;
                 case CNStoreByteCode:   result = "store" ;      break ;
                 case CNPrintByteCode:   result = "print" ;      break ;
         }
@@ -44,6 +45,10 @@ _CNPrintByteCode(const struct CNValue * src)
         /* dump parameters */
         const struct CNOpCode * opcode = &(src->opCodeValue) ;
         switch(bcode){
+                case CNMoveByteCode: {
+                        printRegister(opcode->destination) ;
+                        printRegister(opcode->source0) ;
+                } break ;
                 case CNStoreByteCode: {
                         /* destination register */
                         printRegister(opcode->destination) ;

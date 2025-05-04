@@ -55,6 +55,10 @@ IDENT           [a-zA-Z][_0-9a-zA-Z]*
         }
 }
 
+= {
+        return yytext[0] ;
+}
+
 \" {
         BEGIN(CSTRING) ;
         CNInitStringList(&s_string_list , s_valuePool) ;
