@@ -2,6 +2,12 @@
 
 ## ByteCode
 
+### <code>move</code>
+Copy the value in source register into destination one.
+<pre>
+move $1, $2
+</pre>
+
 ### <code>print</code>
 Print the value in the source register.
 <pre>

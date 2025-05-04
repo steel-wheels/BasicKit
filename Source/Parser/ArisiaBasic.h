@@ -35,14 +35,16 @@ CNInitParser(struct CNProgram * pdb) {
         CNSetupParser(pdb) ;
 }
 
-static inline void
+static inline unsigned int
 CNExecParser(struct CNValueList * strings) {
         extern void CNStartParser(void) ;
         extern void CNSetSourceCode(struct CNValueList * strings) ;
         extern void CNDeinitSourceCode(void) ;
+        extern unsigned int CNParserErrorCount(void) ;
         CNSetSourceCode(strings) ;
         CNStartParser() ;
         CNDeinitSourceCode() ;
+        return CNParserErrorCount() ;
 }
 
 static inline void

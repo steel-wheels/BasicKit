@@ -53,6 +53,7 @@ const char * program0[] = {
 
 const char * program1[] = {
         "var0 = \"s\"",
+        "print var0",
         NULL
 } ;
 
@@ -91,7 +92,11 @@ testParsers(struct CNValuePool * vpool, unsigned int testid)
         struct CNProgram prg ;
         CNInitProgram(&prg, vpool) ;
         CNInitParser(&prg) ;
-        CNExecParser(&lines) ;
+        unsigned int errnum = CNExecParser(&lines) ;
+        if(errnum > 0){
+                printf("(%s) number of oarse errros: %u\n", __func__, errnum) ;
+                result = false ;
+        }
         printf("(%s) generated code\n", __func__) ;
         CNDumpProgram(0, &prg) ;
         printf("(%s) exec code\n", __func__) ;
