@@ -38,6 +38,14 @@ CNAllocateNull(void)
 }
 
 struct CNValue *
+CNAllocateBool(bool b, struct CNValuePool * pool)
+{
+        struct CNValue * val = CNValueAllocate(CNBoolType, sizeof(char), pool) ;
+        val->boolValue = b ;
+        return val ;
+}
+
+struct CNValue *
 CNAllocateChar(char c, struct CNValuePool * pool)
 {
         struct CNValue * val = CNValueAllocate(CNCharType, sizeof(char), pool) ;
@@ -185,6 +193,9 @@ CNCompareValue(const struct CNValue * s0, const struct CNValue * s1)
                 case CNNullType: {
                         result = 0 ;
                 } break ;
+                case CNBoolType: {
+                        result = ((int) s0->boolValue) - ((int) s1->boolValue) ;
+                } break ;
                 case CNCharType: {
                         result = s0->charValue - s1->charValue ;
                 } break ;
@@ -250,6 +261,7 @@ CNRetainValue(struct CNValue * dst)
         /* update element */
         switch(attr.valueType) {
                 case CNNullType:
+                case CNBoolType:
                 case CNCharType:
                 case CNSignedIntType:
                 case CNUnsignedIntType:
@@ -286,6 +298,7 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
         struct CNValueAttribute attr = CNIntToValueAttribute(dst->attribute) ;
         switch(attr.valueType){
                 case CNNullType:
+                case CNBoolType:
                 case CNCharType:
                 case CNSignedIntType:
                 case CNUnsignedIntType:
@@ -318,6 +331,7 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
                 /* release context */
                 switch(attr.valueType){
                         case CNNullType:
+                        case CNBoolType:
                         case CNCharType:
                         case CNSignedIntType:
                         case CNUnsignedIntType:
@@ -354,6 +368,9 @@ CNPrintValue(const struct CNValue * src)
         switch(attr.valueType){
                 case CNNullType: {
                         CNInterface()->printf("nil") ;
+                } break ;
+                case CNBoolType: {
+                        CNInterface()->printf("%s", src->boolValue ? "true" : "false") ;
                 } break ;
                 case CNCharType: {
                         CNInterface()->printf("'%c'", (src->charValue)) ;

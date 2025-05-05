@@ -120,9 +120,11 @@ isReservedWord(int * rwordid, const char * str)
                 const char *    rWord ;
         } ;
         const struct RWord words[] = {
-                { .rId = LET,   .rWord = "let"          },
-                { .rId = PRINT, .rWord = "print"        },
-                { .rId = -1,    .rWord = ""             }  // Terminal word
+                { .rId = LET,    .rWord = "let"         },
+                { .rId = PRINT,  .rWord = "print"       },
+                { .rId = _FALSE, .rWord = "false"       },
+                { .rId = _TRUE,  .rWord = "true"        },
+                { .rId = -1,     .rWord = ""            }  // Terminal word
         } ;
         for(const struct RWord * word = words ; word->rId != -1 ; word++){
                 if(strcasecmp(str, word->rWord) == 0){

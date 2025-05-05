@@ -15,7 +15,6 @@
 
 struct CNProgram {
         struct CNValuePool *    valuePool ;
-        unsigned int            uniqueRegisterId ;
         struct CNRegisters      registers ;
         struct CNValue *        identifierTable ;       // Dictionary
         struct CNValueList      program ;               // List of CNByteCode
@@ -27,8 +26,11 @@ CNInitProgram(struct CNProgram * dst, struct CNValuePool * vpool) ;
 void
 CNDeinitProgram(struct CNProgram * dst) ;
 
-unsigned int
-CNUniqueRegisterIdInProgram(struct CNProgram * src) ;
+static inline uint64_t
+CNAllocateRegisterInProgram(struct CNProgram * src)
+{
+        return CNAllocateRegisterInRegisters(&(src->registers)) ;
+}
 
 /* @return
  * the return value will be null when the register id is not found
@@ -38,6 +40,12 @@ CNRegisterIdForIdentifier(struct CNProgram * src, struct CNValue * identstr) ;
 
 struct CNValue *
 CNAllocateRegisterIdForIdentifier(struct CNProgram * src, struct CNValue * identstr) ;
+
+static inline struct CNValue *
+CNAllocateSpecialRegister(struct CNProgram * src, CNSpecialValueRegister specreg)
+{
+        return CNRegisterIdForSpecialValue(&(src->registers), specreg) ;
+}
 
 static inline void
 CNAppendCodeToProgram(struct CNProgram * dst, struct CNValue * opcode)

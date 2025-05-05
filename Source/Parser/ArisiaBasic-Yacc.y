@@ -30,7 +30,7 @@ CNParserErrorCount(void)
 }
 
 static struct CNValue *
-registerId(unsigned int regid)
+registerId(uint64_t regid)
 {
         return CNAllocateUnsignedInt(regid, s_program->valuePool) ;
 }
@@ -74,6 +74,8 @@ static int yyerror(char const * str) ;
 %}
 
 /* reserved words */
+%token  _TRUE
+%token  _FALSE
 %token  LET
 %token  PRINT
 
@@ -91,7 +93,7 @@ statement_list
 
 statement
         : IDENTIFIER '=' expression
-          {
+        {
                 struct CNValue * identstr = $1.value ;  // string
                 struct CNValue * srcid    = $3.value ;  // unsigned int
 
@@ -107,27 +109,31 @@ statement
                 CNReleaseValue(s_program->valuePool, dstid) ;
                 CNReleaseValue(s_program->valuePool, srcid) ;
                 CNReleaseValue(s_program->valuePool, opcode) ;
-          }
+        }
         | PRINT expression
-          {
+        {
                 struct CNValue * opcode = printCode($2.value) ;
                 appendToBlock(opcode) ;
                 CNReleaseValue(s_program->valuePool, $2.value) ;
                 CNReleaseValue(s_program->valuePool, opcode) ;
-          }
+        }
         ;
 
-expression
-        : STRING
-          {
-                unsigned int regid= CNUniqueRegisterIdInProgram(s_program) ;
+        expression
+        : boolean_expression
+        {
+                $$.value = $1.value ;
+        }
+        | STRING
+        {
+                uint64_t regid= CNAllocateRegisterInProgram(s_program) ;
                 struct CNValue * regval = registerId(regid) ;
                 struct CNValue * opcode = storeCode(regval, $1.value) ;
                 appendToBlock(opcode) ;
                 CNReleaseValue(s_program->valuePool, $1.value) ;
                 CNReleaseValue(s_program->valuePool, opcode) ;
                 $$.value = regval ;
-          }
+        }
         | IDENTIFIER
         {
                 struct CNValue * identstr = $1.value ;  // string
@@ -146,6 +152,17 @@ expression
                 }
                 $$.value = srcid ;
         }
+        ;
+
+boolean_expression
+        : _TRUE
+          {
+                  $$.value = registerId(CNTrueValueRegister) ;
+          }
+        | _FALSE
+          {
+                  $$.value = registerId(CNFalseValueRegister) ;
+          }
         ;
 
 %%

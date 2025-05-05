@@ -24,6 +24,7 @@
  */
 typedef enum {
         CNNullType,
+        CNBoolType,
         CNCharType,
         CNSignedIntType,
         CNUnsignedIntType,
@@ -46,6 +47,7 @@ struct CNValue
 {
         uint64_t                        attribute ;
         union {
+                bool                    boolValue ;
                 char                    charValue ;
                 int64_t                 int64Value ;
                 uint64_t                uint64Value ;
@@ -114,6 +116,9 @@ CNSetNullValue(struct CNValue * dst, bool releasable)
 
 struct CNValue *
 CNAllocateNull(void) ;
+
+struct CNValue *
+CNAllocateBool(bool b, struct CNValuePool * pool) ;
 
 struct CNValue *
 CNAllocateChar(char c, struct CNValuePool * pool) ;

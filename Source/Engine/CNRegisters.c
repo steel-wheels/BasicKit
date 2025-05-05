@@ -13,9 +13,26 @@ void
 CNInitRegisters(struct CNRegisters * dst, struct CNValuePool * vpool)
 {
         dst->valuePool = vpool ;
-        for(unsigned int i = 0 ; i < CNRegisterPageNum ; i++){
+
+        /* initialize oage 0 */
+        struct CNValue * firstpage = CNAllocateArray(CNRegisterElementsInPage, vpool) ;
+        dst->registerArray[0] = firstpage ;
+
+        struct CNValue * truevalue = CNAllocateBool(true, vpool) ;
+        CNSetElementToArray(vpool, &(firstpage->arrayValue), CNTrueValueRegister,  truevalue) ;
+        CNReleaseValue(vpool, truevalue) ;
+
+        struct CNValue * falsevalue = CNAllocateBool(false, vpool) ;
+        CNSetElementToArray(vpool, &(firstpage->arrayValue), CNFalseValueRegister,  falsevalue) ;
+        CNReleaseValue(vpool, falsevalue) ;
+
+        /* initialize the rest of array */
+        for(unsigned int i = 1 ; i < CNRegisterPageNum ; i++){
                 dst->registerArray[i] = CNAllocateNull() ;
         }
+
+        dst->base_index         = CNLastSpecialValueRegister + 1 ;
+        dst->current_index      = dst->base_index ;
 }
 
 void
@@ -68,4 +85,11 @@ CNSetValueToRegisters(struct CNRegisters * dst, uint64_t index, struct CNValue *
                 dst->registerArray[page] = array ;
         }
         CNSetElementToArray(dst->valuePool, &(array->arrayValue), offset, src) ;
+}
+
+struct CNValue *
+CNRegisterIdForSpecialValue(struct CNRegisters * src, CNSpecialValueRegister specreg)
+{
+        struct CNValue * firstpage = src->registerArray[0] ;
+        return CNElementInArray(&(firstpage->arrayValue), specreg) ;
 }

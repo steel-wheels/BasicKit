@@ -14,7 +14,6 @@ void
 CNInitProgram(struct CNProgram * dst, struct CNValuePool * vpool)
 {
         dst->valuePool          = vpool ;
-        dst->uniqueRegisterId   = 0 ;
         dst->identifierTable    = CNAllocateDictionary(vpool) ;
         CNInitRegisters(&(dst->registers), vpool) ;
         CNInitValueList(&(dst->program), vpool) ;
@@ -28,14 +27,6 @@ CNDeinitProgram(struct CNProgram * dst)
         CNDeinitValueList(&(dst->program)) ;
 }
 
-unsigned int
-CNUniqueRegisterIdInProgram(struct CNProgram * src)
-{
-        unsigned int regid = src->uniqueRegisterId ;
-        src->uniqueRegisterId += 1 ;
-        return regid ;
-}
-
 struct CNValue *
 CNRegisterIdForIdentifier(struct CNProgram * src, struct CNValue * identstr)
 {
@@ -46,7 +37,7 @@ CNRegisterIdForIdentifier(struct CNProgram * src, struct CNValue * identstr)
 struct CNValue *
 CNAllocateRegisterIdForIdentifier(struct CNProgram * src, struct CNValue * identstr)
 {
-        unsigned int     newregid  = CNUniqueRegisterIdInProgram(src) ;
+        uint64_t         newregid  = CNAllocateRegisterInProgram(src) ;
         struct CNValue * newregval = CNAllocateUnsignedInt(newregid, src->valuePool) ;
 
         struct CNDictionary * table = &((src->identifierTable)->dictionaryValue) ;
