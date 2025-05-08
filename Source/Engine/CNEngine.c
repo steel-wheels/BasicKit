@@ -13,27 +13,33 @@ CNExecuteProgram(struct CNProgram * program)
 {
         struct CNValueList * codes     = &(program->program) ;
         struct CNRegisters * registers = &(program->registers) ;
+        struct CNValuePool * vpool     = program->valuePool ;
 
         struct CNList * curlist = codes->firstItem ;
         while(curlist != NULL){
                 struct CNValue  * curval  = curlist->data ;
                 struct CNOpCode * curcode = &(curval->opCodeValue) ;
                 struct CNList   * next    = NULL ;
-                switch(CNByteCodeInAttribute(curcode->attribute)){
+                switch((CNByteCode) curcode->code){
                         case CNMoveByteCode: {
-                                uint64_t  dstregid = CNUnsignedIntValue(curcode->destination) ;
-                                uint64_t  srcregid = CNUnsignedIntValue(curcode->source0) ;
-                                struct CNValue * srcval   = CNValueInRegisters(registers, srcregid) ;
-                                CNSetValueToRegisters(registers, dstregid, srcval) ;
+                                const struct CNExecOperands * operands = &(curcode->execOperands) ;
+                                uint64_t dstreg = operands->destinationRegId ;
+                                uint64_t srcreg = operands->source0RegId ;
+                                struct CNValue * srcval = CNValueInRegisters(registers, srcreg) ;
+                                CNSetValueToRegisters(registers, dstreg, srcval) ;
+                                CNReleaseValue(vpool, srcval) ;
                         } break ;
                         case CNStoreByteCode: {
-                                uint64_t dstregid = CNUnsignedIntValue(curcode->destination) ;
-                                struct CNValue * srcval = curcode->source0 ;
-                                CNSetValueToRegisters(registers, dstregid, srcval) ;
+                                const struct CNStorageOperands * operands = &(curcode->storageOperands) ;
+                                uint64_t dstreg = operands->destinationRegId ;
+                                struct CNValue * srcval = operands->sourceValue ;
+                                CNSetValueToRegisters(registers, dstreg, srcval) ;
+                                CNReleaseValue(vpool, srcval) ;
                         } break ;
                         case CNPrintByteCode: {
-                                uint64_t srcregid = CNUnsignedIntValue(curcode->source0) ;
-                                struct CNValue * srcval = CNValueInRegisters(registers, srcregid) ;
+                                const struct CNExecOperands * operands = &(curcode->execOperands) ;
+                                uint64_t srcreg = operands->source0RegId ;
+                                struct CNValue * srcval = CNValueInRegisters(registers, srcreg) ;
                                 CNPrintValue(srcval) ;
                         } break ;
                 }

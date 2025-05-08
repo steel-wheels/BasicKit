@@ -37,7 +37,7 @@ typedef enum {
 } CNValueType ;
 
 struct CNValueAttribute {
-        bool            releasable ;            // [63:63]  1 bit
+        bool            isFixed ;               // [63:63]  1 bit
         CNValueType     valueType ;             // [62:56]  7 bit
         uint32_t        referenceCount ;        // [55:28] 28 bit
         uint32_t        size ;                  // [27: 0] 28 bit
@@ -62,11 +62,11 @@ struct CNValue
 
 static inline uint64_t
 CNValueAttributeToInt(const struct CNValueAttribute * attr) {
-        uint64_t rels   = attr->releasable ? 1 : 0 ;
+        uint64_t fix    = attr->isFixed ? 1 : 0 ;
         uint64_t type   = attr->valueType & 0x7f ;
         uint64_t refc   = attr->referenceCount & 0x0fffffff ;
         uint64_t size   = attr->size & 0x0fffffff ;
-        return    (rels << 63)
+        return    (fix << 63)
                 | (type << 56)
                 | (refc << 28)
                 | (size <<  0)
@@ -89,29 +89,17 @@ CNSizeOfValue(const struct CNValue * src)
 static inline struct CNValueAttribute
 CNIntToValueAttribute(uint64_t attr)
 {
-        uint64_t rels  = (attr >> 63) ;
+        uint64_t fix   = (attr >> 63) ;
         uint64_t type  = (attr >> 56) & 0x7f ;
         uint32_t refc  = (attr >> 28) & 0x0fffffff ;
         uint32_t size  = (attr >>  0) & 0x0fffffff ;
         struct CNValueAttribute result = {
-                .releasable     = (rels != 0),
+                .isFixed        = (fix != 0),
                 .valueType      = (CNValueType) type,
                 .referenceCount = refc,
                 .size           = size
         } ;
         return result ;
-}
-
-static inline void
-CNSetNullValue(struct CNValue * dst, bool releasable)
-{
-         struct CNValueAttribute attr = {
-                 .releasable            = releasable,
-                 .valueType             = CNNullType,
-                 .referenceCount        = 1,
-                 .size                  = 0
-         } ;
-        dst->attribute = CNValueAttributeToInt(&attr) ;
 }
 
 struct CNValue *
@@ -157,8 +145,10 @@ struct CNValue *
 CNAllocateDictionary(struct CNValuePool * pool) ;
 
 struct CNValue *
-CNAllocateOpCode(struct CNValuePool * pool, uint64_t addr, struct CNValue * dst,
-                 struct CNValue * src0, struct CNValue * src1) ;
+CNAllocateOpCodeWithExecOperands(struct CNValuePool * pool, uint32_t type, uint64_t dstregid, uint64_t src0regid, uint64_t src1regid) ;
+
+struct CNValue *
+CNAllocateOpCodeWithStorageOperands(struct CNValuePool * pool, uint32_t type, uint64_t dstregid, struct CNValue * srcval) ;
 
 struct CNValue *
 CNAllocateError(CNErrorCode ecode, struct CNValuePool * pool) ;
@@ -174,5 +164,8 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst) ;
 
 void
 CNPrintValue(const struct CNValue * src) ;
+
+void
+CNPrintValueInfo(const struct CNValue * src) ;
 
 #endif /* CNVALUE_H */

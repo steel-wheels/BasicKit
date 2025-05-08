@@ -22,23 +22,17 @@ opCodeName(CNByteCode code)
         return result ;
 }
 
-static void
-printRegister(const struct CNValue * regid)
+static inline void
+printRegister(uint64_t regid)
 {
-        uint64_t regnum = CNUnsignedIntValue(regid) ;
-        CNInterface()->printf("$%lu ", regnum) ;
+        CNInterface()->printf("$%lu ", regid) ;
 }
 
 void
 _CNPrintByteCode(const struct CNValue * src)
 {
-        CNByteCode bcode ;
-        if(!CNByteCodeInValue(&bcode, src)){
-                CNInterface()->error("[Error] This is not byte code\n") ;
-                return ;
-        }
-
         /* Dump opcode */
+        CNByteCode bcode = (src->opCodeValue).code ;
         const char * opstr = opCodeName(bcode) ;
         CNInterface()->printf("%s ", opstr) ;
 
@@ -46,20 +40,20 @@ _CNPrintByteCode(const struct CNValue * src)
         const struct CNOpCode * opcode = &(src->opCodeValue) ;
         switch(bcode){
                 case CNMoveByteCode: {
-                        printRegister(opcode->destination) ;
-                        printRegister(opcode->source0) ;
+                        const struct CNExecOperands * operands = &(opcode->execOperands) ;
+                        printRegister(operands->destinationRegId) ;
+                        printRegister(operands->source0RegId) ;
                 } break ;
                 case CNStoreByteCode: {
-                        /* destination register */
-                        printRegister(opcode->destination) ;
-                        /* dump source string */
+                        const struct CNStorageOperands * operands = &(opcode->storageOperands) ;
+                        printRegister(operands->destinationRegId) ;
                         CNInterface()->printf("\"") ;
-                        CNPrintValue(opcode->source0) ;
+                        CNPrintValue(operands->sourceValue) ;
                         CNInterface()->printf("\"") ;
                 } break ;
                 case CNPrintByteCode: {
-                        /* dump source register */
-                        printRegister(opcode->source0) ;
+                        const struct CNExecOperands * operands = &(opcode->execOperands) ;
+                        printRegister(operands->source0RegId) ;
                 } break ;
         }
 }

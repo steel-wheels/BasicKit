@@ -17,57 +17,22 @@ typedef enum {
         CNPrintByteCode         = 0x003
 } CNByteCode ;
 
-static inline uint64_t
-CNMakeByteCodeAttribute(CNByteCode code)
+static inline struct CNValue *
+CNAllocateMoveByteCode(struct CNValuePool * vpool, uint64_t dstregid, uint64_t srcregid)
 {
-        uint64_t codeval = code ;
-        return (codeval & 0xfff) ;
-}
-
-static inline CNByteCode
-CNByteCodeInAttribute(uint64_t attr)
-{
-        return (CNByteCode) (attr & 0xfff) ;
-}
-
-static inline bool
-CNByteCodeInValue(CNByteCode * opcode, const struct CNValue * src)
-{
-        bool result ;
-        switch(CNTypeOfValue(src)){
-                case CNOpCodeType: {
-                        uint64_t attr = (src->opCodeValue).attribute ;
-                        *opcode = CNByteCodeInAttribute(attr) ;
-                        result = true ;
-                } break ;
-                default: {
-                        result = false ;
-                } break ;
-        }
-        return result ;
+        return CNAllocateOpCodeWithExecOperands(vpool, CNMoveByteCode, dstregid, srcregid, 0) ;
 }
 
 static inline struct CNValue *
-CNAllocateMoveByteCode(struct CNValuePool * vpool, struct CNValue * dstregid, struct CNValue * srcregid)
+CNAllocateStoreByteCode(struct CNValuePool * vpool, uint64_t dstregid, struct CNValue * src)
 {
-        uint64_t attr = CNMakeByteCodeAttribute(CNMoveByteCode) ;
-        struct CNValue * result = CNAllocateOpCode(vpool, attr, dstregid, srcregid, CNAllocateNull()) ;
-        return result ;
+        return CNAllocateOpCodeWithStorageOperands(vpool, CNStoreByteCode, dstregid, src) ;
 }
 
 static inline struct CNValue *
-CNAllocateStoreByteCode(struct CNValuePool * vpool, struct CNValue * dstregid, struct CNValue * src)
+CNAllocatePrintByteCode(struct CNValuePool * vpool, uint64_t srcregid)
 {
-        uint64_t attr = CNMakeByteCodeAttribute(CNStoreByteCode) ;
-        struct CNValue * result = CNAllocateOpCode(vpool, attr, dstregid, src, CNAllocateNull()) ;
-        return result ;
-}
-
-static inline struct CNValue *
-CNAllocatePrintByteCode(struct CNValuePool * vpool, struct CNValue * srcregid)
-{
-        uint64_t attr = CNMakeByteCodeAttribute(CNPrintByteCode) ;
-        return CNAllocateOpCode(vpool, attr, CNAllocateNull(), srcregid, CNAllocateNull()) ;
+        return CNAllocateOpCodeWithExecOperands(vpool, CNPrintByteCode, 0, srcregid, 0) ;
 }
 
 void

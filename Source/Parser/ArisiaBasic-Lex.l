@@ -45,7 +45,7 @@ IDENT           [a-zA-Z][_0-9a-zA-Z]*
 {IDENT}  {
         int rwordid ;
         if(isReservedWord(&rwordid, yytext)){
-                yylval.value = CNAllocateNull() ;
+                yylval.registerId = 0 ;
                 return rwordid ;
         } else {
                 const char * str = yytext ;
@@ -80,7 +80,8 @@ IDENT           [a-zA-Z][_0-9a-zA-Z]*
                 CNRetainValue(val) ;
                 yylval.value = val ;
         } else {
-                yylval.value = CNAllocateNull() ;
+                struct CNValue * emptystr = CNAllocateString("", 0, s_valuePool) ;
+                yylval.value = emptystr ;
         }
         CNDeinitValueList(&s_string_list) ;
         return STRING ;

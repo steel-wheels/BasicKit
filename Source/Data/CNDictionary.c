@@ -56,9 +56,9 @@ CNReplaceDictionaryValueByKey(struct CNDictionary * dst, struct CNValue * key, s
                         struct CNDictionaryElement * elm = &(dst->elements[i]) ;
                         if(hasValidContextInElement(elm)){
                                 if(CNCompareValue(elm->key, key) == 0){
+                                        CNRetainValue(value) ;
                                         CNReleaseValue(pool, elm->value) ;
                                         elm->value = value ;
-                                        CNRetainValue(value) ;
                                         return true ;
                                 }
                         }
@@ -147,13 +147,8 @@ CNRetainDictionary(struct CNDictionary * dst)
         }
         for(unsigned int i=0 ; i<CNDICTIONARY_ELEMENT_NUM ; i++){
                 struct CNDictionaryElement * elm = &(dst->elements[i]) ;
-                struct CNValue * val ;
-                if((val = elm->key) != NULL){
-                        CNRetainValue(val) ;
-                }
-                if((val = elm->value) != NULL){
-                        CNRetainValue(val) ;
-                }
+                CNRetainValue(elm->key) ;
+                CNRetainValue(elm->value) ;
         }
 }
 
@@ -166,13 +161,8 @@ CNReleaseDictionaryElements(struct CNValuePool * pool, struct CNDictionary * dst
         }
         for(unsigned int i=0 ; i<CNDICTIONARY_ELEMENT_NUM ; i++){
                 struct CNDictionaryElement * elm = &(dst->elements[i]) ;
-                struct CNValue * val ;
-                if((val = elm->key) != NULL){
-                        CNReleaseValue(pool, val) ;
-                }
-                if((val = elm->value) != NULL){
-                        CNReleaseValue(pool, val) ;
-                }
+                CNReleaseValue(pool, elm->key) ;
+                CNReleaseValue(pool, elm->value) ;
         }
 }
 

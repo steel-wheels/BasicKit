@@ -46,7 +46,10 @@ CNValueInRegisters(struct CNRegisters * src, uint64_t index) ;
 void
 CNSetValueToRegisters(struct CNRegisters * dst, uint64_t index, struct CNValue * src) ;
 
-struct CNValue *
-CNRegisterIdForSpecialValue(struct CNRegisters * src, CNSpecialValueRegister specreg) ;
+static inline struct CNValue *
+CNSpecialValueInRegisters(struct CNRegisters * src, CNSpecialValueRegister spec)
+{
+        return CNValueInRegisters(src, (uint64_t) spec) ;
+}
 
 #endif /* CNRegisters_h */

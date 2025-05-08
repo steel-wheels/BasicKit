@@ -87,9 +87,3 @@ CNSetValueToRegisters(struct CNRegisters * dst, uint64_t index, struct CNValue *
         CNSetElementToArray(dst->valuePool, &(array->arrayValue), offset, src) ;
 }
 
-struct CNValue *
-CNRegisterIdForSpecialValue(struct CNRegisters * src, CNSpecialValueRegister specreg)
-{
-        struct CNValue * firstpage = src->registerArray[0] ;
-        return CNElementInArray(&(firstpage->arrayValue), specreg) ;
-}

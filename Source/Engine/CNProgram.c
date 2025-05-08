@@ -25,25 +25,35 @@ CNDeinitProgram(struct CNProgram * dst)
         CNReleaseValue(dst->valuePool, dst->identifierTable) ;
         CNDeinitRegisters(&(dst->registers)) ;
         CNDeinitValueList(&(dst->program)) ;
+        dst->valuePool = NULL ;
 }
 
-struct CNValue *
-CNRegisterIdForIdentifier(struct CNProgram * src, struct CNValue * identstr)
+bool
+CNHasRegisterIdForIdentifier(struct CNProgram * src, struct CNValue * ident)
 {
         struct CNDictionary * table = &((src->identifierTable)->dictionaryValue) ;
-        return CNSearchValueInDictionary(table, identstr) ;
+        if(CNSearchValueInDictionary(table, ident) != NULL){
+                return true ;
+        } else {
+                return false ;
+        }
 }
 
-struct CNValue *
-CNAllocateRegisterIdForIdentifier(struct CNProgram * src, struct CNValue * identstr)
+uint64_t
+CNRegisterIdForIdentifier(struct CNProgram * src, struct CNValue * ident)
 {
-        uint64_t         newregid  = CNAllocateRegisterInProgram(src) ;
-        struct CNValue * newregval = CNAllocateUnsignedInt(newregid, src->valuePool) ;
-
         struct CNDictionary * table = &((src->identifierTable)->dictionaryValue) ;
-        CNSetKeyAndValueToDictionary(table, identstr, newregval, src->valuePool) ;
 
-        return newregval ;
+        struct CNValue * regval ;
+        if((regval = CNSearchValueInDictionary(table, ident)) != NULL){
+                return CNUnsignedIntValue(regval) ;
+        } else {
+                uint64_t regid = CNAllocateRegisterInProgram(src) ;
+                struct CNValue * regval = CNAllocateUnsignedInt(regid, src->valuePool) ;
+                CNSetKeyAndValueToDictionary(table, ident, regval, src->valuePool) ;
+                CNReleaseValue(src->valuePool, regval) ;
+                return regid ;
+        }
 }
 
 void

@@ -10,11 +10,29 @@
 
 #import <BasicKit/CNType.h>
 
+typedef enum {
+        CNExecOperand,
+        CNStorageOperand
+} CNOperandType ;
+
+struct CNExecOperands {
+        uint64_t                destinationRegId ;
+        uint64_t                source0RegId ;
+        uint64_t                source1RegId ;
+} ;
+
+struct CNStorageOperands {
+        uint64_t                destinationRegId ;
+        struct CNValue *        sourceValue ;
+} ;
+
 struct CNOpCode {
-        uint64_t                attribute ;
-        struct CNValue *        destination ;
-        struct CNValue *        source0 ;
-        struct CNValue *        source1 ;
+        uint32_t                        code ;
+        CNOperandType                   operandType ;
+        union {
+                struct CNExecOperands      execOperands ;
+                struct CNStorageOperands   storageOperands ;
+        } ; // no name
 } ;
 
 void
@@ -27,7 +45,7 @@ static inline void
 CNDeinitOpCode(struct CNValuePool * vpool, struct CNOpCode * dst)
 {
         (void) vpool ;
-        dst->attribute = 0 ;
+        dst->code = 0 ;
 }
 
 int

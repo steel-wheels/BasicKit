@@ -14,7 +14,8 @@
 #import <BasicKit/CNInterface.h>
 
 typedef union {
-        struct CNValue * value ;
+        uint64_t                registerId ;
+        struct CNValue *        value ;
 } CNToken ;
 
 #define YYSTYPE CNToken

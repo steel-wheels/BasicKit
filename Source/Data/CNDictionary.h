@@ -13,7 +13,7 @@
 #define CNDICTIONARY_ELEMENT_NUM       3
 
 struct CNDictionaryElement {
-        struct CNValue *        key ;   /* string */
+        struct CNValue *        key ;           /* string or null */
         struct CNValue *        value ;
 } ;
 

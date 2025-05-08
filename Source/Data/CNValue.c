@@ -15,7 +15,7 @@ static struct CNValue *
 CNValueAllocate(CNValueType vtype, uint32_t size, struct CNValuePool * vpool)
 {
         struct CNValueAttribute attr = {
-                 .releasable            = true,
+                 .isFixed               = false,
                  .valueType             = vtype,
                  .referenceCount        = 1,
                  .size                  = size
@@ -25,13 +25,25 @@ CNValueAllocate(CNValueType vtype, uint32_t size, struct CNValuePool * vpool)
         return newval ;
 }
 
+static inline void
+setNullValue(struct CNValue * dst, bool isfixed)
+{
+         struct CNValueAttribute attr = {
+                 .isFixed               = isfixed,
+                 .valueType             = CNNullType,
+                 .referenceCount        = 1,
+                 .size                  = 0
+         } ;
+        dst->attribute = CNValueAttributeToInt(&attr) ;
+}
+
 struct CNValue *
 CNAllocateNull(void)
 {
         static struct CNValue   s_null_value ;
         static bool             s_initialized = false ;
         if(!s_initialized){
-                CNSetNullValue(&s_null_value, false) ;
+                setNullValue(&s_null_value, true) ;
                 s_initialized = true ;
         }
         return &s_null_value ;
@@ -155,20 +167,36 @@ CNAllocateDictionary(struct CNValuePool * pool)
 }
 
 struct CNValue *
-CNAllocateOpCode(struct CNValuePool * pool, uint64_t attr, struct CNValue * dst,
-                 struct CNValue * src0, struct CNValue * src1)
+CNAllocateOpCodeWithExecOperands(struct CNValuePool * pool, uint32_t code, uint64_t dstregid, uint64_t src0regid, uint64_t src1regid)
 {
         struct CNValue * val   = CNValueAllocate(CNOpCodeType, 0, pool) ;
         struct CNOpCode opcode = {
-                .attribute      = attr,
-                .destination    = dst,
-                .source0        = src0,
-                .source1        = src1
+                .code          = code,
+                .operandType   = CNExecOperand,
+                .execOperands  = {
+                        .destinationRegId       = dstregid,
+                        .source0RegId           = src0regid,
+                        .source1RegId           = src1regid
+                }
         } ;
         val->opCodeValue = opcode ;
-        CNRetainValue(opcode.destination) ;
-        CNRetainValue(opcode.source0) ;
-        CNRetainValue(opcode.source1) ;
+        return val ;
+}
+
+struct CNValue *
+CNAllocateOpCodeWithStorageOperands(struct CNValuePool * pool, uint32_t code, uint64_t dstregid, struct CNValue * srcval)
+{
+        struct CNValue * val   = CNValueAllocate(CNOpCodeType, 0, pool) ;
+        struct CNOpCode opcode = {
+                .code            = code,
+                .operandType     = CNStorageOperand,
+                .storageOperands = {
+                        .destinationRegId       = dstregid,
+                        .sourceValue            = srcval
+                }
+        } ;
+        CNRetainValue(srcval) ;
+        val->opCodeValue = opcode ;
         return val ;
 }
 
@@ -258,6 +286,11 @@ CNRetainValue(struct CNValue * dst)
 {
         struct CNValueAttribute attr = CNIntToValueAttribute(dst->attribute) ;
 
+        /* do not touch for fixed value */
+        if(attr.isFixed){
+                return ;
+        }
+
         /* update element */
         switch(attr.valueType) {
                 case CNNullType:
@@ -285,10 +318,8 @@ CNRetainValue(struct CNValue * dst)
         }
 
         /* update reference count */
-        if(attr.releasable){
-                attr.referenceCount += 1 ;
-                dst->attribute = CNValueAttributeToInt(&attr) ;
-        }
+        attr.referenceCount += 1 ;
+        dst->attribute = CNValueAttributeToInt(&attr) ;
 }
 
 void
@@ -296,6 +327,12 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
 {
         /* release elements */
         struct CNValueAttribute attr = CNIntToValueAttribute(dst->attribute) ;
+
+        /* do not touch for fixed value */
+        if(attr.isFixed){
+                return ;
+        }
+
         switch(attr.valueType){
                 case CNNullType:
                 case CNBoolType:
@@ -354,10 +391,8 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
                                 CNDeinitError(&(dst->errorValue)) ;
                         } break ;
                 }
-                CNSetNullValue(dst, attr.releasable) ;
-                if(attr.releasable){
-                        CNFreeScalar(pool, dst) ;
-                }
+                setNullValue(dst, false) ;
+                CNFreeScalar(pool, dst) ;
         }
 }
 
@@ -409,3 +444,22 @@ CNPrintValue(const struct CNValue * src)
         }
 }
 
+void
+CNPrintValueInfo(const struct CNValue * src)
+{
+        /*
+         struct CNValueAttribute {
+                 bool            releasable ;            // [63:63]  1 bit
+                 CNValueType     valueType ;             // [62:56]  7 bit
+                 uint32_t        referenceCount ;        // [55:28] 28 bit
+                 uint32_t        size ;                  // [27: 0] 28 bit
+         } ;
+         */
+        struct CNValueAttribute attr = CNIntToValueAttribute(src->attribute) ;
+        CNInterface()->printf("value-info {\n") ;
+        CNInterface()->printf("  isFixed:         %s\n", attr.isFixed ? "true" : "false") ;
+        CNInterface()->printf("  value-type:      0x%x\n", attr.valueType) ;
+        CNInterface()->printf("  reference-count: %u\n", attr.referenceCount) ;
+        CNInterface()->printf("  size:            %u\n", attr.size) ;
+        CNInterface()->printf("}\n") ;
+}

@@ -13,8 +13,8 @@
 void
 CNSetElementToArray(struct CNValuePool * vpool, struct CNArray * dst, uint64_t index, struct CNValue * newval)
 {
-        CNReleaseValue(vpool, CNElementInArray(dst, index)) ;
         CNRetainValue(newval) ;
+        CNReleaseValue(vpool, CNElementInArray(dst, index)) ;
         dst->values[index] = newval ;
 }
 
@@ -71,6 +71,7 @@ CNDeinitArray(struct CNValuePool * pool, struct CNArray * dst)
         uint64_t count  = dst->count ;
         struct CNValue ** values = dst->values ;
         CNFreeArrayElements(pool, count, values) ;
+        dst->values = NULL ;
 }
 
 void

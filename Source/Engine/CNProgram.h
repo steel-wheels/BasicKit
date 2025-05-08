@@ -32,20 +32,11 @@ CNAllocateRegisterInProgram(struct CNProgram * src)
         return CNAllocateRegisterInRegisters(&(src->registers)) ;
 }
 
-/* @return
- * the return value will be null when the register id is not found
- */
-struct CNValue *
+bool
+CNHasRegisterIdForIdentifier(struct CNProgram * src, struct CNValue * identstr) ;
+
+uint64_t
 CNRegisterIdForIdentifier(struct CNProgram * src, struct CNValue * identstr) ;
-
-struct CNValue *
-CNAllocateRegisterIdForIdentifier(struct CNProgram * src, struct CNValue * identstr) ;
-
-static inline struct CNValue *
-CNAllocateSpecialRegister(struct CNProgram * src, CNSpecialValueRegister specreg)
-{
-        return CNRegisterIdForSpecialValue(&(src->registers), specreg) ;
-}
 
 static inline void
 CNAppendCodeToProgram(struct CNProgram * dst, struct CNValue * opcode)

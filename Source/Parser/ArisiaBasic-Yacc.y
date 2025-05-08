@@ -30,31 +30,21 @@ CNParserErrorCount(void)
 }
 
 static struct CNValue *
-registerId(uint64_t regid)
+moveCode(uint64_t dstreg, uint64_t srcreg)
 {
-        return CNAllocateUnsignedInt(regid, s_program->valuePool) ;
+        return CNAllocateMoveByteCode(s_program->valuePool, dstreg, srcreg) ;
 }
 
 static struct CNValue *
-moveCode(struct CNValue * dstreg, struct CNValue * srcreg)
+storeCode(uint64_t dstreg, struct CNValue * srcval)
 {
-        struct CNValue * opcode = CNAllocateMoveByteCode(s_program->valuePool, dstreg, srcreg) ;
-        return opcode ;
+        return CNAllocateStoreByteCode(s_program->valuePool, dstreg, srcval) ;
 }
 
 static struct CNValue *
-storeCode(struct CNValue * dstreg, struct CNValue * srcval)
+printCode(uint64_t srcregid)
 {
-        struct CNValue * opcode = CNAllocateStoreByteCode(s_program->valuePool, dstreg, srcval) ;
-        return opcode ;
-}
-
-static struct CNValue *
-printCode(struct CNValue * srcregid)
-{
-        struct CNValue * opcode = CNAllocatePrintByteCode(
-                s_program->valuePool, srcregid) ;
-        return opcode ;
+        return CNAllocatePrintByteCode(s_program->valuePool, srcregid) ;
 }
 
 static inline void
@@ -91,77 +81,62 @@ statement_list
         | statement
         ;
 
-statement
+statement // has no value
         : IDENTIFIER '=' expression
         {
-                struct CNValue * identstr = $1.value ;  // string
-                struct CNValue * srcid    = $3.value ;  // unsigned int
+                struct CNValue * identstr = $1.value ;
+                uint64_t         srcreg   = $3.registerId ;
 
-                struct CNValue * dstid ;
-                if((dstid = CNRegisterIdForIdentifier(s_program, identstr)) == NULL){
-                        /* the identifier is not found */
-                        dstid = CNAllocateRegisterIdForIdentifier(s_program, identstr) ;
-                }
-                struct CNValue * opcode = moveCode(dstid, srcid) ;
+                uint64_t dstreg = CNRegisterIdForIdentifier(s_program, identstr) ;
+
+                struct CNValue * opcode = moveCode(dstreg, srcreg) ;
                 appendToBlock(opcode) ;
 
                 CNReleaseValue(s_program->valuePool, identstr) ;
-                CNReleaseValue(s_program->valuePool, dstid) ;
-                CNReleaseValue(s_program->valuePool, srcid) ;
                 CNReleaseValue(s_program->valuePool, opcode) ;
         }
         | PRINT expression
         {
-                struct CNValue * opcode = printCode($2.value) ;
+                uint64_t srcreg = $2.registerId ;
+                struct CNValue * opcode = printCode(srcreg) ;
                 appendToBlock(opcode) ;
-                CNReleaseValue(s_program->valuePool, $2.value) ;
+
                 CNReleaseValue(s_program->valuePool, opcode) ;
         }
         ;
 
-        expression
+expression // has registerId
         : boolean_expression
         {
-                $$.value = $1.value ;
+                $$.registerId = $1.registerId ;
         }
         | STRING
         {
-                uint64_t regid= CNAllocateRegisterInProgram(s_program) ;
-                struct CNValue * regval = registerId(regid) ;
-                struct CNValue * opcode = storeCode(regval, $1.value) ;
+                uint64_t         dstreg = CNAllocateRegisterInProgram(s_program) ;
+                struct CNValue * srcval = $1.value ;
+                struct CNValue * opcode = storeCode(dstreg, srcval) ;
                 appendToBlock(opcode) ;
-                CNReleaseValue(s_program->valuePool, $1.value) ;
+                CNReleaseValue(s_program->valuePool, srcval) ;
                 CNReleaseValue(s_program->valuePool, opcode) ;
-                $$.value = regval ;
+
+                $$.registerId = dstreg ;
         }
         | IDENTIFIER
         {
                 struct CNValue * identstr = $1.value ;  // string
-
-                struct CNValue * srcid ;
-                if((srcid = CNRegisterIdForIdentifier(s_program, identstr)) == NULL){
-                        unsigned int lineno = currentLineNumber() ;
-
-                        CNInterface()->printf("Variable ") ;
-                        CNPrintValue(identstr) ;
-                        CNInterface()->printf(" is refered at line %u\n", lineno) ;
-                        s_error_count += 1 ;
-
-                        /* the identifier is not found */
-                        srcid = CNAllocateRegisterIdForIdentifier(s_program, identstr) ;
-                }
-                $$.value = srcid ;
+                uint64_t srcreg = CNRegisterIdForIdentifier(s_program, identstr) ;
+                $$.registerId = srcreg ;
         }
         ;
 
-boolean_expression
+boolean_expression // has registerId
         : _TRUE
           {
-                  $$.value = registerId(CNTrueValueRegister) ;
+                  $$.registerId = (uint64_t) CNTrueValueRegister ;
           }
         | _FALSE
           {
-                  $$.value = registerId(CNFalseValueRegister) ;
+                  $$.registerId = (uint64_t) CNFalseValueRegister ;
           }
         ;
 

@@ -61,6 +61,7 @@ static bool
 testParsers(struct CNValuePool * vpool, unsigned int testid)
 {
         bool result = true ;
+        struct CNMemoryUsage usage ;
 
         struct CNValueList lines ;
         CNInitValueList(&lines, vpool) ;
@@ -99,17 +100,18 @@ testParsers(struct CNValuePool * vpool, unsigned int testid)
         }
         printf("(%s) generated code\n", __func__) ;
         CNDumpProgram(0, &prg) ;
+        CNDeinitValueList(&lines) ;
+
         printf("(%s) exec code\n", __func__) ;
         CNExecuteProgram(&prg) ;
+
+        printf("(%s) free parser\n", __func__) ;
         CNFreeParser() ;
         CNDeinitProgram(&prg) ;
 
-        CNDeinitValueList(&lines) ;
-
         printf("(%s) Check state\n", __func__) ;
-        struct CNMemoryUsage usage = CNMemoryUsageOfValuePool(vpool) ;
+        usage = CNMemoryUsageOfValuePool(vpool) ;
         CNPrintMemoryUsage(&usage) ;
-
         if(usage.allocatedSize == usage.usableSize) {
                 printf("(%s) No memory leak\n", __func__) ;
         } else {
