@@ -20,7 +20,7 @@ struct CNValuePool {
 static inline void
 CNInitValuePool(struct CNValuePool * dst, struct CNListPool * lpool)
 {
-        CNInitScalarPool(&(dst->scalarPool), sizeof(struct CNValue), 1024, lpool) ;
+        CNInitScalarPool(&(dst->scalarPool), CNValueSize, 1024, lpool) ;
         CNInitArrayPool(&(dst->arrayPool), sizeof(struct CNValue *), lpool) ;
 }
 
@@ -62,7 +62,7 @@ CNFreeArrayElements(struct CNValuePool * src, uint64_t elmnum, struct CNValue **
 }
 
 void
-CNDumpValuePool(unsigned int indent, const struct CNValuePool * src) ;
+CNDumpValuePool(const struct CNValuePool * src) ;
 
 struct CNMemoryUsage
 CNMemoryUsageOfValuePool(const struct CNValuePool * src) ;

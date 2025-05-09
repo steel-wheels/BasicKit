@@ -53,7 +53,7 @@ CNFreeArrayData(struct CNArrayPool * src, uint64_t elmnum, void * data)
 }
 
 void
-CNDumpArrayPool(unsigned int indent, const struct CNArrayPool * src) ;
+CNDumpArrayPool(const struct CNArrayPool * src) ;
 
 static inline struct CNMemoryUsage
 CNMemoryUsageOfArrayPool(const struct CNArrayPool * src)

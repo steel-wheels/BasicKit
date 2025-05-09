@@ -9,6 +9,73 @@
 #define CNVALUE_H
 
 #import <BasicKit/CNType.h>
+
+typedef enum {
+        CNNullType      = 0,
+        CNSignedIntType
+} CNValueType ;
+
+struct CNValueAttribute {
+        bool            isFixed ;               // [63:63]
+        CNValueType     type ;                  // [62:32]
+        uint32_t        referenceCount ;        // [31: 0]
+} ;
+
+static inline uint64_t
+CNValueAttributeToInt(const struct CNValueAttribute * src)
+{
+        uint64_t isfixed = src->isFixed ? 1 : 0 ;
+        uint64_t type    = src->type ;
+        uint64_t rcnt    = 1 ;
+        return (isfixed << 63) | (type << 32) | rcnt ;
+}
+
+static inline struct CNValueAttribute
+CNIntToValueAttribute(uint64_t src)
+{
+        struct CNValueAttribute result = {
+                .isFixed        = ((src >> 63) & 0x1) != 0,
+                .type           = (CNValueType) ((src >> 32) & 0x7FFFFFFF),
+                .referenceCount = (uint32_t) (src & 0xFFFFFFFF)
+        } ;
+        return result ;
+}
+
+#define CNValueSize     64
+
+struct CNVirtualValueFunctions {
+        void (*releaseContents)(struct CNValue * src) ;
+        void (*_print)(struct CNValue * src) ;
+} ;
+
+struct CNValue {
+        uint64_t                                attribute ;             // convert to CNValueAttribute
+        struct CNVirtualValueFunctions *        virtualFunctions ;
+} ;
+
+static inline CNValueType
+CNTypeOfValue(const struct CNValue * src)
+{
+        return (CNValueType) ((src->attribute >> 32) & 0x7FFFFFFF) ;
+}
+
+uint32_t
+CNSizeOfUnionedValue(void) ;
+
+struct CNValue *
+CNAllocateValue(struct CNValuePool * vpool, CNValueType vtype, struct CNVirtualValueFunctions * vfuncs) ;
+
+void
+CNRetainValue(struct CNValue * src) ;
+
+static inline void
+CNPrintValue(struct CNValue * src)
+{
+        ((src->virtualFunctions)->_print)(src) ;
+}
+
+#if 0
+
 #import <BasicKit/CNError.h>
 #import <BasicKit/CNList.h>
 #import <BasicKit/CNString.h>
@@ -167,5 +234,7 @@ CNPrintValue(const struct CNValue * src) ;
 
 void
 CNPrintValueInfo(const struct CNValue * src) ;
+
+#endif
 
 #endif /* CNVALUE_H */

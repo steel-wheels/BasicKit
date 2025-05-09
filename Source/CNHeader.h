@@ -5,24 +5,13 @@
  *   Copyright (C) 2025 Steel Wheels Project
  */
 
-#import <BasicKit/CNType.h>
 #import <BasicKit/CNInterface.h>
 #import <BasicKit/CNList.h>
-#import <BasicKit/CNArrayPool.h>
-#import <BasicKit/CNScalarPool.h>
-#import <BasicKit/CNPagePool.h>
-#import <BasicKit/CNArray.h>
-#import <BasicKit/CNString.h>
-#import <BasicKit/CNDictionary.h>
 #import <BasicKit/CNValue.h>
+#import <BasicKit/CNNumberValue.h>
+#import <BasicKit/CNArrayPool.h>
+#import <BasicKit/CNPagePool.h>
+#import <BasicKit/CNScalarPool.h>
 #import <BasicKit/CNValuePool.h>
-#import <BasicKit/CNValueList.h>
-#import <BasicKit/CNIterators.h>
-#import <BasicKit/CNAllocators.h>
-#import <BasicKit/CNFile.h>
-#import <BasicKit/CNOpCode.h>
-#import <BasicKit/CNByteCode.h>
-#import <BasicKit/CNProgram.h>
-#import <BasicKit/CNEngine.h>
-#import <BasicKit/ArisiaBasic.h>
+
 

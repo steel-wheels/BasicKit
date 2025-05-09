@@ -5,54 +5,51 @@
  *   Copyright (C) 2025 Steel Wheels Project
  */
 
+#import <BasicKit/CNHeader.h>
 #include "UTList.h"
-#include "UTArrayPool.h"
-#include "UTScalarPool.h"
-#include "UTArray.h"
-#include "UTString.h"
-#include "UTDictionary.h"
-#include "UTValue.h"
-#include "UTValueList.h"
-#include "UTIterator.h"
-#include "UTAllocator.h"
-#include "UTRegisters.h"
-#include "UTProgram.h"
-#include "UTParser.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 int main(int argc, char * argv[])
 {
-        printf("Hello world\n") ;
+        bool result = true ;
 
         CNInitInterface(NULL) ;
-        CNInterface()->printf("Message from interface\n") ;
+        CNInterface()->printf("Hello world\n") ;
 
-        bool result0  = UTList() ;
-        bool result1  = UTArrayPool() ;
-        bool result2  = UTScalarPool() ;
-        bool result3  = UTString() ;
-        bool result4  = UTArray() ;
-        bool result5  = UTDictionary() ;
-        bool result6  = UTValue() ;
-        bool result7  = UTValueList() ;
-        bool result8  = UTIterator() ;
-        bool result9  = UTAllocator() ;
-        bool result10 = UTRegisters() ;
-        bool result11 = UTProgram() ;
-        bool result12 = UTParser() ;
-
-        int ecode ;
-        bool result = result0 && result1 && result2  && result3 &&
-                      result4 && result5 && result6  && result7 &&
-                      result8 && result9 && result10 && result11 &&
-                      result12 ;
-        if(result) {
-                printf("SUMMARY: OK\n") ;
-                ecode = 0 ;
+        /* check value size*/
+        uint32_t usize = CNSizeOfUnionedValue() ;
+        if(usize == CNValueSize){
+                CNInterface()->printf("sizeof(Value) = %u\n", usize) ;
         } else {
-                printf("SUMMARY: Error\n") ;
-                ecode = 1 ;
+                CNInterface()->error("[Errror] unexpected sizeof(Value) = %u\n", usize) ;
+                result = false ;
         }
-        exit(ecode) ;
+
+        /* allocate pools */
+        CNInterface()->printf("(%s) Allocate pools\n", __func__) ;
+        struct CNListPool lpool ;
+        CNInitListPool(&lpool) ;
+        struct CNValuePool vpool ;
+
+        /* execute tests */
+        bool result0 = UTList(&lpool) ;
+
+        CNInitValuePool(&vpool, &lpool) ;
+
+        /* execute tests */
+
+        /* summaryze result */
+        result &= result0 ;
+
+        /* release pools */
+        CNInterface()->printf("(%s) Free pools\n", __func__) ;
+        CNDeinitValuePool(&vpool) ;
+        CNDeinitListPool(&lpool) ;
+
+        if(result){
+                CNInterface()->printf("SUMMARY: OK\n") ;
+                return 0 ;
+        } else {
+                CNInterface()->printf("SUMMARY: Error\n") ;
+                return -1 ;
+        }
 }

@@ -9,35 +9,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-bool UTList(void)
+bool UTList(struct CNListPool * lpool)
 {
         printf("(%s) start\n", __func__) ;
         bool result = true ;
 
-        struct CNListPool       lpool ;
-        CNInitListPool(&lpool) ;
-        struct CNMemoryUsage usage = CNMemoryUsageOfListPool(&lpool) ;
+        struct CNMemoryUsage usage = CNMemoryUsageOfListPool(lpool) ;
         CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) allocate state\n", __func__) ;
 #       define ITEM_NUM         10
         struct CNList * items[ITEM_NUM] ;
         for(unsigned int i=0 ; i<ITEM_NUM ; i++){
-                items[i] = CNAllocateList(&lpool) ;
+                items[i] = CNAllocateList(lpool) ;
         }
-        usage = CNMemoryUsageOfListPool(&lpool) ;
+        usage = CNMemoryUsageOfListPool(lpool) ;
         CNPrintMemoryUsage(&usage) ;
 
         printf("(%s) release state\n", __func__) ;
         for(unsigned int i=0 ; i<ITEM_NUM ; i++){
-                CNFreeList(&lpool, items[i]) ;
+                CNFreeList(lpool, items[i]) ;
         }
-        usage = CNMemoryUsageOfListPool(&lpool) ;
-        CNPrintMemoryUsage(&usage) ;
-
-        CNDeinitListPool(&lpool) ;
 
         printf("(%s) check memory management\n", __func__) ;
+        usage = CNMemoryUsageOfListPool(lpool) ;
+        CNPrintMemoryUsage(&usage) ;
         if(usage.allocatedSize == usage.usableSize) {
                 printf("(%s) No memory leak\n", __func__) ;
         } else {

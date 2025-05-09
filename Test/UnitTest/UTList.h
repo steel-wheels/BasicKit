@@ -10,6 +10,6 @@
 
 #import <BasicKit/CNHeader.h>
 
-bool UTList(void) ;
+bool UTList(struct CNListPool * lpool) ;
 
 #endif /* UTList_h */

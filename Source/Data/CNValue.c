@@ -7,8 +7,76 @@
 
 #import <BasicKit/CNValue.h>
 #import <BasicKit/CNValuePool.h>
+#import <BasicKit/CNNumberValue.h>
 #import <BasicKit/CNInterface.h>
-#import <BasicKit/CNUtils.h>
+
+union CNUnionedValue {
+        uint64_t                        baseValue[CNValueSize / sizeof(uint64_t)] ;
+        struct CNSignedIntValue         signedValue ;
+        struct CNUnsignedIntValue       unsignedValue ;
+        struct CNFloatValue             floatValue ;
+} ;
+
+uint32_t
+CNSizeOfUnionedValue(void)
+{
+        return sizeof(union CNUnionedValue) ;
+}
+
+struct CNValue *
+CNAllocateValue(struct CNValuePool * vpool, CNValueType vtype, struct CNVirtualValueFunctions * vfunc)
+{
+        struct CNValue * newvalue = CNAllocateScalar(vpool) ;
+        struct CNValueAttribute attr = {
+                .isFixed        = false,
+                .type           = vtype,
+                .referenceCount = 1
+        } ;
+        newvalue->attribute        = CNValueAttributeToInt(&attr) ;
+        newvalue->virtualFunctions = vfunc ;
+        return newvalue ;
+}
+
+void
+CNRetainValue(struct CNValue * src)
+{
+        struct CNValueAttribute attr = CNIntToValueAttribute(src->attribute) ;
+        if(attr.isFixed){
+                return ;
+        }
+        attr.referenceCount += 1 ;
+        src->attribute = CNValueAttributeToInt(&attr) ;
+}
+
+void
+CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
+{
+        struct CNValueAttribute attr = CNIntToValueAttribute(dst->attribute) ;
+        if(attr.isFixed){
+                return ;
+        }
+        if(attr.referenceCount > 1){
+                attr.referenceCount -= 1 ;
+                dst->attribute = CNValueAttributeToInt(&attr) ;
+        } else if(attr.referenceCount == 1){
+                /* release contents of the value */
+                (dst->virtualFunctions)->releaseContents(dst) ;
+                /* release value frame */
+                struct CNValueAttribute newattr = {
+                        .isFixed        = false,
+                        .type           = CNNullType,
+                        .referenceCount = 0
+                } ;
+                dst->attribute = CNValueAttributeToInt(&newattr) ;
+                CNFreeScalar(pool, dst) ;
+        } else { // attr.referenceCount == 0
+                CNInterface()->error("[Error] Too much release: %s\n", __func__) ;
+        }
+}
+
+#if 0
+#import <BasicKit/CNValuePool.h>
+#import <BasicKit/CNInterface.h>
 #include <string.h>
 
 static struct CNValue *
@@ -463,3 +531,6 @@ CNPrintValueInfo(const struct CNValue * src)
         CNInterface()->printf("  size:            %u\n", attr.size) ;
         CNInterface()->printf("}\n") ;
 }
+
+#endif
+
