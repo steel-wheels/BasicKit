@@ -7,6 +7,7 @@
 
 #import <BasicKit/CNHeader.h>
 #include "UTList.h"
+#include "UTValue.h"
 
 int main(int argc, char * argv[])
 {
@@ -36,15 +37,15 @@ int main(int argc, char * argv[])
         CNInitValuePool(&vpool, &lpool) ;
 
         /* execute tests */
-
-        /* summaryze result */
-        result &= result0 ;
+        bool result1 = UTValue(&vpool) ;
 
         /* release pools */
         CNInterface()->printf("(%s) Free pools\n", __func__) ;
         CNDeinitValuePool(&vpool) ;
         CNDeinitListPool(&lpool) ;
 
+        /* summaryze result */
+        result &= result0 && result1 ;
         if(result){
                 CNInterface()->printf("SUMMARY: OK\n") ;
                 return 0 ;

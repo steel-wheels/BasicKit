@@ -68,6 +68,9 @@ CNAllocateValue(struct CNValuePool * vpool, CNValueType vtype, struct CNVirtualV
 void
 CNRetainValue(struct CNValue * src) ;
 
+void
+CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst) ;
+
 static inline void
 CNPrintValue(struct CNValue * src)
 {
