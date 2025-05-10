@@ -11,8 +11,10 @@
 #import <BasicKit/CNType.h>
 
 typedef enum {
-        CNNullType      = 0,
-        CNSignedIntType
+        CNNullType              = 0,
+        CNSignedIntType,
+        CNUnsignedIntType,
+        CNFloatType
 } CNValueType ;
 
 struct CNValueAttribute {
@@ -45,7 +47,7 @@ CNIntToValueAttribute(uint64_t src)
 
 struct CNVirtualValueFunctions {
         void (*releaseContents)(struct CNValue * src) ;
-        void (*_print)(struct CNValue * src) ;
+        void (*print)(struct CNValue * src) ;
 } ;
 
 struct CNValue {
@@ -58,6 +60,9 @@ CNTypeOfValue(const struct CNValue * src)
 {
         return (CNValueType) ((src->attribute >> 32) & 0x7FFFFFFF) ;
 }
+
+const char *
+CNValueTypeName(CNValueType vtype) ;
 
 uint32_t
 CNSizeOfUnionedValue(void) ;
@@ -74,37 +79,13 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst) ;
 static inline void
 CNPrintValue(struct CNValue * src)
 {
-        ((src->virtualFunctions)->_print)(src) ;
+        ((src->virtualFunctions)->print)(src) ;
 }
 
+void
+CNPrintValueAttribute(struct CNValue * src) ;
+
 #if 0
-
-#import <BasicKit/CNError.h>
-#import <BasicKit/CNList.h>
-#import <BasicKit/CNString.h>
-#import <BasicKit/CNArray.h>
-#import <BasicKit/CNDictionary.h>
-#import <BasicKit/CNOpCode.h>
-#import <BasicKit/CNScalarPool.h>
-#import <BasicKit/CNArrayPool.h>
-
-/* The value must be smaller than 128
- * Because thie value will be embedded into
- * the "attribute" of CNValue
- */
-typedef enum {
-        CNNullType,
-        CNBoolType,
-        CNCharType,
-        CNSignedIntType,
-        CNUnsignedIntType,
-        CNFloatType,
-        CNStringType,
-        CNArrayType,
-        CNDictionaryType,
-        CNOpCodeType,
-        CNErrorType
-} CNValueType ;
 
 struct CNValueAttribute {
         bool            isFixed ;               // [63:63]  1 bit

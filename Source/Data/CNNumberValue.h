@@ -28,6 +28,12 @@ struct CNFloatValue {
 struct CNVirtualValueFunctions *
 CNVirtualFunctionsForSignedIntValue(void) ;
 
+struct CNVirtualValueFunctions *
+CNVirtualFunctionsForUnignedIntValue(void) ;
+
+struct CNVirtualValueFunctions *
+CNVirtualFunctionsForFloatValue(void) ;
+
 static inline struct CNSignedIntValue *
 CNAllocateSignedIntValue(struct CNValuePool * vpool, int64_t value)
 {
@@ -39,9 +45,41 @@ CNAllocateSignedIntValue(struct CNValuePool * vpool, int64_t value)
 }
 
 static inline struct CNSignedIntValue *
-CNCasToSignedIntValue(struct CNValue * src)
+CNCastToSignedIntValue(struct CNValue * src)
 {
         return CNTypeOfValue(src) == CNSignedIntType ? (struct CNSignedIntValue *) src : NULL ;
+}
+
+static inline struct CNUnsignedIntValue *
+CNAllocateUnsignedIntValue(struct CNValuePool * vpool, uint64_t value)
+{
+        struct CNVirtualValueFunctions * vfunc = CNVirtualFunctionsForUnignedIntValue() ;
+        struct CNUnsignedIntValue * newval ;
+        newval = (struct CNUnsignedIntValue *) CNAllocateValue(vpool, CNUnsignedIntType, vfunc) ;
+        newval->value = value ;
+        return newval ;
+}
+
+static inline struct CNUnsignedIntValue *
+CNCastToUnsignedIntValue(struct CNValue * src)
+{
+        return CNTypeOfValue(src) == CNUnsignedIntType ? (struct CNUnsignedIntValue *) src : NULL ;
+}
+
+static inline struct CNFloatValue *
+CNAllocateFloatValue(struct CNValuePool * vpool, double value)
+{
+        struct CNVirtualValueFunctions * vfunc = CNVirtualFunctionsForFloatValue() ;
+        struct CNFloatValue * newval ;
+        newval = (struct CNFloatValue *) CNAllocateValue(vpool, CNFloatType, vfunc) ;
+        newval->value = value ;
+        return newval ;
+}
+
+static inline struct CNFloatValue *
+CNCastToFloatValue(struct CNValue * src)
+{
+        return CNTypeOfValue(src) == CNFloatType ? (struct CNFloatValue *) src : NULL ;
 }
 
 #endif /* CNIntValue_h */

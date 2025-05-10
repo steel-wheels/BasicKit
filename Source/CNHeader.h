@@ -8,6 +8,7 @@
 #import <BasicKit/CNInterface.h>
 #import <BasicKit/CNList.h>
 #import <BasicKit/CNValue.h>
+#import <BasicKit/CNNullValue.h>
 #import <BasicKit/CNNumberValue.h>
 #import <BasicKit/CNArrayPool.h>
 #import <BasicKit/CNPagePool.h>

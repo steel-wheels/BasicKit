@@ -7,11 +7,26 @@
 
 #import <BasicKit/CNValue.h>
 #import <BasicKit/CNValuePool.h>
+#import <BasicKit/CNNullValue.h>
 #import <BasicKit/CNNumberValue.h>
 #import <BasicKit/CNInterface.h>
 
+const char *
+CNValueTypeName(CNValueType vtype)
+{
+        const char * result = "?" ;
+        switch(vtype){
+                case CNNullType:        result = "null" ;       break ;
+                case CNSignedIntType:   result = "int64_t" ;    break ;
+                case CNUnsignedIntType: result = "uint64_t" ;   break ;
+                case CNFloatType:       result = "double" ;     break ;
+        }
+        return result ;
+}
+
 union CNUnionedValue {
         uint64_t                        baseValue[CNValueSize / sizeof(uint64_t)] ;
+        struct CNNullValue              nullValue ;
         struct CNSignedIntValue         signedValue ;
         struct CNUnsignedIntValue       unsignedValue ;
         struct CNFloatValue             floatValue ;
@@ -72,6 +87,17 @@ CNReleaseValue(struct CNValuePool * pool, struct CNValue * dst)
         } else { // attr.referenceCount == 0
                 CNInterface()->error("[Error] Too much release: %s\n", __func__) ;
         }
+}
+
+void
+CNPrintValueAttribute(struct CNValue * src)
+{
+        struct CNValueAttribute attr = CNIntToValueAttribute(src->attribute) ;
+        CNInterface()->printf("value-attribute {\n") ;
+        CNInterface()->printf("  isFixed:        %s\n", attr.isFixed ? "true" : "false") ;
+        CNInterface()->printf("  type:           %s\n", CNValueTypeName(attr.type)) ;
+        CNInterface()->printf("  referenceCount: %u\n", attr.referenceCount) ;
+        CNInterface()->printf("}\n") ;
 }
 
 #if 0

@@ -8,8 +8,10 @@
 #include "CNNumberValue.h"
 #include "CNInterface.h"
 
-static void releasetSignedIntValue(struct CNValue * val) ;
+static void releaseContents(struct CNValue * val) ;
 static void printSignedIntValue(struct CNValue * val) ;
+static void printUnsignedIntValue(struct CNValue * val) ;
+static void printFloatValue(struct CNValue * val) ;
 
 struct CNVirtualValueFunctions *
 CNVirtualFunctionsForSignedIntValue(void)
@@ -17,15 +19,41 @@ CNVirtualFunctionsForSignedIntValue(void)
         static struct CNVirtualValueFunctions s_virt_func ;
         static bool s_initialized = false ;
         if(!s_initialized){
-                s_virt_func.releaseContents     = &releasetSignedIntValue ;
-                s_virt_func._print              = &printSignedIntValue ;
+                s_virt_func.releaseContents     = &releaseContents ;
+                s_virt_func.print               = &printSignedIntValue ;
+                s_initialized = true ;
+        }
+        return &s_virt_func ;
+}
+
+struct CNVirtualValueFunctions *
+CNVirtualFunctionsForUnignedIntValue(void)
+{
+        static struct CNVirtualValueFunctions s_virt_func ;
+        static bool s_initialized = false ;
+        if(!s_initialized){
+                s_virt_func.releaseContents    = &releaseContents ;
+                s_virt_func.print              = &printUnsignedIntValue ;
+                s_initialized = true ;
+        }
+        return &s_virt_func ;
+}
+
+struct CNVirtualValueFunctions *
+CNVirtualFunctionsForFloatValue(void)
+{
+        static struct CNVirtualValueFunctions s_virt_func ;
+        static bool s_initialized = false ;
+        if(!s_initialized){
+                s_virt_func.releaseContents    = &releaseContents ;
+                s_virt_func.print              = &printFloatValue ;
                 s_initialized = true ;
         }
         return &s_virt_func ;
 }
 
 static void
-releasetSignedIntValue(struct CNValue * val)
+releaseContents(struct CNValue * val)
 {
         (void) val ; // do nothing'
 }
@@ -33,7 +61,7 @@ releasetSignedIntValue(struct CNValue * val)
 static void
 printSignedIntValue(struct CNValue * src)
 {
-        struct CNSignedIntValue * ival = CNCasToSignedIntValue(src) ;
+        struct CNSignedIntValue * ival = CNCastToSignedIntValue(src) ;
         if(ival != NULL){
                 CNInterface()->printf("%ld", ival->value) ;
         } else {
@@ -41,3 +69,24 @@ printSignedIntValue(struct CNValue * src)
         }
 }
 
+static void
+printUnsignedIntValue(struct CNValue * src)
+{
+        struct CNUnsignedIntValue * ival = CNCastToUnsignedIntValue(src) ;
+        if(ival != NULL){
+                CNInterface()->printf("%ld", ival->value) ;
+        } else {
+                CNInterface()->printf("[error at %s]", __func__) ;
+        }
+}
+
+static void
+printFloatValue(struct CNValue * src)
+{
+        struct CNFloatValue * ival = CNCastToFloatValue(src) ;
+        if(ival != NULL){
+                CNInterface()->printf("%lf", ival->value) ;
+        } else {
+                CNInterface()->printf("[error at %s]", __func__) ;
+        }
+}
