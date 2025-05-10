@@ -15,7 +15,9 @@ typedef enum {
         CNSignedIntType,
         CNUnsignedIntType,
         CNFloatType,
-        CNArrayType
+        CNStringType,
+        CNArrayType,
+        CNDictionaryType
 } CNValueType ;
 
 struct CNValueAttribute {

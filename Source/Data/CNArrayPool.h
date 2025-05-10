@@ -32,7 +32,7 @@ CNDeinitArrayPool(struct CNArrayPool * dst)
 static inline size_t
 CNArrayPageSize(size_t elmsize, uint64_t elmnum)
 {
-        static const size_t UNIT_SIZE = 512 ;
+        static const size_t UNIT_SIZE = 128 ;
         size_t unum = (elmsize * elmnum + UNIT_SIZE - 1) / UNIT_SIZE ;
         return unum * UNIT_SIZE ;
 

@@ -9,7 +9,9 @@
 #import <BasicKit/CNValuePool.h>
 #import <BasicKit/CNNullValue.h>
 #import <BasicKit/CNNumberValue.h>
+#import <BasicKit/CNStringValue.h>
 #import <BasicKit/CNArrayValue.h>
+#import <BasicKit/CNDictionaryValue.h>
 #import <BasicKit/CNInterface.h>
 
 const char *
@@ -21,7 +23,9 @@ CNValueTypeName(CNValueType vtype)
                 case CNSignedIntType:   result = "int64_t" ;    break ;
                 case CNUnsignedIntType: result = "uint64_t" ;   break ;
                 case CNFloatType:       result = "double" ;     break ;
+                case CNStringType:      result = "string" ;     break ;
                 case CNArrayType:       result = "array" ;      break ;
+                case CNDictionaryType:  result = "dict" ;       break ;
         }
         return result ;
 }
@@ -32,7 +36,9 @@ union CNUnionedValue {
         struct CNSignedIntValue         signedValue ;
         struct CNUnsignedIntValue       unsignedValue ;
         struct CNFloatValue             floatValue ;
+        struct CNStringValue            stringValue ;
         struct CNArrayValue             arrayValue ;
+        struct CNDictionaryValue        dictionaryValue ;
 } ;
 
 uint32_t

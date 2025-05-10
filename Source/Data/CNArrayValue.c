@@ -77,10 +77,12 @@ printValues(struct CNValue * val)
         struct CNValue ** ptr    = arr->values ;
         struct CNValue ** endptr = ptr + arr->elementNum ;
         if(ptr < endptr){
+                CNInterface()->printf("[") ;
                 CNPrintValue(*ptr) ; ptr++ ;
                 for( ; ptr < endptr ; ptr++){
                         CNInterface()->printf(", ") ;
                         CNPrintValue(*ptr) ;
                 }
+                CNInterface()->printf("]") ;
         }
 }

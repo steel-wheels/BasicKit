@@ -8,6 +8,8 @@
 #include "UTValue.h"
 #include "UTUtils.h"
 
+static void
+dumpInfo(void) ;
 static bool
 testNullValues(struct CNValuePool * vpool) ;
 static bool
@@ -16,9 +18,21 @@ testIntValues(struct CNValuePool * vpool) ;
 bool
 UTValue(struct CNValuePool * vpool)
 {
+        dumpInfo() ;
         bool res0 = testNullValues(vpool) ;
         bool res1 = testIntValues(vpool) ;
         return res0 && res1 ;
+}
+
+static void
+dumpInfo(void)
+{
+        CNInterface()->printf("null value          : %u\n", sizeof(struct CNNullValue)) ;
+        CNInterface()->printf("signed int value    : %u\n", sizeof(struct CNSignedIntValue)) ;
+        CNInterface()->printf("unsigned int value  : %u\n", sizeof(struct CNUnsignedIntValue)) ;
+        CNInterface()->printf("float value         : %u\n", sizeof(struct CNFloatValue)) ;
+        CNInterface()->printf("array value         : %u\n", sizeof(struct CNArrayValue)) ;
+        CNInterface()->printf("dictionary value    : %u\n", sizeof(struct CNDictionaryValue)) ;
 }
 
 static bool
