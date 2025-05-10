@@ -34,4 +34,10 @@ CNSuperClassOfArrayValue(struct CNArrayValue * src)
         return &(src->superClass) ;
 }
 
+struct CNValue *
+CNValueInArray(struct CNArrayValue * array, unsigned int index) ;
+
+bool
+CNSetValueToArray(struct CNValuePool * vpool, struct CNArrayValue * array, unsigned int index, struct CNValue * src) ;
+
 #endif /* CNArrayValue_h */

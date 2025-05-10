@@ -8,7 +8,9 @@
 
 #include "CNDictionaryValue.h"
 #include "CNNullValue.h"
+#include "CNStringValue.h"
 #include "CNValuePool.h"
+#include "CNInterface.h"
 
 static void releaseContents(struct CNValuePool * vpool, struct CNValue * val) ;
 static void printValues(struct CNValue * val) ;
@@ -69,7 +71,6 @@ releaseElements(struct CNValuePool * vpool, struct CNValue ** elm)
 static void releaseContents(struct CNValuePool * vpool, struct CNValue * val)
 {
         struct CNDictionaryValue * dict = CNCastToDictionaryValue(val) ;
-
         struct CNList *list, *next ;
         for(list = dict->elementList ; list != NULL ; list = next){
                 next = list->next ;
@@ -77,8 +78,34 @@ static void releaseContents(struct CNValuePool * vpool, struct CNValue * val)
         }
 }
 
+static void printElement(struct CNValue ** elm)
+{
+        struct CNValue *  key   = elm[0] ;
+        struct CNValue *  value = elm[1] ;
+        if(CNCastToStringValue(key) != NULL){
+                CNPrintValue(key) ;
+                CNInterface()->printf(":") ;
+                CNPrintValue(value) ;
+        }
+}
+
 static void printValues(struct CNValue * val)
 {
-
+        struct CNDictionaryValue * dict = CNCastToDictionaryValue(val) ;
+        struct CNList *list ;
+        CNInterface()->printf("[") ;
+        for(list = dict->elementList ; list != NULL ; list = list->next){
+                struct CNValue ** elements = list->data ;
+                struct CNValue ** endptr   = elements + ELEMENT_NUM_IN_PAGE ;
+                bool   is1st = true ;
+                for( ; elements < endptr ; elements+=2){
+                        if(!is1st){
+                                CNInterface()->printf(", ") ;
+                                is1st = false ;
+                        }
+                        printElement(elements) ;
+                }
+        }
+        CNInterface()->printf("]") ;
 }
 

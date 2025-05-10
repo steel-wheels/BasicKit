@@ -55,6 +55,31 @@ CNAllocateArrayValue(struct CNValuePool * vpool, unsigned int elmnum)
         return newval ;
 }
 
+struct CNValue *
+CNValueInArray(struct CNArrayValue * array, unsigned int index)
+{
+        if(index < array->elementNum) {
+                return array->values[index] ;
+        } else {
+                CNInterface()->printf("[Error] Index overflow at %s\n", __func__) ;
+                return CNSuperClassOfNullValue(CNAllocateNullValue()) ;
+        }
+}
+
+bool
+CNSetValueToArray(struct CNValuePool * vpool, struct CNArrayValue * array, unsigned int index, struct CNValue * src)
+{
+        if(index < array->elementNum) {
+                CNRetainValue(src) ;
+                CNReleaseValue(vpool, array->values[index]) ;
+                array->values[index] = src ;
+                return true ;
+        } else {
+                CNInterface()->printf("[Error] Index overflow at %s\n", __func__) ;
+                return false ;
+        }
+}
+
 static void
 releaseContents(struct CNValuePool * vpool, struct CNValue * val)
 {

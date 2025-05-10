@@ -31,6 +31,7 @@ dumpInfo(void)
         CNInterface()->printf("signed int value    : %u\n", sizeof(struct CNSignedIntValue)) ;
         CNInterface()->printf("unsigned int value  : %u\n", sizeof(struct CNUnsignedIntValue)) ;
         CNInterface()->printf("float value         : %u\n", sizeof(struct CNFloatValue)) ;
+        CNInterface()->printf("string value        : %u\n", sizeof(struct CNStringValue)) ;
         CNInterface()->printf("array value         : %u\n", sizeof(struct CNArrayValue)) ;
         CNInterface()->printf("dictionary value    : %u\n", sizeof(struct CNDictionaryValue)) ;
 }

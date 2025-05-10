@@ -31,7 +31,7 @@ CNValueAttributeToInt(const struct CNValueAttribute * src)
 {
         uint64_t isfixed = src->isFixed ? 1 : 0 ;
         uint64_t type    = src->type ;
-        uint64_t rcnt    = 1 ;
+        uint64_t rcnt    = src-> referenceCount ;
         return (isfixed << 63) | (type << 32) | rcnt ;
 }
 
