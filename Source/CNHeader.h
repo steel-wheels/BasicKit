@@ -10,6 +10,7 @@
 #import <BasicKit/CNValue.h>
 #import <BasicKit/CNNullValue.h>
 #import <BasicKit/CNNumberValue.h>
+#import <BasicKit/CNArrayValue.h>
 #import <BasicKit/CNArrayPool.h>
 #import <BasicKit/CNPagePool.h>
 #import <BasicKit/CNScalarPool.h>

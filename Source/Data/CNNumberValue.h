@@ -50,6 +50,12 @@ CNCastToSignedIntValue(struct CNValue * src)
         return CNTypeOfValue(src) == CNSignedIntType ? (struct CNSignedIntValue *) src : NULL ;
 }
 
+static inline struct CNValue *
+CNSuperClassOfSignedIntValue(struct CNSignedIntValue * src)
+{
+        return &(src->superClass) ;
+}
+
 static inline struct CNUnsignedIntValue *
 CNAllocateUnsignedIntValue(struct CNValuePool * vpool, uint64_t value)
 {
@@ -66,6 +72,12 @@ CNCastToUnsignedIntValue(struct CNValue * src)
         return CNTypeOfValue(src) == CNUnsignedIntType ? (struct CNUnsignedIntValue *) src : NULL ;
 }
 
+static inline struct CNValue *
+CNSuperClassOfUnsignedIntValue(struct CNUnsignedIntValue * src)
+{
+        return &(src->superClass) ;
+}
+
 static inline struct CNFloatValue *
 CNAllocateFloatValue(struct CNValuePool * vpool, double value)
 {
@@ -80,6 +92,12 @@ static inline struct CNFloatValue *
 CNCastToFloatValue(struct CNValue * src)
 {
         return CNTypeOfValue(src) == CNFloatType ? (struct CNFloatValue *) src : NULL ;
+}
+
+static inline struct CNValue *
+CNSuperClassOfFloatValue(struct CNFloatValue * src)
+{
+        return &(src->superClass) ;
 }
 
 #endif /* CNIntValue_h */

@@ -26,10 +26,10 @@ testNullValues(struct CNValuePool * vpool)
 {
         CNInterface()->printf("(%s) Null value test\n", __func__) ;
         struct CNNullValue * nval = CNAllocateNullValue() ;
-        CNRetainValue(&(nval->superClass)) ;
-        CNPrintValueAttribute(&(nval->superClass)) ;
-        CNReleaseValue(vpool, &(nval->superClass)) ;
-        CNRetainValue(&(nval->superClass)) ;
+        CNRetainValue(CNSuperClassOfNullValue(nval)) ;
+        CNPrintValueAttribute(CNSuperClassOfNullValue(nval)) ;
+        CNReleaseValue(vpool, CNSuperClassOfNullValue(nval)) ;
+        CNRetainValue(CNSuperClassOfNullValue(nval)) ;
         return checkMemoryUsage(vpool) ;
 }
 

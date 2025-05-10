@@ -8,7 +8,7 @@
 #include "CNNullValue.h"
 #include "CNInterface.h"
 
-static void releaseContents(struct CNValue * val) ;
+static void releaseContents(struct CNValuePool * vpool, struct CNValue * val) ;
 static void printNullValue(struct CNValue * val) ;
 
 struct CNVirtualValueFunctions *
@@ -44,9 +44,9 @@ CNAllocateNullValue(void)
 }
 
 static void
-releaseContents(struct CNValue * val)
+releaseContents(struct CNValuePool * vpool, struct CNValue * val)
 {
-        (void) val ; // nothing have to do
+        (void) vpool ; (void) val ; // nothing have to do
 }
 
 static void printNullValue(struct CNValue * src)

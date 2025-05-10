@@ -8,7 +8,7 @@
 #include "CNNumberValue.h"
 #include "CNInterface.h"
 
-static void releaseContents(struct CNValue * val) ;
+static void releaseContents(struct CNValuePool * vpool, struct CNValue * val) ;
 static void printSignedIntValue(struct CNValue * val) ;
 static void printUnsignedIntValue(struct CNValue * val) ;
 static void printFloatValue(struct CNValue * val) ;
@@ -53,9 +53,9 @@ CNVirtualFunctionsForFloatValue(void)
 }
 
 static void
-releaseContents(struct CNValue * val)
+releaseContents(struct CNValuePool * vpool, struct CNValue * val)
 {
-        (void) val ; // do nothing'
+        (void) vpool ; (void) val ; // do nothing'
 }
 
 static void

@@ -26,4 +26,10 @@ CNCastToNullValue(struct CNValue * src)
         return CNTypeOfValue(src) == CNNullType ? (struct CNNullValue *) src : NULL ;
 }
 
+static inline struct CNValue *
+CNSuperClassOfNullValue(struct CNNullValue * src)
+{
+        return &(src->superClass) ;
+}
+
 #endif /* CNNullValue_h */
