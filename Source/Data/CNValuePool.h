@@ -62,7 +62,7 @@ CNFreeArrayElements(struct CNValuePool * src, uint64_t elmnum, struct CNValue **
 }
 
 void
-CNDumpValuePool(const struct CNValuePool * src) ;
+CNDumpValuePool(unsigned int indent, const struct CNValuePool * src) ;
 
 struct CNMemoryUsage
 CNMemoryUsageOfValuePool(const struct CNValuePool * src) ;

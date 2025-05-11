@@ -35,4 +35,7 @@ CNSuperClassOfStringValue(struct CNStringValue * src)
         return &(src->superClass) ;
 }
 
+int
+CNCompareStringValue(struct CNStringValue * s0, struct CNStringValue * s1) ;
+
 #endif /* CNStringValue_h */

@@ -49,6 +49,17 @@ CNAllocateStringValue(struct CNValuePool * vpool, unsigned int length, const cha
         return newval ;
 }
 
+int
+CNCompareStringValue(struct CNStringValue * s0, struct CNStringValue * s1)
+{
+        int64_t diff ;
+        if((diff = s0->length - s1->length) != 0){
+                return (int) diff ;
+        } else {
+                return strcmp(s0->string, s1->string) ;
+        }
+}
+
 static void
 releaseContents(struct CNValuePool * vpool, struct CNValue * val)
 {

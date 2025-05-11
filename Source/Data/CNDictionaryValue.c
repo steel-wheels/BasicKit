@@ -12,6 +12,9 @@
 #include "CNValuePool.h"
 #include "CNInterface.h"
 
+#define ELEMENT_NUM_IN_PAGE             32
+
+static struct CNValue ** allocateElements(struct CNValuePool * vpool) ;
 static void releaseContents(struct CNValuePool * vpool, struct CNValue * val) ;
 static void printValues(struct CNValue * val) ;
 
@@ -39,7 +42,82 @@ CNAllocateDictionaryValue(struct CNValuePool * vpool)
         return newval ;
 }
 
-#define ELEMENT_NUM_IN_PAGE     (32 * 2)
+void
+CNSetValueToDictionary(struct CNValuePool * vpool, struct CNDictionaryValue * dst, struct CNStringValue * key, struct CNValue * newvalue)
+{
+        /* replace current value */
+        struct CNList * list ;
+        for(list = dst->elementList ; list != NULL ; list = list->next){
+                struct CNValue ** ptr    = list->data ;
+                struct CNValue ** endptr = ptr + ELEMENT_NUM_IN_PAGE ;
+                for( ; ptr < endptr ; ptr += 2){
+                        struct CNStringValue * keyval = CNCastToStringValue(ptr[0]) ;
+                        if(keyval != NULL){
+                                if(CNCompareStringValue(keyval, key) == 0){
+                                        /* the key is alread set */
+                                        CNRetainValue(newvalue) ;
+                                        CNReleaseValue(vpool, ptr[1]) ;
+                                        ptr[1] = newvalue ;
+                                        return ; // done setting
+                                }
+                        }
+                }
+        }
+        /* use empty slot */
+        for(list = dst->elementList ; list != NULL ; list = list->next){
+                struct CNValue ** ptr    = list->data ;
+                struct CNValue ** endptr = ptr + ELEMENT_NUM_IN_PAGE ;
+                for( ; ptr < endptr ; ptr += 2){
+                        struct CNStringValue * keyval = CNCastToStringValue(ptr[0]) ;
+                        if(keyval == NULL){
+                                CNRetainValue(CNSuperClassOfStringValue(key)) ;
+                                CNReleaseValue(vpool, ptr[0]) ;
+                                ptr[0] = CNSuperClassOfStringValue(key) ;
+
+                                CNRetainValue(newvalue) ;
+                                CNReleaseValue(vpool, ptr[1]) ;
+                                ptr[1] = newvalue ;
+
+                                return ;
+                        }
+                }
+        }
+        /* no key and no empty slot */
+        struct CNList *   newlist = CNAllocateList(CNListPoolInValuePool(vpool)) ;
+        struct CNValue ** newpage = allocateElements(vpool) ;
+        newlist->data = newpage ;
+        newlist->next = NULL ;
+        if(dst->elementList != NULL){
+                struct CNList * last = CNLastInList(dst->elementList) ;
+                last->next = newlist ;
+        } else {
+                dst->elementList = newlist ;
+        }
+        /* set new slot */
+        newpage[0] = CNSuperClassOfStringValue(key) ;
+        newpage[1] = newvalue ;
+        CNRetainValue(newpage[0]) ;
+        CNRetainValue(newpage[1]) ;
+}
+
+struct CNValue *
+CNValueForKeyInDictionary(struct CNDictionaryValue * dst, struct CNStringValue * key)
+{
+        struct CNList * list ;
+        for(list = dst->elementList ; list != NULL ; list = list->next){
+                struct CNValue ** ptr    = list->data ;
+                struct CNValue ** endptr = ptr + ELEMENT_NUM_IN_PAGE ;
+                for( ; ptr < endptr ; ptr += 2){
+                        struct CNStringValue * keyval = CNCastToStringValue(ptr[0]) ;
+                        if(keyval != NULL){
+                                if(CNCompareStringValue(keyval, key) == 0){
+                                        return ptr[1] ; // value for key
+                                }
+                        }
+                }
+        }
+        return CNSuperClassOfNullValue(CNAllocateNullValue()) ;
+}
 
 static struct CNValue **
 allocateElements(struct CNValuePool * vpool)
@@ -57,13 +135,14 @@ allocateElements(struct CNValuePool * vpool)
         return result ;
 }
 
+
 static void
 releaseElements(struct CNValuePool * vpool, struct CNValue ** elm)
 {
         struct CNValue ** ptr    = elm ;
         struct CNValue ** endptr = ptr + ELEMENT_NUM_IN_PAGE ;
         for( ; ptr < endptr ; ptr++){
-                CNReleaseValue(vpool, CNSuperClassOfNullValue(CNAllocateNullValue())) ;
+                CNReleaseValue(vpool, *ptr) ;
         }
         CNFreeArrayData(&(vpool->arrayPool), ELEMENT_NUM_IN_PAGE, elm) ;
 }
@@ -75,7 +154,10 @@ static void releaseContents(struct CNValuePool * vpool, struct CNValue * val)
         for(list = dict->elementList ; list != NULL ; list = next){
                 next = list->next ;
                 releaseElements(vpool, list->data) ;
+                list->data = NULL ;
+                CNFreeList(CNListPoolInValuePool(vpool), list) ;
         }
+        dict->elementList = NULL ;
 }
 
 static void printElement(struct CNValue ** elm)

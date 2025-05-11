@@ -7,6 +7,7 @@
 
 #import <BasicKit/CNPagePool.h>
 #import <BasicKit/CNInterface.h>
+#import "CNUtils.h"
 #include <stdlib.h>
 
 void
@@ -30,15 +31,16 @@ CNDeinitPagePool(struct CNPagePool * dst)
 }
 
 void
-CNDumpPagePool(const struct CNPagePool * src)
+CNDumpPagePool(unsigned int indent, const struct CNPagePool * src)
 {
         struct CNList * list ;
-        unsigned int freenum = 0 ;
+        size_t fsize = 0 ;
         for(list=src->freeList ; list != NULL ; list = list->next){
-                freenum += 1 ;
+                fsize += (size_t) list->attribute ;
         }
-        CNInterface()->printf("PagePool: free-num = %u\n", freenum) ;
-        CNDumpListPool(src->listPool) ;
+        CNPrintIndent(indent) ; CNInterface()->printf("PagePool: alloc-size = %d\n", src->allocatedSize) ;
+        CNPrintIndent(indent) ; CNInterface()->printf("PagePool: free-size  = %d\n", fsize) ;
+        CNDumpListPool(indent+1, src->listPool) ;
 }
 
 void *
@@ -76,15 +78,15 @@ CNFreePage(struct CNPagePool * src, size_t size, void * data)
 struct CNMemoryUsage
 CNMemoryUsageOfPagePool(const struct CNPagePool * src)
 {
-        /* used size */
-        size_t          usize = 0 ;
+        /* free size */
+        size_t          fsize = 0 ;
         struct CNList * list ;
         for(list = src->freeList ; list != NULL ; list = list->next){
-                usize += (size_t) list->attribute ;
+                fsize += (size_t) list->attribute ;
         }
         struct CNMemoryUsage result = {
                 .allocatedSize  = src->allocatedSize,
-                .usableSize     = usize
+                .usableSize     = fsize
         } ;
         return result ;
 }

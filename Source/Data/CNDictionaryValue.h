@@ -9,6 +9,7 @@
 #define CNDictionaryValue_h
 
 #import <BasicKit/CNValue.h>
+#import <BasicKit/CNStringValue.h>
 
 struct CNDictionaryValue {
         struct CNValue                  superClass ;
@@ -33,5 +34,12 @@ CNSuperClassOfDictionaryValue(struct CNDictionaryValue * src)
 {
         return &(src->superClass) ;
 }
+
+void
+CNSetValueToDictionary(struct CNValuePool * vpool, struct CNDictionaryValue * dst,
+                       struct CNStringValue * key, struct CNValue * value) ;
+
+struct CNValue *
+CNValueForKeyInDictionary(struct CNDictionaryValue * dst, struct CNStringValue * key) ;
 
 #endif /* CNDictionaryValue_h */

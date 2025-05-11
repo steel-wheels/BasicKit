@@ -35,7 +35,6 @@ CNArrayPageSize(size_t elmsize, uint64_t elmnum)
         static const size_t UNIT_SIZE = 128 ;
         size_t unum = (elmsize * elmnum + UNIT_SIZE - 1) / UNIT_SIZE ;
         return unum * UNIT_SIZE ;
-
 }
 
 static inline void *
@@ -53,7 +52,7 @@ CNFreeArrayData(struct CNArrayPool * src, uint64_t elmnum, void * data)
 }
 
 void
-CNDumpArrayPool(const struct CNArrayPool * src) ;
+CNDumpArrayPool(unsigned int indent, const struct CNArrayPool * src) ;
 
 static inline struct CNMemoryUsage
 CNMemoryUsageOfArrayPool(const struct CNArrayPool * src)

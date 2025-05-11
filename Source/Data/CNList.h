@@ -35,7 +35,7 @@ void
 CNDeinitListPool(struct CNListPool * dst) ;
 
 void
-CNDumpListPool(const struct CNListPool * src) ;
+CNDumpListPool(unsigned int indent, const struct CNListPool * src) ;
 
 struct CNList *
 CNAllocateList(struct CNListPool * pool) ;

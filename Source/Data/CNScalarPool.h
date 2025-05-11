@@ -25,7 +25,7 @@ void
 CNDeinitScalarPool(struct CNScalarPool * dst) ;
 
 void
-CNDumpScalarPool(const struct CNScalarPool * src) ;
+CNDumpScalarPool(unsigned int indent, const struct CNScalarPool * src) ;
 
 void *
 CNAllocateScalarData(struct CNScalarPool * src) ;

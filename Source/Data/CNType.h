@@ -12,6 +12,7 @@
 #include <stdbool.h>
 
 struct CNValue ;
+struct CNDictionaryValue ;
 struct CNValuePool ;
 
 #endif /* CNType_h */

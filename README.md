@@ -1,13 +1,10 @@
 # BasicKit
-The BASIC interpreter
+The BASIC interpreter which supports *Arisia Basic* language.
 
 ## Arisia Basic
 ### Feature
 * Designed for the beginner programmer
-* Simple usage
-  * Operate everything in one window
-  * Step by Step execution (REPL)
-  * One liner. <code>print "Hello, world !!"</code>
+* Provied with the arisia basic shell (<code>absh</code>) which supports execution and debugging the program which is written by the basic.
 
 ## Documents
 * [language](./Document/language.md): The specification of ArisiaBasic.

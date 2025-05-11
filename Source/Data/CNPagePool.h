@@ -29,7 +29,7 @@ void
 CNDeinitPagePool(struct CNPagePool * dst) ;
 
 void
-CNDumpPagePool(const struct CNPagePool * src) ;
+CNDumpPagePool(unsigned int indent, const struct CNPagePool * src) ;
 
 void *
 CNAllocatePage(struct CNPagePool * src, size_t reqsize) ;

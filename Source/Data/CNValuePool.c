@@ -7,6 +7,7 @@
 
 #import <BasicKit/CNValuePool.h>
 #import <BasicKit/CNInterface.h>
+#import "CNUtils.h"
 
 struct CNMemoryUsage
 CNMemoryUsageOfValuePool(const struct CNValuePool * src)
@@ -21,10 +22,10 @@ CNMemoryUsageOfValuePool(const struct CNValuePool * src)
 }
 
 void
-CNDumpValuePool(const struct CNValuePool * src)
+CNDumpValuePool(unsigned int indent, const struct CNValuePool * src)
 {
-        CNInterface()->printf("ValuePool\n") ;
-        CNDumpScalarPool(&(src->scalarPool)) ;
-        CNDumpArrayPool(&(src->arrayPool)) ;
+        CNPrintIndent(0) ; CNInterface()->printf("ValuePool:\n") ;
+        CNDumpScalarPool(indent+1, &(src->scalarPool)) ;
+        CNDumpArrayPool(indent+1, &(src->arrayPool)) ;
 }
 

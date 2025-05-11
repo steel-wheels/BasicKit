@@ -7,10 +7,11 @@
 
 #import <BasicKit/CNArrayPool.h>
 #import <BasicKit/CNInterface.h>
+#import "CNUtils.h"
 
 void
-CNDumpArrayPool(const struct CNArrayPool * src)
-{;
-        CNInterface()->printf("ArrayPool: elementSize=%lu\n", src->elementSize) ;
-        CNDumpPagePool(&(src->pagePool)) ;
+CNDumpArrayPool(unsigned int indent, const struct CNArrayPool * src)
+{
+        CNPrintIndent(indent) ; CNInterface()->printf("ArrayPool: elementSize = %lu\n", src->elementSize) ;
+        CNDumpPagePool(indent+1, &(src->pagePool)) ;
 }

@@ -7,6 +7,7 @@
 
 #import <BasicKit/CNList.h>
 #import <BasicKit/CNInterface.h>
+#import "CNUtils.h"
 #include <stdlib.h>
 
 #define CNLIST_PAGE_NUM         1024
@@ -57,14 +58,19 @@ CNDeinitListPool(struct CNListPool * dst)
 }
 
 void
-CNDumpListPool(const struct CNListPool * src)
+CNDumpListPool(unsigned int indent, const struct CNListPool * src)
 {
         unsigned int freenum = 0 ;
         const struct CNList * list ;
         for(list = src->freeList ; list != NULL ; list = list->next) {
                 freenum++ ;
         }
-        CNInterface()->printf("ListPool: free-num=%u\n", freenum) ;
+        unsigned int allocnum = 0 ;
+        for(struct CNListPage * page = src->firstPage ; page != NULL ; page = page->next){
+                allocnum += CNLIST_PAGE_NUM ;
+        }
+        CNPrintIndent(indent) ; CNInterface()->printf("ListPool: free-num  = %u\n", freenum) ;
+        CNPrintIndent(indent) ; CNInterface()->printf("ListPool: alloc-num = %u\n", allocnum) ;
 }
 
 struct CNList *
