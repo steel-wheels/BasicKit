@@ -21,7 +21,7 @@ static inline void
 CNInitValuePool(struct CNValuePool * dst, struct CNListPool * lpool)
 {
         CNInitScalarPool(&(dst->scalarPool), CNValueSize, 1024, lpool) ;
-        CNInitArrayPool(&(dst->arrayPool), sizeof(struct CNValue *), lpool) ;
+        CNInitArrayPool(&(dst->arrayPool), lpool) ;
 }
 
 static inline void
@@ -47,18 +47,6 @@ static inline void
 CNFreeScalar(struct CNValuePool * src, struct CNValue * data)
 {
         CNFreeScalarData(&(src->scalarPool), data) ;
-}
-
-static inline struct CNValue **
-CNAllocateArrayElements(struct CNValuePool * src, unsigned int elmnum)
-{
-        return (struct CNValue **) CNAllocateArrayData(&(src->arrayPool), elmnum) ;
-}
-
-static inline void
-CNFreeArrayElements(struct CNValuePool * src, uint64_t elmnum, struct CNValue ** data)
-{
-        CNFreeArrayData(&(src->arrayPool), elmnum, data) ;
 }
 
 void

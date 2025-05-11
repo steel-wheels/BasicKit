@@ -44,7 +44,9 @@ CNAllocateArrayValue(struct CNValuePool * vpool, unsigned int elmnum)
         newval->elementNum      = elmnum ;
 
         unsigned int pagenum = pageElementNumInPage(elmnum) ;
-        struct CNValue ** elements = (struct CNValue **) CNAllocateArrayData(&(vpool->arrayPool), pagenum) ;
+        struct CNValue ** elements ;
+        elements = (struct CNValue **) CNAllocateArrayData(&(vpool->arrayPool),
+                        sizeof(struct CNValue *) * pagenum) ;
 
         struct CNValue ** ptr    = elements ;
         struct CNValue ** endptr = ptr + elmnum ;
@@ -90,7 +92,7 @@ releaseContents(struct CNValuePool * vpool, struct CNValue * val)
                 CNReleaseValue(vpool, *ptr) ;
         }
         unsigned int pagenum = pageElementNumInPage((unsigned int) arr->elementNum) ;
-        CNFreeArrayData(&(vpool->arrayPool), pagenum, arr->values) ;
+        CNFreeArrayData(&(vpool->arrayPool), sizeof(struct CNValue *) * pagenum, arr->values) ;
         arr->elementNum = 0 ;
         arr->values     = NULL ;
 }

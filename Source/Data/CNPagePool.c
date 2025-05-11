@@ -30,19 +30,6 @@ CNDeinitPagePool(struct CNPagePool * dst)
         }
 }
 
-void
-CNDumpPagePool(unsigned int indent, const struct CNPagePool * src)
-{
-        struct CNList * list ;
-        size_t fsize = 0 ;
-        for(list=src->freeList ; list != NULL ; list = list->next){
-                fsize += (size_t) list->attribute ;
-        }
-        CNPrintIndent(indent) ; CNInterface()->printf("PagePool: alloc-size = %d\n", src->allocatedSize) ;
-        CNPrintIndent(indent) ; CNInterface()->printf("PagePool: free-size  = %d\n", fsize) ;
-        CNDumpListPool(indent+1, src->listPool) ;
-}
-
 void *
 CNAllocatePage(struct CNPagePool * src, size_t reqsize)
 {
@@ -75,6 +62,19 @@ CNFreePage(struct CNPagePool * src, size_t size, void * data)
         src->freeList   = list ;
 }
 
+void
+CNDumpPagePool(unsigned int indent, const struct CNPagePool * src)
+{
+        struct CNList * list ;
+        size_t fsize = 0 ;
+        for(list=src->freeList ; list != NULL ; list = list->next){
+                fsize += (size_t) list->attribute ;
+        }
+        CNPrintIndent(indent) ; CNInterface()->printf("PagePool: alloc-size = %d\n", src->allocatedSize) ;
+        CNPrintIndent(indent) ; CNInterface()->printf("PagePool: free-size  = %d\n", fsize) ;
+        CNDumpListPool(indent+1, src->listPool) ;
+}
+
 struct CNMemoryUsage
 CNMemoryUsageOfPagePool(const struct CNPagePool * src)
 {
@@ -90,4 +90,3 @@ CNMemoryUsageOfPagePool(const struct CNPagePool * src)
         } ;
         return result ;
 }
-

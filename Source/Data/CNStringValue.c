@@ -16,9 +16,8 @@ static void printValues(struct CNValue * val) ;
 static unsigned int
 pageElementNumInPage(unsigned int length)
 {
-        static const unsigned int UNIT_LENGTH = CNValueSize ;
-        unsigned int unitnum = (length + UNIT_LENGTH - 1) / UNIT_LENGTH ;
-        return unitnum ;
+        static const unsigned int UNIT_SIZE = sizeof(char) * 8 ;
+        return (length + UNIT_SIZE - 1) / UNIT_SIZE ;
 }
 
 struct CNVirtualValueFunctions *
@@ -42,8 +41,8 @@ CNAllocateStringValue(struct CNValuePool * vpool, unsigned int length, const cha
         newval = (struct CNStringValue *) CNAllocateValue(vpool, CNStringType, vfunc) ;
         newval->length = length ;
 
-        unsigned int pagenum = pageElementNumInPage(length + 1) ;
-        char * buffer = (char *) CNAllocateArrayData(&(vpool->arrayPool), pagenum) ;
+        unsigned int elmnum = pageElementNumInPage(length + 1) ;
+        char * buffer = (char *) CNAllocateArrayData(&(vpool->arrayPool), sizeof(char) * elmnum) ;
         memcpy(buffer, src, length + 1) ;
         newval->string = buffer ;
         return newval ;
@@ -64,8 +63,8 @@ static void
 releaseContents(struct CNValuePool * vpool, struct CNValue * val)
 {
         struct CNStringValue * str = CNCastToStringValue(val) ;
-        unsigned int pagenum = pageElementNumInPage((unsigned int) (str->length + 1)) ;
-        CNFreeArrayData(&(vpool->arrayPool), pagenum, str->string) ;
+        unsigned int elmnum = pageElementNumInPage((unsigned int) (str->length + 1)) ;
+        CNFreeArrayData(&(vpool->arrayPool), sizeof(char) * elmnum, str->string) ;
 }
 
 static void

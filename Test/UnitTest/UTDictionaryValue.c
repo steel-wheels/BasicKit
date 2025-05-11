@@ -19,7 +19,6 @@ UTDictionaryValue(struct CNValuePool * vpool)
         CNInterface()->printf("\n") ;
         dumpMemoryUsage(vpool) ;
 
-#if 0
         CNInterface()->printf("(%s) set dictionary\n", __func__) ;
         struct CNStringValue * key0 = CNAllocateStringValue(vpool, 4, "key0") ;
         struct CNUnsignedIntValue * val0 = CNAllocateUnsignedIntValue(vpool, 1) ;
@@ -29,7 +28,6 @@ UTDictionaryValue(struct CNValuePool * vpool)
         CNPrintValue(CNSuperClassOfDictionaryValue(dict0)) ;
         CNInterface()->printf("\n") ;
         dumpMemoryUsage(vpool) ;
-#endif
         
         CNInterface()->printf("(%s) release dictionary\n", __func__) ;
         //CNPrintValueAttribute(CNSuperClassOfDictionaryValue(dict0)) ;

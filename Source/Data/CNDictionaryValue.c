@@ -123,8 +123,8 @@ static struct CNValue **
 allocateElements(struct CNValuePool * vpool)
 {
         struct CNValue ** result ;
-        unsigned int pagenum = ELEMENT_NUM_IN_PAGE ;
-        result = (struct CNValue **) CNAllocateArrayData(&(vpool->arrayPool), pagenum) ;
+        result = (struct CNValue **) CNAllocateArrayData(&(vpool->arrayPool),
+                                                         sizeof(struct CNValue *) * ELEMENT_NUM_IN_PAGE) ;
 
         struct CNValue ** ptr    = result ;
         struct CNValue ** endptr = ptr + ELEMENT_NUM_IN_PAGE ;
@@ -144,7 +144,8 @@ releaseElements(struct CNValuePool * vpool, struct CNValue ** elm)
         for( ; ptr < endptr ; ptr++){
                 CNReleaseValue(vpool, *ptr) ;
         }
-        CNFreeArrayData(&(vpool->arrayPool), ELEMENT_NUM_IN_PAGE, elm) ;
+        CNFreeArrayData(&(vpool->arrayPool),
+                         sizeof(struct CNValue *) * ELEMENT_NUM_IN_PAGE, elm) ;
 }
 
 static void releaseContents(struct CNValuePool * vpool, struct CNValue * val)

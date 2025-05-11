@@ -12,6 +12,6 @@
 void
 CNDumpArrayPool(unsigned int indent, const struct CNArrayPool * src)
 {
-        CNPrintIndent(indent) ; CNInterface()->printf("ArrayPool: elementSize = %lu\n", src->elementSize) ;
+        CNPrintIndent(indent) ; CNInterface()->printf("ArrayPool\n") ;
         CNDumpPagePool(indent+1, &(src->pagePool)) ;
 }
