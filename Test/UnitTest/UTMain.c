@@ -11,6 +11,7 @@
 #include "UTStringValue.h"
 #include "UTArrayValue.h"
 #include "UTDictionaryValue.h"
+#include "UTRegisterFile.h"
 
 int main(int argc, char * argv[])
 {
@@ -44,6 +45,7 @@ int main(int argc, char * argv[])
         bool result2 = UTStringValue(&vpool) ;
         bool result3 = UTArrayValue(&vpool) ;
         bool result4 = UTDictionaryValue(&vpool) ;
+        bool result5 = UTRegisterFile(&vpool) ;
 
         /* release pools */
         CNInterface()->printf("(%s) Free pools\n", __func__) ;
@@ -52,7 +54,7 @@ int main(int argc, char * argv[])
 
         /* summaryze result */
         result &= result0 && result1 && result2 && result3
-                  && result4 ;
+                   && result4 && result5 ;
         if(result){
                 CNInterface()->printf("SUMMARY: OK\n") ;
                 return 0 ;
