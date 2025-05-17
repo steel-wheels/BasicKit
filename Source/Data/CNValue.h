@@ -17,7 +17,8 @@ typedef enum {
         CNFloatType,
         CNStringType,
         CNArrayType,
-        CNDictionaryType
+        CNDictionaryType,
+        CNCodeType
 } CNValueType ;
 
 struct CNValueAttribute {

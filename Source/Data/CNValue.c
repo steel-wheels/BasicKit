@@ -20,12 +20,13 @@ CNValueTypeName(CNValueType vtype)
         const char * result = "?" ;
         switch(vtype){
                 case CNNullType:        result = "null" ;       break ;
-                case CNSignedIntType:   result = "int64_t" ;    break ;
-                case CNUnsignedIntType: result = "uint64_t" ;   break ;
+                case CNSignedIntType:   result = "int64" ;      break ;
+                case CNUnsignedIntType: result = "uint64" ;     break ;
                 case CNFloatType:       result = "double" ;     break ;
                 case CNStringType:      result = "string" ;     break ;
                 case CNArrayType:       result = "array" ;      break ;
                 case CNDictionaryType:  result = "dict" ;       break ;
+                case CNCodeType:        result = "code" ;       break ;
         }
         return result ;
 }
