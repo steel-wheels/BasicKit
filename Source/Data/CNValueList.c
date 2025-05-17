@@ -1,0 +1,38 @@
+/*
+ * @file CNValueList.c
+ * @description Define value list data structure
+ * @par Copyright
+ *   Copyright (C) 2025 Steel Wheels Project
+ */
+
+#include "CNValueList.h"
+#include "CNValuePool.h"
+
+void
+CNDeinitValueList(struct CNValueList * dst)
+{
+        struct CNValuePool * vpool = dst->valuePool ;
+        struct CNList *list, *next ;
+        for(list = dst->valueList ; list != NULL ; list = next){
+                next = list->next ;
+                CNReleaseValue(vpool, list->data) ;
+                CNFreeList(CNListPoolInValuePool(vpool), list) ;
+        }
+}
+
+void
+CNAppendValueToValueList(struct CNValueList * dst, struct CNValue * src)
+{
+        CNRetainValue(src) ;
+
+        struct CNList * newlist = CNAllocateList(CNListPoolInValuePool(dst->valuePool)) ;
+        newlist->data = src ;
+        newlist->next = NULL ;
+
+        struct CNList * last = CNLastInList(dst->valueList) ;
+        if(last != NULL){
+                last->next = newlist ;
+        } else {
+                dst->valueList = newlist ;
+        }
+}
