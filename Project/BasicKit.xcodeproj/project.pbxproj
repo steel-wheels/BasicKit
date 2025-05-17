@@ -18,6 +18,12 @@
 		051D1A632DD7FE3700E42FBB /* CNCodeValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 051D1A602DD7FE3700E42FBB /* CNCodeValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		051D1A642DD7FE3700E42FBB /* CNCodeValue.c in Sources */ = {isa = PBXBuildFile; fileRef = 051D1A612DD7FE3700E42FBB /* CNCodeValue.c */; };
 		051D1A652DD7FE3700E42FBB /* CNCodeValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 051D1A602DD7FE3700E42FBB /* CNCodeValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		051D1A682DD86F0200E42FBB /* ArisiaBasic-Lex.l in Sources */ = {isa = PBXBuildFile; fileRef = 051D1A672DD86F0200E42FBB /* ArisiaBasic-Lex.l */; };
+		051D1A692DD86F0200E42FBB /* ArisiaBasic-Lex.l in Sources */ = {isa = PBXBuildFile; fileRef = 051D1A672DD86F0200E42FBB /* ArisiaBasic-Lex.l */; };
+		051D1A6E2DD86F2300E42FBB /* ArisiaBasic-Yacc.y in Sources */ = {isa = PBXBuildFile; fileRef = 051D1A6D2DD86F2300E42FBB /* ArisiaBasic-Yacc.y */; };
+		051D1A6F2DD86F2300E42FBB /* ArisiaBasic-Yacc.y in Sources */ = {isa = PBXBuildFile; fileRef = 051D1A6D2DD86F2300E42FBB /* ArisiaBasic-Yacc.y */; };
+		051D1A712DD88D7800E42FBB /* ArisiaBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = 051D1A702DD88D7800E42FBB /* ArisiaBasic.h */; };
+		051D1A722DD88D7800E42FBB /* ArisiaBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = 051D1A702DD88D7800E42FBB /* ArisiaBasic.h */; };
 		053472802DCE593900ED4C3B /* CNNullValue.c in Sources */ = {isa = PBXBuildFile; fileRef = 0534727F2DCE593900ED4C3B /* CNNullValue.c */; };
 		053472812DCE593900ED4C3B /* CNNullValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 0534727E2DCE593900ED4C3B /* CNNullValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		053472822DCE593900ED4C3B /* CNNullValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 0534727E2DCE593900ED4C3B /* CNNullValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -121,6 +127,9 @@
 		051697E72D86705800628DF6 /* UnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		051D1A602DD7FE3700E42FBB /* CNCodeValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNCodeValue.h; sourceTree = "<group>"; };
 		051D1A612DD7FE3700E42FBB /* CNCodeValue.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNCodeValue.c; sourceTree = "<group>"; };
+		051D1A672DD86F0200E42FBB /* ArisiaBasic-Lex.l */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.lex; path = "ArisiaBasic-Lex.l"; sourceTree = "<group>"; };
+		051D1A6D2DD86F2300E42FBB /* ArisiaBasic-Yacc.y */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.yacc; path = "ArisiaBasic-Yacc.y"; sourceTree = "<group>"; };
+		051D1A702DD88D7800E42FBB /* ArisiaBasic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArisiaBasic.h; sourceTree = "<group>"; };
 		0534727E2DCE593900ED4C3B /* CNNullValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNNullValue.h; sourceTree = "<group>"; };
 		0534727F2DCE593900ED4C3B /* CNNullValue.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNNullValue.c; sourceTree = "<group>"; };
 		053472842DCF065800ED4C3B /* CNArrayValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNArrayValue.h; sourceTree = "<group>"; };
@@ -259,6 +268,16 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
+		051D1A662DD86ECA00E42FBB /* Parser */ = {
+			isa = PBXGroup;
+			children = (
+				051D1A702DD88D7800E42FBB /* ArisiaBasic.h */,
+				051D1A672DD86F0200E42FBB /* ArisiaBasic-Lex.l */,
+				051D1A6D2DD86F2300E42FBB /* ArisiaBasic-Yacc.y */,
+			);
+			path = Parser;
+			sourceTree = "<group>";
+		};
 		054072E52DD38A19009AB9C3 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
@@ -285,6 +304,7 @@
 				05A0868F2D7C31C600A3DEA5 /* BSBasicEngine.h */,
 				05A086902D7C31C600A3DEA5 /* BSBasicEngine.m */,
 				059D76FB2DCCF9E700DA4FFB /* Interface */,
+				051D1A662DD86ECA00E42FBB /* Parser */,
 				054072E52DD38A19009AB9C3 /* Engine */,
 				051697D92D86657D00628DF6 /* Data */,
 			);
@@ -334,6 +354,7 @@
 				051D1A652DD7FE3700E42FBB /* CNCodeValue.h in Headers */,
 				054072F32DD63621009AB9C3 /* CNValueStack.h in Headers */,
 				054176C52DCCF34D00FC331F /* CNNumberValue.h in Headers */,
+				051D1A712DD88D7800E42FBB /* ArisiaBasic.h in Headers */,
 				054072CB2DD03E4D009AB9C3 /* CNUtils.h in Headers */,
 				050BCF032D86D07E00C05DE3 /* CNValue.h in Headers */,
 			);
@@ -361,6 +382,7 @@
 				054072F22DD63621009AB9C3 /* CNValueStack.h in Headers */,
 				051D1A632DD7FE3700E42FBB /* CNCodeValue.h in Headers */,
 				050BCF042D86D07E00C05DE3 /* CNValue.h in Headers */,
+				051D1A722DD88D7800E42FBB /* ArisiaBasic.h in Headers */,
 				054072CA2DD03E4D009AB9C3 /* CNUtils.h in Headers */,
 				054176C62DCCF34D00FC331F /* CNNumberValue.h in Headers */,
 			);
@@ -470,7 +492,7 @@
 				TargetAttributes = {
 					050070DD2D7C2DF700C9449B = {
 						CreatedOnToolsVersion = 16.2;
-						LastSwiftMigration = 1620;
+						LastSwiftMigration = 1630;
 					};
 					051697E62D86705800628DF6 = {
 						CreatedOnToolsVersion = 16.2;
@@ -478,7 +500,7 @@
 					};
 					05A086832D7C30CD00A3DEA5 = {
 						CreatedOnToolsVersion = 16.2;
-						LastSwiftMigration = 1620;
+						LastSwiftMigration = 1630;
 					};
 					05C62FCD2D7C4F7400C42DB7 = {
 						CreatedOnToolsVersion = 16.2;
@@ -543,9 +565,11 @@
 				05A086922D7C31C600A3DEA5 /* BSBasicEngine.m in Sources */,
 				059D770C2DCD003500DA4FFB /* CNValuePool.c in Sources */,
 				054072CC2DD03E4D009AB9C3 /* CNUtils.c in Sources */,
+				051D1A6F2DD86F2300E42FBB /* ArisiaBasic-Yacc.y in Sources */,
 				053472962DCF58C500ED4C3B /* CNStringValue.c in Sources */,
 				059D76FA2DCCF57700DA4FFB /* CNList.c in Sources */,
 				059D77132DCD006600DA4FFB /* CNPagePool.c in Sources */,
+				051D1A682DD86F0200E42FBB /* ArisiaBasic-Lex.l in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -574,9 +598,11 @@
 				05A086932D7C31C600A3DEA5 /* BSBasicEngine.m in Sources */,
 				059D770B2DCD003500DA4FFB /* CNValuePool.c in Sources */,
 				054072C92DD03E4D009AB9C3 /* CNUtils.c in Sources */,
+				051D1A6E2DD86F2300E42FBB /* ArisiaBasic-Yacc.y in Sources */,
 				053472972DCF58C500ED4C3B /* CNStringValue.c in Sources */,
 				059D76F82DCCF57700DA4FFB /* CNList.c in Sources */,
 				059D77112DCD006600DA4FFB /* CNPagePool.c in Sources */,
+				051D1A692DD86F0200E42FBB /* ArisiaBasic-Lex.l in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
