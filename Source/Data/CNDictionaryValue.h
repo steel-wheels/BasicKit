@@ -13,7 +13,6 @@
 
 struct CNDictionaryValue {
         struct CNValue                  superClass ;
-        int64_t                         elementNum ;
         struct CNList *                 elementList ;
 } ;
 

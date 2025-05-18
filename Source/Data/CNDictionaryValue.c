@@ -37,7 +37,6 @@ CNAllocateDictionaryValue(struct CNValuePool * vpool)
         struct CNVirtualValueFunctions * vfunc = CNVirtualFunctionsForDictionaryValue() ;
         struct CNDictionaryValue * newval ;
         newval = (struct CNDictionaryValue *) CNAllocateValue(vpool, CNDictionaryType, vfunc) ;
-        newval->elementNum      = 0 ;
         newval->elementList     = NULL ;
         return newval ;
 }
@@ -155,7 +154,6 @@ static void releaseContents(struct CNValuePool * vpool, struct CNValue * val)
         for(list = dict->elementList ; list != NULL ; list = next){
                 next = list->next ;
                 releaseElements(vpool, list->data) ;
-                list->data = NULL ;
                 CNFreeList(CNListPoolInValuePool(vpool), list) ;
         }
         dict->elementList = NULL ;

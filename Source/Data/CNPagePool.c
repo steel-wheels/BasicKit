@@ -39,9 +39,9 @@ CNAllocatePage(struct CNPagePool * src, size_t reqsize)
                 if(list->attribute == reqsize) {
                         void * data = list->data ;
                         if(prev != NULL){
-                                src->freeList = list->next ;
-                        } else {
                                 prev->next = list->next ;
+                        } else {
+                                src->freeList = list->next ;
                         }
                         CNFreeList(src->listPool, list) ;
                         return data ;

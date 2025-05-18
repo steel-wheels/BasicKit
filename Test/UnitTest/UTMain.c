@@ -14,6 +14,7 @@
 #include "UTValueList.h"
 #include "UTValueStack.h"
 #include "UTRegisterFile.h"
+#include "UTFile.h"
 
 int main(int argc, char * argv[])
 {
@@ -50,6 +51,7 @@ int main(int argc, char * argv[])
         bool result5 = UTValueList(&vpool) ;
         bool result6 = UTValueStack(&vpool) ;
         bool result7 = UTRegisterFile(&vpool) ;
+        bool result8 = UTFile(&vpool) ;
 
         /* release pools */
         CNInterface()->printf("(%s) Free pools\n", __func__) ;
@@ -58,7 +60,8 @@ int main(int argc, char * argv[])
 
         /* summaryze result */
         result &= result0 && result1 && result2 && result3
-        && result4 && result5 && result6 && result7 ;
+        && result4 && result5 && result6 && result7
+        && result8 ;
         if(result){
                 CNInterface()->printf("SUMMARY: OK\n") ;
                 return 0 ;
