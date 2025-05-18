@@ -7,6 +7,7 @@
 
 #include "CNValueList.h"
 #include "CNValuePool.h"
+#include "CNInterface.h"
 
 void
 CNDeinitValueList(struct CNValueList * dst)
@@ -35,4 +36,19 @@ CNAppendValueToValueList(struct CNValueList * dst, struct CNValue * src)
         } else {
                 dst->valueList = newlist ;
         }
+}
+
+void
+CNPrintValueList(struct CNValueList * src)
+{
+        bool is1st = true ;
+
+        CNInterface()->printf("{") ;
+        for(struct CNList * list = src->valueList ; list != NULL ; list = list->next){
+                if(!is1st){
+                        CNInterface()->printf(", ") ; is1st = false ;
+                }
+                CNPrintValue(list->data) ;
+        }
+        CNInterface()->printf("}") ;
 }

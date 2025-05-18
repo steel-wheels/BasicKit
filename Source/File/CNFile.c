@@ -33,7 +33,7 @@ CNLoadFile(struct CNValueList * dst, const char * filename, struct CNValuePool *
         int             c ;
         while((c = fgetc(file)) != EOF){
                 /* expand buffer if it required */
-                if(cursize >= bufsize){
+                if(cursize >= bufsize - 1){ // -1 for EOS
                         bufsize += 1024 ;
                         buffer  = realloc(buffer, bufsize) ;
                 }
@@ -42,6 +42,8 @@ CNLoadFile(struct CNValueList * dst, const char * filename, struct CNValuePool *
                 cursize += 1 ;
                 /* the newline code means the end of line */
                 if(c == '\n'){
+                        buffer[cursize] = '\0' ;
+
                         struct CNStringValue * newstr ;
                         newstr = CNAllocateStringValue(vpool, (unsigned int) cursize, buffer) ;
                         CNAppendValueToValueList(dst, CNSuperClassOfStringValue(newstr)) ;
@@ -51,6 +53,8 @@ CNLoadFile(struct CNValueList * dst, const char * filename, struct CNValuePool *
         }
 
         if(cursize > 0){
+                buffer[cursize] = '\0' ;
+                
                 struct CNStringValue * newstr ;
                 newstr = CNAllocateStringValue(vpool, (unsigned int) cursize, buffer) ;
                 CNAppendValueToValueList(dst, CNSuperClassOfStringValue(newstr)) ;

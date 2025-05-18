@@ -35,4 +35,7 @@ CNListInValueList(struct CNValueList * src)
 void
 CNAppendValueToValueList(struct CNValueList * dst, struct CNValue * src) ;
 
+void
+CNPrintValueList(struct CNValueList * src) ;
+
 #endif /* CNValueList_h */

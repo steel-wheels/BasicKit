@@ -6,13 +6,24 @@
  */
 
 #include "UTFile.h"
+#include "UTUtils.h"
 
 bool
 UTFile(struct CNValuePool * vpool)
 {
-        (void) vpool ;
+        bool result = true ;
+        const char * srcfile = "./BasicKit.framework/Resources/Info.plist" ;
 
-        CNInterface()->printf("(%s) File test\n", __func__) ;
+        CNInterface()->printf("(%s) File test: %s\n", __func__, srcfile) ;
 
-        return true ;
+        struct CNValueList vlist ;
+        if(CNLoadFile(&vlist, srcfile, vpool)){
+                CNPrintValueList(&vlist) ;
+                CNDeinitValueList(&vlist) ;
+        } else {
+                CNInterface()->error("(%s) [Error] Failed to read %s\n", __func__, srcfile) ;
+                result = false ;
+        }
+
+        return checkMemoryUsage(vpool) && result ;
 }
