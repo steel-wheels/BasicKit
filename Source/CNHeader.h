@@ -21,5 +21,6 @@
 #import <BasicKit/CNScalarPool.h>
 #import <BasicKit/CNValuePool.h>
 #import <BasicKit/CNRegisterFile.h>
+#import <BasicKit/CNStringIterator.h>
 #import <BasicKit/CNFile.h>
 

@@ -38,6 +38,21 @@ CNAppendValueToValueList(struct CNValueList * dst, struct CNValue * src)
         }
 }
 
+struct CNValue *
+CNPopValueFromValueList(struct CNValueList * dst)
+{
+        struct CNList * list ;
+        if((list = dst->valueList) != NULL){
+                struct CNList *  next   = list->next ;
+                struct CNValue * result = list->data ;
+                dst->valueList          = next ;
+                CNFreeList(CNListPoolInValuePool(dst->valuePool),  list) ;
+                return result ;
+        } else {
+                return NULL ;
+        }
+}
+
 void
 CNPrintValueList(struct CNValueList * src)
 {

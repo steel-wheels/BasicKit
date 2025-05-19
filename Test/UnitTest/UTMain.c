@@ -13,6 +13,7 @@
 #include "UTDictionaryValue.h"
 #include "UTValueList.h"
 #include "UTValueStack.h"
+#include "UTStringIterator.h"
 #include "UTRegisterFile.h"
 #include "UTFile.h"
 
@@ -50,8 +51,9 @@ int main(int argc, char * argv[])
         bool result4 = UTDictionaryValue(&vpool) ;
         bool result5 = UTValueList(&vpool) ;
         bool result6 = UTValueStack(&vpool) ;
-        bool result7 = UTRegisterFile(&vpool) ;
-        bool result8 = UTFile(&vpool) ;
+        bool result7 = UTStringIterator(&vpool) ;
+        bool result8 = UTRegisterFile(&vpool) ;
+        bool result9 = UTFile(&vpool) ;
 
         /* release pools */
         CNInterface()->printf("(%s) Free pools\n", __func__) ;
@@ -61,7 +63,7 @@ int main(int argc, char * argv[])
         /* summaryze result */
         result &= result0 && result1 && result2 && result3
         && result4 && result5 && result6 && result7
-        && result8 ;
+        && result8 && result9 ;
         if(result){
                 CNInterface()->printf("SUMMARY: OK\n") ;
                 return 0 ;
