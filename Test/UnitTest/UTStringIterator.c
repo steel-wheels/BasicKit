@@ -8,6 +8,7 @@
 #include "UTStringIterator.h"
 #include "UTUtils.h"
 #include <string.h>
+#include <stdio.h>
 
 bool
 UTStringIterator(struct CNValuePool * vpool)
@@ -53,6 +54,10 @@ UTStringIterator(struct CNValuePool * vpool)
                         result = false ;
                         break ;
                 }
+        }
+        if(CNGetCharFromStringItetator(&iter) != EOF){
+                CNInterface()->error("[Error] End of string is expected\n") ;
+                result = false ;
         }
 
         CNDeinitValueList(&vlist) ;

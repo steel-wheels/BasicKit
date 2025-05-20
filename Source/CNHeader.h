@@ -13,7 +13,6 @@
 #import <BasicKit/CNArrayValue.h>
 #import <BasicKit/CNStringValue.h>
 #import <BasicKit/CNDictionaryValue.h>
-#import <BasicKit/CNValueStack.h>
 #import <BasicKit/CNValueList.h>
 #import <BasicKit/CNCodeValue.h>
 #import <BasicKit/CNArrayPool.h>

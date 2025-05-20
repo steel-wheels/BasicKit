@@ -38,6 +38,18 @@ CNAppendValueToValueList(struct CNValueList * dst, struct CNValue * src)
         }
 }
 
+void
+CNPushValueToValueList(struct CNValueList * dst, struct CNValue * src)
+{
+        CNRetainValue(src) ;
+
+        struct CNList * newlist = CNAllocateList(CNListPoolInValuePool(dst->valuePool)) ;
+        newlist->data = src ;
+        newlist->next = dst->valueList ;
+
+        dst->valueList = newlist ;
+}
+
 struct CNValue *
 CNPopValueFromValueList(struct CNValueList * dst)
 {

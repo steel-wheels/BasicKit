@@ -9,9 +9,9 @@
 #include "UTUtils.h"
 
 static void
-pushInt(struct CNValueStack * dst, uint64_t src) ;
+pushInt(struct CNValueList * dst, uint64_t src) ;
 static bool
-popInt(struct CNValueStack * dst, uint64_t exp) ;
+popInt(struct CNValueList * dst, uint64_t exp) ;
 
 bool
 UTValueStack(struct CNValuePool * vpool)
@@ -21,8 +21,8 @@ UTValueStack(struct CNValuePool * vpool)
         CNInterface()->printf("(%s) ValueStack test\n", __func__) ;
 
         CNInterface()->printf("(%s) allocation\n", __func__) ;
-        struct CNValueStack stack ;
-        CNInitValueStack(&stack, vpool) ;
+        struct CNValueList stack ;
+        CNInitValueList(&stack, vpool) ;
 
         for(uint64_t i=1 ; i<100 ; i++){
                 pushInt(&stack, i) ;
@@ -32,26 +32,26 @@ UTValueStack(struct CNValuePool * vpool)
         }
 
         CNInterface()->printf("(%s) release\n", __func__) ;
-        CNDeinitValueStack(&stack) ;
+        CNDeinitValueList(&stack) ;
 
         return checkMemoryUsage(vpool) ;
 }
 
 static void
-pushInt(struct CNValueStack * dst, uint64_t src)
+pushInt(struct CNValueList * dst, uint64_t src)
 {
         struct CNValuePool * vpool = dst->valuePool ;
         struct CNUnsignedIntValue * uval = CNAllocateUnsignedIntValue(vpool, src) ;
-        CNPushValueToStack(dst, CNSuperClassOfUnsignedIntValue(uval)) ;
+        CNPushValueToValueList(dst, CNSuperClassOfUnsignedIntValue(uval)) ;
         CNReleaseValue(vpool, CNSuperClassOfUnsignedIntValue(uval)) ;
 }
 
 static bool
-popInt(struct CNValueStack * src, uint64_t exp)
+popInt(struct CNValueList * src, uint64_t exp)
 {
         bool result ;
         struct CNValuePool * vpool = src->valuePool ;
-        struct CNValue * retval = CNPopValueFromStack(src) ;
+        struct CNValue * retval = CNPopValueFromValueList(src) ;
         if(retval != NULL){
                 struct CNUnsignedIntValue * uval = CNCastToUnsignedIntValue(retval) ;
                 if(uval != NULL){
