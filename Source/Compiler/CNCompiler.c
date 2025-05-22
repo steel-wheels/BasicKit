@@ -15,6 +15,14 @@ CNInitCompiler(struct CNCompiler * dst, struct CNValuePool * vpool)
         dst->valuePool          = vpool ;
         dst->next_free_regid    = 0 ;
         dst->identifierTable    = CNAllocateDictionaryValue(vpool) ;
+        CNInitValueList(&(dst->codeList), vpool) ;
+}
+
+void
+CNDeinitCompiler(struct CNCompiler * dst)
+{
+        CNReleaseValue(dst->valuePool, CNSuperClassOfDictionaryValue(dst->identifierTable)) ;
+        CNDeinitValueList(&(dst->codeList)) ;
 }
 
 bool

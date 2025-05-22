@@ -25,12 +25,11 @@ CNVirtualFunctionsForCodeValue(void)
 }
 
 struct CNCodeValue *
-CNAllocateCalcCodeValue(struct CNValuePool * vpool, uint32_t code, CNValueType vtype,
+CNAllocateCalcCodeValue(struct CNValuePool * vpool, uint32_t code,
                         uint64_t dstregid, uint64_t src0regid, uint64_t src1regid)
 {
         struct CNCodeValueAttribute attr = {
                 .code           = code,
-                .type           = vtype,
                 .operand        = CNCalcOperandType
         } ;
 
@@ -49,14 +48,13 @@ CNAllocateCalcCodeValue(struct CNValuePool * vpool, uint32_t code, CNValueType v
 }
 
 struct CNCodeValue *
-CNAllocateLoadCodeValue(struct CNValuePool * vpool, uint32_t code, CNValueType vtype,
+CNAllocateLoadCodeValue(struct CNValuePool * vpool, uint32_t code,
                         uint64_t dstregid, struct CNValue * srcval)
 {
         CNRetainValue(srcval) ;
 
         struct CNCodeValueAttribute attr = {
                 .code           = code,
-                .type           = vtype,
                 .operand        = CNCalcOperandType
         } ;
 
@@ -95,7 +93,6 @@ printValues(struct CNValue * val)
         struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(codevalue->atttribute) ;
 
         CNInterface()->printf("{code:0x%lx ", attr.code) ;
-        CNInterface()->printf("type:%s ", CNValueTypeName(attr.type)) ;
         switch(attr.operand){
                 case CNCalcOperandType: {
                         struct CNCalcOperand * cop = &(codevalue->calcOperand) ;

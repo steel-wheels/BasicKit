@@ -35,7 +35,7 @@ expression: IDENTIFIER
         {
                 uint64_t regid ;
                 if(CNAllocateRegisterIdForIdentifier(&regid, s_compiler, $1.identifier)){
-                        $$.registerId = regid ;
+                        $$.variable = CNMakeVariable(CNStringType, regid) ;
                 } else {
                         undefinedVariableReferenceError($1.identifier, yyloc.first_line) ;
                 }

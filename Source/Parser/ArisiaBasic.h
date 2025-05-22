@@ -8,6 +8,7 @@
 #ifndef ArisiaBasic_h
 #define ArisiaBasic_h
 
+#include <BasicKit/CNValue.h>
 #include <BasicKit/CNValueList.h>
 #include <BasicKit/CNCompiler.h>
 #include <BasicKit/CNInterface.h>
@@ -15,8 +16,23 @@
 
 typedef void *  yyscan_t ;
 
+struct CNVariable {
+        CNValueType     valueType ;
+        uint64_t        registerId ;
+} ;
+
+static inline struct CNVariable
+CNMakeVariable(CNValueType vtype, uint64_t regid)
+{
+        struct CNVariable result = {
+                .valueType      = vtype,
+                .registerId     = regid
+        } ;
+        return result ;
+}
+
 typedef union {
-        uint64_t                registerId ;
+        struct CNVariable       variable ;
         struct CNStringValue *  identifier ;
 } CNToken ;
 #define YYSTYPE CNToken

@@ -48,7 +48,7 @@ IDENTIFIER      [a-zA-Z][_0-9a-zA-Z]*
 {IDENTIFIER}  {
         int rwordid ;
         if(isReservedWord(&rwordid, yytext)){
-                yylval->registerId = 0 ;
+                yylval->variable = CNMakeVariable(CNNullType, 0) ;
                 return rwordid ;
         } else {
                 const char * str = yytext ;

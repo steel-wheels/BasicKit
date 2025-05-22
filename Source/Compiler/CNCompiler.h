@@ -15,12 +15,18 @@
 struct CNCompiler
 {
         struct CNValuePool *            valuePool ;
+
         struct CNDictionaryValue *      identifierTable ;
         uint64_t                        next_free_regid ;
+
+        struct CNValueList              codeList ;
 } ;
 
 void
 CNInitCompiler(struct CNCompiler * dst, struct CNValuePool * vpool) ;
+
+void
+CNDeinitCompiler(struct CNCompiler * dst) ;
 
 bool
 CNAllocateRegisterIdForIdentifier(uint64_t * regid, struct CNCompiler * src, struct CNStringValue * ident) ;
