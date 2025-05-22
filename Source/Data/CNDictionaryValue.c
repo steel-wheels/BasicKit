@@ -115,7 +115,7 @@ CNValueForKeyInDictionary(struct CNDictionaryValue * dst, struct CNStringValue *
                         }
                 }
         }
-        return CNSuperClassOfNullValue(CNAllocateNullValue()) ;
+        return NULL ;
 }
 
 static struct CNValue **

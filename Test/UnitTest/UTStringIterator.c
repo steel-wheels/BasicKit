@@ -43,7 +43,8 @@ UTStringIterator(struct CNValuePool * vpool)
 
         CNInterface()->printf("(%s) test string iterator\n", __func__) ;
         struct CNStringIterator iter ;
-        CNInitStringIterator(&iter, &vlist, vpool) ;
+        CNInitStringIterator(&iter, vpool) ;
+        CNSetStringListToStringIterator(&iter, &vlist) ;
         index = 0 ;
         for(unsigned int i=0 ; i<totalnum ; i++){
                 int exp = 'a' + (index % 26) ; index++ ;

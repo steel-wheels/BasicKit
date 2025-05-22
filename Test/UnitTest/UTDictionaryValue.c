@@ -78,11 +78,11 @@ getIntValue(struct CNDictionaryValue * dst, struct CNValuePool * vpool, uint64_t
         struct CNStringValue * key = CNAllocateStringValue(vpool, (unsigned int) strlen(buffer), buffer) ;
         struct CNValue * ret = CNValueForKeyInDictionary(dst, key) ;
         CNReleaseValue(vpool, CNSuperClassOfStringValue(key)) ;
-        struct CNUnsignedIntValue * intval ;
-        if((intval = CNCastToUnsignedIntValue(ret)) != NULL){
-                return intval->value ;
+
+        if(ret != NULL){
+                struct CNUnsignedIntValue * uval = CNCastToUnsignedIntValue(ret) ;
+                return uval->value ;
         } else {
                 return (uint64_t) -1 ;
         }
-
 }

@@ -19,15 +19,19 @@ popString(struct CNStringIterator * dst)
         }
 }
 
+
 void
-CNInitStringIterator(struct CNStringIterator * dst, struct CNValueList * strlist,
-                     struct CNValuePool * vpool)
+CNInitStringIterator(struct CNStringIterator * dst, struct CNValuePool * vpool)
 {
         dst->valuePool          = vpool ;
+        dst->currentString      = NULL ;
         dst->currentIndex       = 0 ;
-
-        /* Copy value list */
         CNInitValueList(&(dst->stringList), vpool) ;
+}
+
+void
+CNSetStringListToStringIterator(struct CNStringIterator * dst, struct CNValueList * strlist)
+{
         for(struct CNList * list = strlist->valueList ; list != NULL ; list = list->next){
                 struct CNValue * val = list->data ;
                 CNAppendValueToValueList(&(dst->stringList), val) ;
@@ -63,6 +67,8 @@ CNDeinitStringIterator(struct CNStringIterator * dst)
                 CNReleaseValue(dst->valuePool, CNSuperClassOfStringValue(curval)) ;
         }
         CNDeinitValueList(&(dst->stringList)) ;
+        dst->currentString      = NULL ;
+        dst->currentIndex       = 0 ;
 }
 
 

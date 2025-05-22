@@ -8,6 +8,8 @@
 #ifndef ArisiaBasic_h
 #define ArisiaBasic_h
 
+#include <BasicKit/CNValueList.h>
+#include <BasicKit/CNCompiler.h>
 #include <BasicKit/CNInterface.h>
 #include <stdint.h>
 
@@ -15,7 +17,7 @@ typedef void *  yyscan_t ;
 
 typedef union {
         uint64_t                registerId ;
-        struct CNValue *        value ;
+        struct CNStringValue *  identifier ;
 } CNToken ;
 #define YYSTYPE CNToken
 
@@ -32,5 +34,17 @@ struct _YYLTYPE
 #define YYLEX_PARAM     &yylval, &yylloc
 
 int yylex(YYSTYPE *lvalp, YYLTYPE *llocp);
+
+void
+CNInitLexicalParser(struct CNValuePool * vpool) ;
+
+/*
+ * progtam: List of CNStringValue
+ */
+void
+CNSetProgramToLexicalParser(struct CNValueList * statementList) ;
+
+void
+CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * vpool) ;
 
 #endif /* ArisiaBasic_h */

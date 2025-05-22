@@ -38,6 +38,7 @@ void
 CNSetValueToDictionary(struct CNValuePool * vpool, struct CNDictionaryValue * dst,
                        struct CNStringValue * key, struct CNValue * value) ;
 
+/* The return value will be null */
 struct CNValue *
 CNValueForKeyInDictionary(struct CNDictionaryValue * dst, struct CNStringValue * key) ;
 

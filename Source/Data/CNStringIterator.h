@@ -19,8 +19,10 @@ struct CNStringIterator {
 } ;
 
 void
-CNInitStringIterator(struct CNStringIterator * dst, struct CNValueList * strlist,
-                     struct CNValuePool * pool) ;
+CNInitStringIterator(struct CNStringIterator * dst, struct CNValuePool * vpool) ;
+
+void
+CNSetStringListToStringIterator(struct CNStringIterator * dst, struct CNValueList * strlist) ;
 
 int
 CNGetCharFromStringItetator(struct CNStringIterator * src) ;
