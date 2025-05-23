@@ -78,4 +78,10 @@ CNCastToCodeValue(struct CNValue * src)
         return CNTypeOfValue(src) == CNCodeType ? (struct CNCodeValue *) src : NULL ;
 }
 
+static inline struct CNValue *
+CNSuperClassOfCodeValue(struct CNCodeValue * src)
+{
+        return &(src->superClass) ;
+}
+
 #endif /* CNCodeValue_h */

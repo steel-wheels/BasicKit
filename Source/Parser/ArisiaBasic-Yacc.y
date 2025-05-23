@@ -1,6 +1,8 @@
 %{
 
 #include "ArisiaBasic.h"
+#include "CNParser.h"
+#include "CNByteCode.h"
 #include <stdio.h>
 
 static void yyerror(const char * message) ;
@@ -29,6 +31,12 @@ CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * v
 %start  statement ;
 
 statement: PRINT expression
+        {
+                struct CNVariable src = $1.variable ;
+                struct CNCodeValue * code = CNAllocatePrintCode(s_value_pool, src.registerId) ;
+                CNAppendCodeToCompiler(s_compiler, code) ;
+                CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+        }
         ;
 
 expression: IDENTIFIER
@@ -44,6 +52,11 @@ expression: IDENTIFIER
 
 %%
 
+void CNStartParser(void)
+{
+        yyparse() ;
+}
+        
 static void yyerror(const char * message)
 {
         CNInterface()->error("[Error] %s\n", message) ;

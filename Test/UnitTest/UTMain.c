@@ -16,6 +16,7 @@
 #include "UTStringIterator.h"
 #include "UTRegisterFile.h"
 #include "UTFile.h"
+#include "UTParser.h"
 
 int main(int argc, char * argv[])
 {
@@ -45,15 +46,16 @@ int main(int argc, char * argv[])
         CNInitValuePool(&vpool, &lpool) ;
 
         /* execute tests */
-        bool result1 = UTValue(&vpool) ;
-        bool result2 = UTStringValue(&vpool) ;
-        bool result3 = UTArrayValue(&vpool) ;
-        bool result4 = UTDictionaryValue(&vpool) ;
-        bool result5 = UTValueList(&vpool) ;
-        bool result6 = UTValueStack(&vpool) ;
-        bool result7 = UTStringIterator(&vpool) ;
-        bool result8 = UTRegisterFile(&vpool) ;
-        bool result9 = UTFile(&vpool) ;
+        bool result1  = UTValue(&vpool) ;
+        bool result2  = UTStringValue(&vpool) ;
+        bool result3  = UTArrayValue(&vpool) ;
+        bool result4  = UTDictionaryValue(&vpool) ;
+        bool result5  = UTValueList(&vpool) ;
+        bool result6  = UTValueStack(&vpool) ;
+        bool result7  = UTStringIterator(&vpool) ;
+        bool result8  = UTRegisterFile(&vpool) ;
+        bool result9  = UTFile(&vpool) ;
+        bool result10 = UTParser(&vpool) ;
 
         /* release pools */
         CNInterface()->printf("(%s) Free pools\n", __func__) ;
@@ -63,7 +65,7 @@ int main(int argc, char * argv[])
         /* summaryze result */
         result &= result0 && result1 && result2 && result3
         && result4 && result5 && result6 && result7
-        && result8 && result9 ;
+        && result8 && result9 && result10 ;
         if(result){
                 CNInterface()->printf("SUMMARY: OK\n") ;
                 return 0 ;

@@ -22,4 +22,8 @@
 #import <BasicKit/CNRegisterFile.h>
 #import <BasicKit/CNStringIterator.h>
 #import <BasicKit/CNFile.h>
+#import <BasicKit/CNParser.h>
+#import <BasicKit/CNCompiler.h>
+#import <BasicKit/CNByteCode.h>
+
 

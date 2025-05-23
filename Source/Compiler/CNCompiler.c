@@ -38,3 +38,8 @@ CNAllocateRegisterIdForIdentifier(uint64_t * regid, struct CNCompiler * src, str
         }
 }
 
+void
+CNAppendCodeToCompiler(struct CNCompiler * dst, struct CNCodeValue * code)
+{
+        CNAppendValueToValueList(&(dst->codeList), CNSuperClassOfCodeValue(code)) ;
+}

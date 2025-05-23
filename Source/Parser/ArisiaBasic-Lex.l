@@ -1,5 +1,6 @@
 %{
 #include "ArisiaBasic.h"
+#include "CNParser.h"
 #include "CNStringValue.h"
 #include "CNStringIterator.h"
 #include "y.tab.h"
@@ -15,6 +16,12 @@ CNInitLexicalParser(struct CNValuePool * vpool)
 {
         s_value_pool = vpool ;
         CNInitStringIterator(&s_iterator, vpool) ;
+}
+
+void
+CNDeinitLexicalParser(void)
+{
+        CNDeinitStringIterator(&s_iterator) ;
 }
 
 void

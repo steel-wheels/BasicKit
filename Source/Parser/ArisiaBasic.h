@@ -51,16 +51,4 @@ struct _YYLTYPE
 
 int yylex(YYSTYPE *lvalp, YYLTYPE *llocp);
 
-void
-CNInitLexicalParser(struct CNValuePool * vpool) ;
-
-/*
- * progtam: List of CNStringValue
- */
-void
-CNSetProgramToLexicalParser(struct CNValueList * statementList) ;
-
-void
-CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * vpool) ;
-
 #endif /* ArisiaBasic_h */
