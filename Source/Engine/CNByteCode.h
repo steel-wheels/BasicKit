@@ -9,6 +9,8 @@
 #define CNByteCode_h
 
 #import <BasicKit/CNCodeValue.h>
+#import <BasicKit/CNValueList.h>
+#import <BasicKit/CNArrayValue.h>
 
 typedef enum {
         CNNopCode,
@@ -36,5 +38,11 @@ CNAllocatePrintCode(struct CNValuePool * vpool, uint64_t regid)
 
 void
 CNPrintByteCode(const struct CNCodeValue * src) ;
+
+void
+CNDumpByteCodeInValueList(struct CNValueList * src) ;
+
+void
+CNDumpByteCodeInArrayValue(struct CNArrayValue * src) ;
 
 #endif /* CNByteCode_h */

@@ -23,7 +23,8 @@
 #import <BasicKit/CNStringIterator.h>
 #import <BasicKit/CNFile.h>
 #import <BasicKit/CNParser.h>
-#import <BasicKit/CNCompiler.h>
 #import <BasicKit/CNByteCode.h>
+#import <BasicKit/CNCompiler.h>
+#import <BasicKit/CNCodeGenerator.h>
 
 

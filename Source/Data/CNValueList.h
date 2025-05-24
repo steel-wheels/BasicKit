@@ -32,6 +32,9 @@ CNListInValueList(struct CNValueList * src)
         return src->valueList ;
 }
 
+unsigned int
+CNNumberOfValuesInValueList(const struct CNValueList * src) ;
+
 void
 CNAppendValueToValueList(struct CNValueList * dst, struct CNValue * src) ;
 

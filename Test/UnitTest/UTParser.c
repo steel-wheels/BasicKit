@@ -59,6 +59,12 @@ testParser(const char * lines[], struct CNValuePool * vpool)
         CNInterface()->printf("(%s) Dump program\n", __func__) ;
         CNDumpCodeInCompiler(&compiler) ;
 
+        CNInterface()->printf("(%s) Generate code\n", __func__) ;
+        struct CNArrayValue * codes ;
+        codes = CNGenerateCode(CNCodeListInCompiler(&compiler)) ;
+        CNDumpByteCodeInArrayValue(codes) ;
+        CNReleaseValue(vpool, CNSuperClassOfArrayValue(codes)) ;
+
         CNInterface()->printf("(%s) Free parser\n", __func__) ;
         CNDeinitCompiler(&compiler) ;
         CNDeinitValueList(&codelist) ;

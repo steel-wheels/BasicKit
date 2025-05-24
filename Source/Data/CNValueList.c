@@ -21,6 +21,16 @@ CNDeinitValueList(struct CNValueList * dst)
         }
 }
 
+unsigned int
+CNNumberOfValuesInValueList(const struct CNValueList * src)
+{
+        unsigned int result = 0 ;
+        for(struct CNList * list = src->valueList ; list != NULL ; list = list->next){
+                result += 1 ;
+        }
+        return result ;
+}
+
 void
 CNAppendValueToValueList(struct CNValueList * dst, struct CNValue * src)
 {

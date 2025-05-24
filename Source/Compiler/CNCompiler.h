@@ -10,8 +10,9 @@
 
 #import <BasicKit/CNValuePool.h>
 #import <BasicKit/CNValueList.h>
+#import <BasicKit/CNStringValue.h>
 #import <BasicKit/CNCodeValue.h>
-#import <BasicKit/CNStringIterator.h>
+#import <BasicKit/CNByteCode.h>
 
 struct CNCompiler
 {
@@ -30,6 +31,12 @@ CNInitCompiler(struct CNCompiler * dst, struct CNValuePool * vpool) ;
 void
 CNDeinitCompiler(struct CNCompiler * dst) ;
 
+static inline struct CNValueList *
+CNCodeListInCompiler(struct CNCompiler * src)
+{
+        return &(src->codeList) ;
+}
+
 bool
 CNHasRegisterIdForIdentifier(uint64_t * regid, struct CNCompiler * src, struct CNStringValue * ident) ;
 
@@ -39,7 +46,10 @@ CNAllocateFreeRegisterId(struct CNCompiler * src) ;
 void
 CNAppendCodeToCompiler(struct CNCompiler * dst, struct CNCodeValue * code) ;
 
-void
-CNDumpCodeInCompiler(struct CNCompiler * src) ;
+static inline void
+CNDumpCodeInCompiler(struct CNCompiler * src)
+{
+        CNDumpByteCodeInValueList(&(src->codeList)) ;
+}
 
 #endif /* CNCompiler_h */

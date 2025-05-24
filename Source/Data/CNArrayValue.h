@@ -8,7 +8,9 @@
 #ifndef CNArrayValue_h
 #define CNArrayValue_h
 
+#import <BasicKit/CNNullValue.h>
 #import <BasicKit/CNValue.h>
+#import <BasicKit/CNInterface.h>
 
 struct CNArrayValue {
         struct CNValue          superClass ;
@@ -34,8 +36,16 @@ CNSuperClassOfArrayValue(struct CNArrayValue * src)
         return &(src->superClass) ;
 }
 
-struct CNValue *
-CNValueInArray(struct CNArrayValue * array, unsigned int index) ;
+static inline struct CNValue *
+CNValueInArray(struct CNArrayValue * array, unsigned int index)
+{
+        if(index < array->elementNum) {
+                return array->values[index] ;
+        } else {
+                CNInterface()->printf("[Error] Index overflow at %s\n", __func__) ;
+                return CNSuperClassOfNullValue(CNAllocateNullValue()) ;
+        }
+}
 
 bool
 CNSetValueToArray(struct CNValuePool * vpool, struct CNArrayValue * array, unsigned int index, struct CNValue * src) ;

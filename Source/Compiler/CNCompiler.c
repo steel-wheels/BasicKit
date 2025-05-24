@@ -53,18 +53,3 @@ CNAppendCodeToCompiler(struct CNCompiler * dst, struct CNCodeValue * code)
 {
         CNAppendValueToValueList(&(dst->codeList), CNSuperClassOfCodeValue(code)) ;
 }
-
-void
-CNDumpCodeInCompiler(struct CNCompiler * src)
-{
-        struct CNList * list = (src->codeList).valueList ;
-        for( ; list != NULL ; list = list->next){
-                struct CNCodeValue * code = CNCastToCodeValue(list->data) ;
-                if(code != NULL){
-                        CNPrintByteCode(code) ;
-                        CNInterface()->printf("\n") ;
-                } else {
-                        CNInterface()->printf("[Error] Invalid opcode\n") ;
-                }
-        }
-}

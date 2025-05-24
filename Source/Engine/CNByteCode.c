@@ -72,3 +72,33 @@ CNPrintByteCode(const struct CNCodeValue * src)
                 } break ;
         }
 }
+
+void
+CNDumpByteCodeInValueList(struct CNValueList * src)
+{
+        struct CNList * list = src->valueList ;
+        for( ; list != NULL ; list = list->next){
+                struct CNCodeValue * code = CNCastToCodeValue(list->data) ;
+                if(code != NULL){
+                        CNPrintByteCode(code) ;
+                        CNInterface()->printf("\n") ;
+                } else {
+                        CNInterface()->printf("[Error] Invalid opcode\n") ;
+                }
+        }
+}
+
+void
+CNDumpByteCodeInArrayValue(struct CNArrayValue * src)
+{
+        unsigned int elmnum = (unsigned int) src->elementNum ;
+        for(unsigned int i=0 ; i<elmnum ; i++){
+                struct CNCodeValue * code = CNCastToCodeValue(CNValueInArray(src, i)) ;
+                if(code != NULL){
+                        CNPrintByteCode(code) ;
+                        CNInterface()->printf("\n") ;
+                } else {
+                        CNInterface()->printf("[Error] Invalid opcode\n") ;
+                }
+        }
+}

@@ -20,9 +20,6 @@ CNDeinitLexicalParser(void) ;
 void
 CNStartParser(void) ;
 
-/*
- * progtam: List of CNStringValue
- */
 void
 CNSetSourceCodeToLexicalParser(struct CNValueList * statementList) ;
 

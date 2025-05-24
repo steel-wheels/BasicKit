@@ -9,7 +9,6 @@
 #include "CNValuePool.h"
 #include "CNValue.h"
 #include "CNNullValue.h"
-#include "CNInterface.h"
 
 static void releaseContents(struct CNValuePool * vpool, struct CNValue * val) ;
 static void printValues(struct CNValue * val) ;
@@ -55,17 +54,6 @@ CNAllocateArrayValue(struct CNValuePool * vpool, unsigned int elmnum)
         }
         newval->values = elements ;
         return newval ;
-}
-
-struct CNValue *
-CNValueInArray(struct CNArrayValue * array, unsigned int index)
-{
-        if(index < array->elementNum) {
-                return array->values[index] ;
-        } else {
-                CNInterface()->printf("[Error] Index overflow at %s\n", __func__) ;
-                return CNSuperClassOfNullValue(CNAllocateNullValue()) ;
-        }
 }
 
 bool
