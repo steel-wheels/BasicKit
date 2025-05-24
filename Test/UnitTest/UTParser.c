@@ -13,7 +13,7 @@ static bool
 testParser(const char * lines[], struct CNValuePool * vpool) ;
 
 static void
-makeProgram(struct CNValueList * dst, struct CNValuePool * vpool, const char ** sources) ;
+makeCodeList(struct CNValueList * dst, struct CNValuePool * vpool, const char ** sources) ;
 
 bool
 UTParser(struct CNValuePool * vpool)
@@ -40,14 +40,14 @@ testParser(const char * lines[], struct CNValuePool * vpool)
 {
         CNInterface()->printf("(%s) Test parser\n", __func__) ;
         dumpMemoryUsage(vpool) ;
-        struct CNValueList program ;
-        makeProgram(&program, vpool, lines) ;
+        struct CNValueList codelist ;
+        makeCodeList(&codelist, vpool, lines) ;
 
         CNInterface()->printf("(%s) Dump program\n", __func__) ;
-        CNPrintValueList(&program) ;
+        CNPrintValueList(&codelist) ;
         CNInterface()->printf("\n", __func__) ;
 
-        CNSetProgramToLexicalParser(&program) ;
+        CNSetSourceCodeToLexicalParser(&codelist) ;
 
         struct CNCompiler compiler ;
         CNInitCompiler(&compiler, vpool) ;
@@ -61,12 +61,12 @@ testParser(const char * lines[], struct CNValuePool * vpool)
 
         CNInterface()->printf("(%s) Free parser\n", __func__) ;
         CNDeinitCompiler(&compiler) ;
-        CNDeinitValueList(&program) ;
+        CNDeinitValueList(&codelist) ;
         return checkMemoryUsage(vpool) ;
 }
 
 static void
-makeProgram(struct CNValueList * dst, struct CNValuePool * vpool, const char ** sources)
+makeCodeList(struct CNValueList * dst, struct CNValuePool * vpool, const char ** sources)
 {
         CNInitValueList(dst, vpool) ;
         const char ** line ;

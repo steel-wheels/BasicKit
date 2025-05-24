@@ -40,7 +40,7 @@ CNDeinitLexicalParser(void)
 }
 
 void
-CNSetProgramToLexicalParser(struct CNValueList * statementList)
+CNSetSourceCodeToLexicalParser(struct CNValueList * statementList)
 {
         CNDeinitStringIterator(&s_iterator) ;
         CNSetStringListToStringIterator(&s_iterator, statementList) ;

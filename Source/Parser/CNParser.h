@@ -24,7 +24,7 @@ CNStartParser(void) ;
  * progtam: List of CNStringValue
  */
 void
-CNSetProgramToLexicalParser(struct CNValueList * statementList) ;
+CNSetSourceCodeToLexicalParser(struct CNValueList * statementList) ;
 
 void
 CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * vpool) ;
