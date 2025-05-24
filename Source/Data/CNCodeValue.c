@@ -55,7 +55,7 @@ CNAllocateLoadCodeValue(struct CNValuePool * vpool, uint32_t code,
 
         struct CNCodeValueAttribute attr = {
                 .code           = code,
-                .operand        = CNCalcOperandType
+                .operand        = CNLoadOperandType
         } ;
 
         struct CNLoadOperand operand = {

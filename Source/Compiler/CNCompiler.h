@@ -30,7 +30,10 @@ void
 CNDeinitCompiler(struct CNCompiler * dst) ;
 
 bool
-CNAllocateRegisterIdForIdentifier(uint64_t * regid, struct CNCompiler * src, struct CNStringValue * ident) ;
+CNHasRegisterIdForIdentifier(uint64_t * regid, struct CNCompiler * src, struct CNStringValue * ident) ;
+
+uint64_t
+CNAllocateFreeRegisterId(struct CNCompiler * src) ;
 
 void
 CNAppendCodeToCompiler(struct CNCompiler * dst, struct CNCodeValue * code) ;

@@ -12,7 +12,7 @@
 
 typedef enum {
         CNNopCode,
-        CNMoveCode,
+        CNStoreCode,
         CNPrintCode
 } CNOpCode ;
 
@@ -23,9 +23,9 @@ CNAllocateNopCode(struct CNValuePool * vpool)
 }
 
 static inline struct CNCodeValue *
-CNAllocateMoveCode(struct CNValuePool * vpool, uint64_t dstreg, struct CNValue * srcval)
+CNAllocateStoreCode(struct CNValuePool * vpool, uint64_t dstreg, struct CNValue * srcval)
 {
-        return CNAllocateLoadCodeValue(vpool, CNMoveCode, dstreg, srcval) ;
+        return CNAllocateLoadCodeValue(vpool, CNStoreCode, dstreg, srcval) ;
 }
 
 static inline struct CNCodeValue *

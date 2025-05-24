@@ -34,6 +34,7 @@ CNMakeVariable(CNValueType vtype, uint64_t regid)
 typedef union {
         struct CNVariable       variable ;
         struct CNStringValue *  identifier ;
+        struct CNStringValue *  string ;
 } CNToken ;
 #define YYSTYPE CNToken
 

@@ -24,7 +24,7 @@ CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * v
 
 %locations
 
-%token  IDENTIFIER LET PRINT _FALSE _TRUE
+%token  IDENTIFIER LET PRINT STRING _FALSE _TRUE
 
 %%
 
@@ -41,12 +41,23 @@ statement: PRINT expression
 
 expression: IDENTIFIER
         {
-                uint64_t regid ;
-                if(CNAllocateRegisterIdForIdentifier(&regid, s_compiler, $1.identifier)){
+                struct CNStringValue *  ident = $1.identifier ;
+                uint64_t                regid ;
+                if(CNHasRegisterIdForIdentifier(&regid, s_compiler, ident)){
                         $$.variable = CNMakeVariable(CNStringType, regid) ;
                 } else {
-                        undefinedVariableReferenceError($1.identifier, yyloc.first_line) ;
+                        undefinedVariableReferenceError(ident, yyloc.first_line) ;
                 }
+                CNReleaseValue(s_value_pool, CNSuperClassOfStringValue(ident)) ;
+        }
+        | STRING
+        {
+                struct CNValue * srcval = CNSuperClassOfStringValue($1.string) ;
+                uint64_t dstid = CNAllocateFreeRegisterId(s_compiler) ;
+                struct CNCodeValue * code = CNAllocateStoreCode(s_value_pool, dstid, srcval) ;
+                CNAppendCodeToCompiler(s_compiler, code) ;
+                CNReleaseValue(s_value_pool, srcval) ;
+                CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
         }
         ;
 

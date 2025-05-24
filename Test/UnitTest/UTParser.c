@@ -24,7 +24,7 @@ UTParser(struct CNValuePool * vpool)
         CNInitLexicalParser(vpool) ;
 
         const char * lines0[] = {
-                "print A\n",
+                "print \"A\"\n",
                 ""
         } ;
 
@@ -38,10 +38,28 @@ UTParser(struct CNValuePool * vpool)
 static bool
 testParser(const char * lines[], struct CNValuePool * vpool)
 {
+        CNInterface()->printf("(%s) Test parser\n", __func__) ;
+        dumpMemoryUsage(vpool) ;
         struct CNValueList program ;
         makeProgram(&program, vpool, lines) ;
+
+        CNInterface()->printf("(%s) Dump program\n", __func__) ;
+        CNPrintValueList(&program) ;
+        CNInterface()->printf("\n", __func__) ;
+
+        CNSetProgramToLexicalParser(&program) ;
+
+        struct CNCompiler compiler ;
+        CNInitCompiler(&compiler, vpool) ;
+        CNSetCompilerToSyntaxParser(&compiler, vpool) ;
+
+        CNInterface()->printf("(%s) Start parser\n", __func__) ;
+        CNStartParser() ;
+
+        CNInterface()->printf("(%s) Free parser\n", __func__) ;
+        CNDeinitCompiler(&compiler) ;
         CNDeinitValueList(&program) ;
-        return true ;
+        return checkMemoryUsage(vpool) ;
 }
 
 static void

@@ -8,30 +8,67 @@
 static int
 getChar(void) ;
 
+struct CNStringBuffer {
+        unsigned int    currentIndex ;
+        size_t          buffer_size ;
+        char *          buffer ;
+} ;
+
 static struct CNValuePool *     s_value_pool ;
 static struct CNStringIterator  s_iterator ;
+static struct CNStringBuffer    s_buffer ;
 
 void
 CNInitLexicalParser(struct CNValuePool * vpool)
 {
         s_value_pool = vpool ;
         CNInitStringIterator(&s_iterator, vpool) ;
+
+        struct CNStringBuffer buf = {
+                .currentIndex   = 0,
+                .buffer_size    = 1024,
+                .buffer         = malloc(1024)
+        } ;
+        s_buffer = buf ;
 }
 
 void
 CNDeinitLexicalParser(void)
 {
         CNDeinitStringIterator(&s_iterator) ;
+        free(s_buffer.buffer) ;
 }
 
 void
 CNSetProgramToLexicalParser(struct CNValueList * statementList)
 {
+        CNDeinitStringIterator(&s_iterator) ;
         CNSetStringListToStringIterator(&s_iterator, statementList) ;
 }
 
 static bool
 isReservedWord(int * rwordid, const char * str) ;
+
+static void
+appendCharToBuffer(char c)
+{
+        if(s_buffer.currentIndex >= s_buffer.buffer_size){
+                size_t newsize       = s_buffer.buffer_size + 1024 ;
+                s_buffer.buffer      = realloc(s_buffer.buffer, newsize) ;
+                s_buffer.buffer_size = newsize ;
+        }
+        s_buffer.buffer[s_buffer.currentIndex] = c ;
+        s_buffer.currentIndex += 1 ;
+}
+
+static void
+appendStringToBuffer(const char * str)
+{
+        char c ;
+        for( ; (c = *str) != '\0' ; str++){
+                appendCharToBuffer(c) ;
+        }
+}
 
 #define YY_INPUT(buf,result,max_size) \
     { \
@@ -46,6 +83,8 @@ isReservedWord(int * rwordid, const char * str) ;
 
 SPACE           [ \t]
 IDENTIFIER      [a-zA-Z][_0-9a-zA-Z]*
+
+%x CSTRING
 
 %%
 
@@ -63,6 +102,28 @@ IDENTIFIER      [a-zA-Z][_0-9a-zA-Z]*
                 yylval->identifier = CNAllocateStringValue(s_value_pool, len, str) ;
                 return IDENTIFIER ;
         }
+}
+
+\" {
+        BEGIN(CSTRING) ;
+        s_buffer.currentIndex = 0 ;
+}
+
+<CSTRING>\\\" {
+        appendStringToBuffer(yytext) ;
+}
+
+<CSTRING>[^\"]* {
+        appendStringToBuffer(yytext) ;
+}
+
+<CSTRING>\"     {
+        BEGIN(INITIAL) ;
+        appendCharToBuffer('\0') ;
+        const char * buf = s_buffer.buffer ;
+        struct CNStringValue * str = CNAllocateStringValue(s_value_pool, (unsigned int) strlen(buf), buf) ;
+        yylval->string = str ;
+        return STRING ;
 }
 
 %%

@@ -26,7 +26,7 @@ CNDeinitCompiler(struct CNCompiler * dst)
 }
 
 bool
-CNAllocateRegisterIdForIdentifier(uint64_t * regid, struct CNCompiler * src, struct CNStringValue * ident)
+CNHasRegisterIdForIdentifier(uint64_t * regid, struct CNCompiler * src, struct CNStringValue * ident)
 {
         struct CNValue * value = CNValueForKeyInDictionary(src->identifierTable, ident) ;
         if(value != NULL){
@@ -36,6 +36,14 @@ CNAllocateRegisterIdForIdentifier(uint64_t * regid, struct CNCompiler * src, str
         } else {
                 return false ;
         }
+}
+
+uint64_t
+CNAllocateFreeRegisterId(struct CNCompiler * src)
+{
+        uint64_t regid = src->next_free_regid ;
+        src->next_free_regid += 1 ;
+        return regid ;
 }
 
 void
