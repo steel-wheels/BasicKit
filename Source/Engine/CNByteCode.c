@@ -13,6 +13,13 @@ CNPrintByteCode(const struct CNCodeValue * src)
 {
         struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(src->atttribute) ;
 
+        uint32_t label ;
+        if((label = attr.label) != CNNoLabel) {
+                CNInterface()->printf("l%x:\t") ;
+        } else {
+                CNInterface()->printf("\t") ;
+        }
+
         const char * opname = "?" ;
         unsigned int dstnum, srcnum ;
         switch((CNOpCode) attr.code){

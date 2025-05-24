@@ -29,6 +29,7 @@ CNAllocateCalcCodeValue(struct CNValuePool * vpool, uint32_t code,
                         uint64_t dstregid, uint64_t src0regid, uint64_t src1regid)
 {
         struct CNCodeValueAttribute attr = {
+                .label          = CNNoLabel,
                 .code           = code,
                 .operand        = CNCalcOperandType
         } ;
@@ -54,6 +55,7 @@ CNAllocateLoadCodeValue(struct CNValuePool * vpool, uint32_t code,
         CNRetainValue(srcval) ;
 
         struct CNCodeValueAttribute attr = {
+                .label          = CNNoLabel,
                 .code           = code,
                 .operand        = CNLoadOperandType
         } ;
