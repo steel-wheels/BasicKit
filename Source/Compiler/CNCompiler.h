@@ -20,6 +20,7 @@ struct CNCompiler
         struct CNDictionaryValue *      identifierTable ;
         uint64_t                        next_free_regid ;
 
+        /* List of */
         struct CNValueList              codeList ;
 } ;
 
@@ -37,5 +38,8 @@ CNAllocateFreeRegisterId(struct CNCompiler * src) ;
 
 void
 CNAppendCodeToCompiler(struct CNCompiler * dst, struct CNCodeValue * code) ;
+
+void
+CNDumpCodeInCompiler(struct CNCompiler * src) ;
 
 #endif /* CNCompiler_h */

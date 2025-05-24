@@ -6,8 +6,10 @@
  */
 
 #include "CNCompiler.h"
+#include "CNByteCode.h"
 #include "CNNumberValue.h"
 #include "CNDictionaryValue.h"
+#include "CNInterface.h"
 
 void
 CNInitCompiler(struct CNCompiler * dst, struct CNValuePool * vpool)
@@ -50,4 +52,19 @@ void
 CNAppendCodeToCompiler(struct CNCompiler * dst, struct CNCodeValue * code)
 {
         CNAppendValueToValueList(&(dst->codeList), CNSuperClassOfCodeValue(code)) ;
+}
+
+void
+CNDumpCodeInCompiler(struct CNCompiler * src)
+{
+        struct CNList * list = (src->codeList).valueList ;
+        for( ; list != NULL ; list = list->next){
+                struct CNCodeValue * code = CNCastToCodeValue(list->data) ;
+                if(code != NULL){
+                        CNPrintByteCode(code) ;
+                        CNInterface()->printf("\n") ;
+                } else {
+                        CNInterface()->printf("[Error] Invalid opcode\n") ;
+                }
+        }
 }

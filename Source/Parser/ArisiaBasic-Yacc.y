@@ -54,7 +54,7 @@ expression: IDENTIFIER
         {
                 struct CNValue * srcval = CNSuperClassOfStringValue($1.string) ;
                 uint64_t dstid = CNAllocateFreeRegisterId(s_compiler) ;
-                struct CNCodeValue * code = CNAllocateStoreCode(s_value_pool, dstid, srcval) ;
+                struct CNCodeValue * code = CNAllocateLoadCode(s_value_pool, dstid, srcval) ;
                 CNAppendCodeToCompiler(s_compiler, code) ;
                 CNReleaseValue(s_value_pool, srcval) ;
                 CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;

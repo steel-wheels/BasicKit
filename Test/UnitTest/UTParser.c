@@ -56,6 +56,9 @@ testParser(const char * lines[], struct CNValuePool * vpool)
         CNInterface()->printf("(%s) Start parser\n", __func__) ;
         CNStartParser() ;
 
+        CNInterface()->printf("(%s) Dump program\n", __func__) ;
+        CNDumpCodeInCompiler(&compiler) ;
+
         CNInterface()->printf("(%s) Free parser\n", __func__) ;
         CNDeinitCompiler(&compiler) ;
         CNDeinitValueList(&program) ;
