@@ -12,6 +12,10 @@
 		050BCF032D86D07E00C05DE3 /* CNValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 050BCF002D86D07E00C05DE3 /* CNValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		050BCF042D86D07E00C05DE3 /* CNValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 050BCF002D86D07E00C05DE3 /* CNValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		050BCF052D86D07E00C05DE3 /* CNValue.c in Sources */ = {isa = PBXBuildFile; fileRef = 050BCF012D86D07E00C05DE3 /* CNValue.c */; };
+		050C8DF72DE319F9009A693D /* CNByteExec.h in Headers */ = {isa = PBXBuildFile; fileRef = 050C8DF52DE319F9009A693D /* CNByteExec.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		050C8DF82DE319F9009A693D /* CNByteExec.c in Sources */ = {isa = PBXBuildFile; fileRef = 050C8DF62DE319F9009A693D /* CNByteExec.c */; };
+		050C8DF92DE319F9009A693D /* CNByteExec.c in Sources */ = {isa = PBXBuildFile; fileRef = 050C8DF62DE319F9009A693D /* CNByteExec.c */; };
+		050C8DFA2DE319F9009A693D /* CNByteExec.h in Headers */ = {isa = PBXBuildFile; fileRef = 050C8DF52DE319F9009A693D /* CNByteExec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0510FBA72D7C533600AEE906 /* BasicKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 0510FBA42D7C533600AEE906 /* BasicKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0510FBB22D7C680500AEE906 /* BasicKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 0510FBA42D7C533600AEE906 /* BasicKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		051D1A622DD7FE3700E42FBB /* CNCodeValue.c in Sources */ = {isa = PBXBuildFile; fileRef = 051D1A612DD7FE3700E42FBB /* CNCodeValue.c */; };
@@ -145,6 +149,8 @@
 		050070DE2D7C2DF700C9449B /* BasicKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BasicKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		050BCF002D86D07E00C05DE3 /* CNValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNValue.h; sourceTree = "<group>"; };
 		050BCF012D86D07E00C05DE3 /* CNValue.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNValue.c; sourceTree = "<group>"; };
+		050C8DF52DE319F9009A693D /* CNByteExec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNByteExec.h; sourceTree = "<group>"; };
+		050C8DF62DE319F9009A693D /* CNByteExec.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNByteExec.c; sourceTree = "<group>"; };
 		0510FBA42D7C533600AEE906 /* BasicKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BasicKit.h; sourceTree = "<group>"; };
 		051697E72D86705800628DF6 /* UnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		051D1A602DD7FE3700E42FBB /* CNCodeValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNCodeValue.h; sourceTree = "<group>"; };
@@ -328,6 +334,8 @@
 			children = (
 				05B7B2902DDF4D1900808133 /* CNByteCode.h */,
 				05B7B2912DDF4D1900808133 /* CNByteCode.c */,
+				050C8DF52DE319F9009A693D /* CNByteExec.h */,
+				050C8DF62DE319F9009A693D /* CNByteExec.c */,
 				054072E62DD38AFF009AB9C3 /* CNRegisterFile.h */,
 				054072E72DD38AFF009AB9C3 /* CNRegisterFile.c */,
 			);
@@ -419,6 +427,7 @@
 				054176C52DCCF34D00FC331F /* CNNumberValue.h in Headers */,
 				05B7B29B2DE0C41F00808133 /* CNParser.h in Headers */,
 				05B939592DE27EC300D4B620 /* CNCodeGenerator.h in Headers */,
+				050C8DFA2DE319F9009A693D /* CNByteExec.h in Headers */,
 				05B7B28A2DDCD8B200808133 /* CNCompiler.h in Headers */,
 				054072CB2DD03E4D009AB9C3 /* CNUtils.h in Headers */,
 				050BCF032D86D07E00C05DE3 /* CNValue.h in Headers */,
@@ -453,6 +462,7 @@
 				051D1A7E2DD8C31700E42FBB /* CNValueList.h in Headers */,
 				05B7B29A2DE0C41F00808133 /* CNParser.h in Headers */,
 				05B9395B2DE27EC300D4B620 /* CNCodeGenerator.h in Headers */,
+				050C8DF72DE319F9009A693D /* CNByteExec.h in Headers */,
 				05B7B28C2DDCD8B200808133 /* CNCompiler.h in Headers */,
 				054072CA2DD03E4D009AB9C3 /* CNUtils.h in Headers */,
 				051D1A722DD88D7800E42FBB /* ArisiaBasic.h in Headers */,
@@ -635,6 +645,7 @@
 				059D76FE2DCCFA2000DA4FFB /* CNInterface.c in Sources */,
 				051D1A792DD8BE3F00E42FBB /* CNFile.c in Sources */,
 				054072E92DD38AFF009AB9C3 /* CNRegisterFile.c in Sources */,
+				050C8DF92DE319F9009A693D /* CNByteExec.c in Sources */,
 				051D1A642DD7FE3700E42FBB /* CNCodeValue.c in Sources */,
 				059D77072DCD002500DA4FFB /* CNArrayPool.c in Sources */,
 				05A086922D7C31C600A3DEA5 /* BSBasicEngine.m in Sources */,
@@ -673,6 +684,7 @@
 				059D77012DCCFA2000DA4FFB /* CNInterface.c in Sources */,
 				051D1A772DD8BE3F00E42FBB /* CNFile.c in Sources */,
 				054072EB2DD38AFF009AB9C3 /* CNRegisterFile.c in Sources */,
+				050C8DF82DE319F9009A693D /* CNByteExec.c in Sources */,
 				051D1A622DD7FE3700E42FBB /* CNCodeValue.c in Sources */,
 				059D77052DCD002500DA4FFB /* CNArrayPool.c in Sources */,
 				05A086932D7C31C600A3DEA5 /* BSBasicEngine.m in Sources */,

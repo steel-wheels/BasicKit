@@ -24,6 +24,7 @@
 #import <BasicKit/CNFile.h>
 #import <BasicKit/CNParser.h>
 #import <BasicKit/CNByteCode.h>
+#import <BasicKit/CNByteExec.h>
 #import <BasicKit/CNCompiler.h>
 #import <BasicKit/CNCodeGenerator.h>
 
