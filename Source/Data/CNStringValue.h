@@ -21,7 +21,13 @@ struct CNVirtualValueFunctions *
 CNVirtualFunctionsForStringValue(void) ;
 
 struct CNStringValue *
-CNAllocateStringValue(struct CNValuePool * vpool, unsigned int length, const char * src) ;
+CNAllocateStringValue(struct CNValuePool * vpool, size_t length, const char * src) ;
+
+static inline size_t
+CNLengthOfStringValue(const struct CNStringValue * src)
+{
+        return src->length ;
+}
 
 static inline struct CNStringValue *
 CNCastToStringValue(struct CNValue * src)

@@ -11,10 +11,10 @@
 #include <stdlib.h>
 
 static void
-setValue(struct CNRegisterFile * dst, uint32_t idx, uint64_t val) ;
+setValue(struct CNRegisterFile * dst, index_t idx, uint64_t val) ;
 
 static uint64_t
-getValue(struct CNRegisterFile * src, uint32_t idx) ;
+getValue(struct CNRegisterFile * src, index_t idx) ;
 
 bool UTRegisterFile(struct CNValuePool * vpool)
 {
@@ -51,7 +51,7 @@ bool UTRegisterFile(struct CNValuePool * vpool)
 }
 
 static void
-setValue(struct CNRegisterFile * dst, uint32_t idx, uint64_t src)
+setValue(struct CNRegisterFile * dst, index_t idx, uint64_t src)
 {
         struct CNUnsignedIntValue * val = CNAllocateUnsignedIntValue(dst->valuePool, src) ;
         CNSetValueToRegisterFile(dst, idx, CNSuperClassOfUnsignedIntValue(val)) ;
@@ -59,7 +59,7 @@ setValue(struct CNRegisterFile * dst, uint32_t idx, uint64_t src)
 }
 
 static uint64_t
-getValue(struct CNRegisterFile * src, uint32_t idx)
+getValue(struct CNRegisterFile * src, index_t idx)
 {
         struct CNValue * val = CNValueInRegisterFile(src, idx) ;
 

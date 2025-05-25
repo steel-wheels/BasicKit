@@ -8,10 +8,10 @@
 #include "CNByteExec.h"
 
 void
-CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, unsigned int startidx)
+CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, index_t startidx)
 {
         struct CNValuePool *    vpool  = regfile->valuePool ;
-        unsigned int            curidx = startidx ;
+        index_t                 curidx = startidx ;
         bool                    dostop = false ;
         while(!dostop){
                 struct CNCodeValue * code = CNCastToCodeValue(CNValueInArray(codes, curidx)) ;
@@ -26,7 +26,7 @@ CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, 
                  } CNOpCode ;
                  */
 
-                unsigned int nextidx = curidx + 1 ;
+                index_t nextidx = curidx + 1 ;
                 switch((CNOpCode) attr.code){
                         case CNNopCode: {
                                 /* do nothing */
@@ -44,7 +44,7 @@ CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, 
                         } break ;
                         case CNPrintCode: {
                                 const struct CNCalcOperand * operand = &(code->calcOperand) ;
-                                uint64_t srcregid = operand->source0RegId ;
+                                index_t srcregid = (index_t) operand->source0RegId ;
                                 const struct CNValue * val ;
                                 if((val = CNValueInRegisterFile(regfile, srcregid))){
 

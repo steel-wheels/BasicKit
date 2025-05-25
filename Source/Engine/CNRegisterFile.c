@@ -28,7 +28,7 @@ CNDeinitRegisterFile(struct CNRegisterFile * dst)
 }
 
 void
-CNSetValueToRegisterFile(struct CNRegisterFile * src, uint32_t regid, struct CNValue * val)
+CNSetValueToRegisterFile(struct CNRegisterFile * src, index_t regid, struct CNValue * val)
 {
         uint32_t idx     = regid ;
         uint32_t pagenum = idx / CNRegisterNumInPage ;
@@ -41,12 +41,12 @@ CNSetValueToRegisterFile(struct CNRegisterFile * src, uint32_t regid, struct CNV
 }
 
 struct CNValue *
-CNValueInRegisterFile(struct CNRegisterFile * src, uint32_t regid)
+CNValueInRegisterFile(struct CNRegisterFile * src, index_t regid)
 {
         struct CNValue * result ;
-        uint32_t idx     = regid ;
-        uint32_t pagenum = idx / CNRegisterNumInPage ;
-        uint32_t regoff  = idx % CNRegisterNumInPage ;
+        index_t idx     = regid ;
+        index_t pagenum = idx / CNRegisterNumInPage ;
+        index_t regoff  = idx % CNRegisterNumInPage ;
         if(pagenum < CNRegisterPageNum){
                 result = CNValueInArray(src->registerPages[pagenum], regoff) ;
         } else {

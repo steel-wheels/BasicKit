@@ -16,7 +16,7 @@ UTStringIterator(struct CNValuePool * vpool)
         bool    result = true ;
 
 #       define STRING_NUM       5
-        unsigned int    index = 0 ;
+        index_t index = 0 ;
 
         CNInterface()->printf("(%s) make source string\n", __func__) ;
         char source[STRING_NUM][STRING_NUM +1] ;

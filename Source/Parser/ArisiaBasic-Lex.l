@@ -9,7 +9,7 @@ static int
 getChar(void) ;
 
 struct CNStringBuffer {
-        unsigned int    currentIndex ;
+        index_t         currentIndex ;
         size_t          buffer_size ;
         char *          buffer ;
 } ;

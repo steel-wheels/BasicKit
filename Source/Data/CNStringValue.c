@@ -13,10 +13,10 @@
 static void releaseContents(struct CNValuePool * vpool, struct CNValue * val) ;
 static void printValues(struct CNValue * val) ;
 
-static unsigned int
-lengthToSize(unsigned int length)
+static size_t
+lengthToSize(size_t length)
 {
-        unsigned int tmp = (length + CNValueSize - 1) / CNValueSize ;
+        size_t tmp = (length + CNValueSize - 1) / CNValueSize ;
         return tmp * CNValueSize ;
 }
 
@@ -34,14 +34,14 @@ CNVirtualFunctionsForStringValue(void)
 }
 
 struct CNStringValue *
-CNAllocateStringValue(struct CNValuePool * vpool, unsigned int length, const char * src)
+CNAllocateStringValue(struct CNValuePool * vpool, size_t length, const char * src)
 {
         struct CNVirtualValueFunctions * vfunc = CNVirtualFunctionsForStringValue() ;
         struct CNStringValue * newval ;
         newval = (struct CNStringValue *) CNAllocateValue(vpool, CNStringType, vfunc) ;
         newval->length = length ;
 
-        unsigned int srcsize = lengthToSize(length + 1) ;
+        size_t srcsize = lengthToSize(length + 1) ;
         char * buffer = (char *) CNAllocateArrayData(&(vpool->arrayPool), srcsize) ;
         memcpy(buffer, src, length + 1) ;
         newval->string = buffer ;
@@ -63,7 +63,7 @@ static void
 releaseContents(struct CNValuePool * vpool, struct CNValue * val)
 {
         struct CNStringValue * str = CNCastToStringValue(val) ;
-        unsigned int srcsize = lengthToSize((unsigned int) (str->length + 1)) ;
+        size_t srcsize = lengthToSize(str->length + 1) ;
         CNFreeArrayData(&(vpool->arrayPool), srcsize, str->string) ;
 }
 

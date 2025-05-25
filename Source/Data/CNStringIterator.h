@@ -15,7 +15,7 @@ struct CNStringIterator {
         struct CNValuePool *    valuePool ;
         struct CNValueList      stringList ;
         struct CNStringValue *  currentString ;
-        unsigned int            currentIndex ;
+        index_t                 currentIndex ;
 } ;
 
 void

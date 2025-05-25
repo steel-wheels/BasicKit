@@ -16,7 +16,7 @@
 
 struct CNRegisterFile {
         struct CNValuePool *    valuePool ;
-        uint32_t                currentIndex ;
+        index_t                 currentIndex ;
         struct CNArrayValue *   registerPages[CNRegisterPageNum] ;
 } ;
 
@@ -26,18 +26,18 @@ CNInitRegisterFile(struct CNRegisterFile * dst, struct CNValuePool * vpool) ;
 void
 CNDeinitRegisterFile(struct CNRegisterFile * dst) ;
 
-static inline uint32_t
+static inline index_t
 CNGetFreeRegisterIdInRegisterFile(struct CNRegisterFile * src)
 {
-        uint32_t idx = src->currentIndex ;
+        index_t idx = src->currentIndex ;
         src->currentIndex += 1 ;
         return idx ;
 }
 
 void
-CNSetValueToRegisterFile(struct CNRegisterFile * src, uint32_t idx, struct CNValue * val) ;
+CNSetValueToRegisterFile(struct CNRegisterFile * src, index_t idx, struct CNValue * val) ;
 
 struct CNValue *
-CNValueInRegisterFile(struct CNRegisterFile * src, uint32_t idx) ;
+CNValueInRegisterFile(struct CNRegisterFile * src, index_t idx) ;
 
 #endif /* CNRegisterFile_h */

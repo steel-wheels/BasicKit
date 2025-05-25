@@ -57,7 +57,7 @@ CNAllocateArrayValue(struct CNValuePool * vpool, unsigned int elmnum)
 }
 
 bool
-CNSetValueToArray(struct CNValuePool * vpool, struct CNArrayValue * array, unsigned int index, struct CNValue * src)
+CNSetValueToArray(struct CNValuePool * vpool, struct CNArrayValue * array, index_t index, struct CNValue * src)
 {
         if(index < array->elementNum) {
                 CNRetainValue(src) ;

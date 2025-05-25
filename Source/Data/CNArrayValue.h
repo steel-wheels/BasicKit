@@ -43,7 +43,7 @@ CNNumberOfValuesInArrayValue(struct CNArrayValue * src)
 }
 
 static inline struct CNValue *
-CNValueInArray(struct CNArrayValue * array, unsigned int index)
+CNValueInArray(struct CNArrayValue * array, index_t index)
 {
         if(index < array->elementNum) {
                 return array->values[index] ;
@@ -54,7 +54,7 @@ CNValueInArray(struct CNArrayValue * array, unsigned int index)
 }
 
 bool
-CNSetValueToArray(struct CNValuePool * vpool, struct CNArrayValue * array, unsigned int index,
+CNSetValueToArray(struct CNValuePool * vpool, struct CNArrayValue * array, index_t index,
                   struct CNValue * src) ;
 
 #endif /* CNArrayValue_h */

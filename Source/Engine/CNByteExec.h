@@ -13,6 +13,6 @@
 #import <BasicKit/CNRegisterFile.h>
 
 void
-CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, unsigned int startidx) ;
+CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, index_t startidx) ;
 
 #endif /* CNByteExec_h */

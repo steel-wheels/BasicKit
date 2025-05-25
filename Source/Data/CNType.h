@@ -15,4 +15,6 @@ struct CNValue ;
 struct CNDictionaryValue ;
 struct CNValuePool ;
 
+typedef unsigned int    index_t ;
+
 #endif /* CNType_h */
