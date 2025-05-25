@@ -36,6 +36,12 @@ CNSuperClassOfArrayValue(struct CNArrayValue * src)
         return &(src->superClass) ;
 }
 
+static inline unsigned int
+CNNumberOfValuesInArrayValue(struct CNArrayValue * src)
+{
+        return (unsigned int) src->elementNum ;
+}
+
 static inline struct CNValue *
 CNValueInArray(struct CNArrayValue * array, unsigned int index)
 {

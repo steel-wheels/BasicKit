@@ -25,6 +25,7 @@ UTParser(struct CNValuePool * vpool)
 
         const char * lines0[] = {
                 "print \"A\"\n",
+                "print 1234\n",
                 ""
         } ;
 

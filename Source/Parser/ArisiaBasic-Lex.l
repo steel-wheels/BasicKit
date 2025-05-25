@@ -14,6 +14,7 @@ struct CNStringBuffer {
         char *          buffer ;
 } ;
 
+static unsigned int             s_current_line ;
 static struct CNValuePool *     s_value_pool ;
 static struct CNStringIterator  s_iterator ;
 static struct CNStringBuffer    s_buffer ;
@@ -21,7 +22,8 @@ static struct CNStringBuffer    s_buffer ;
 void
 CNInitLexicalParser(struct CNValuePool * vpool)
 {
-        s_value_pool = vpool ;
+        s_value_pool   = vpool ;
+        s_current_line = 1 ;
         CNInitStringIterator(&s_iterator, vpool) ;
 
         struct CNStringBuffer buf = {
@@ -46,8 +48,11 @@ CNSetSourceCodeToLexicalParser(struct CNValueList * statementList)
         CNSetStringListToStringIterator(&s_iterator, statementList) ;
 }
 
-static bool
-isReservedWord(int * rwordid, const char * str) ;
+unsigned int
+CNGetCurrentParsingLine(void)
+{
+        return s_current_line ;
+}
 
 static void
 appendCharToBuffer(char c)
@@ -70,6 +75,12 @@ appendStringToBuffer(const char * str)
         }
 }
 
+static bool
+isReservedWord(int * rwordid, const char * str) ;
+
+static uint64_t
+stringToInt(const char * src) ;
+
 #define YY_INPUT(buf,result,max_size) \
     { \
         int c = getChar(); \
@@ -83,6 +94,8 @@ appendStringToBuffer(const char * str)
 
 SPACE           [ \t]
 IDENTIFIER      [a-zA-Z][_0-9a-zA-Z]*
+DIGIT           [0-9]
+NONZERO_DIGIT   [1-9]
 
 %x CSTRING
 
@@ -102,6 +115,16 @@ IDENTIFIER      [a-zA-Z][_0-9a-zA-Z]*
                 yylval->identifier = CNAllocateStringValue(s_value_pool, len, str) ;
                 return IDENTIFIER ;
         }
+}
+
+{NONZERO_DIGIT}{DIGIT}* {
+        uint64_t val = stringToInt(yytext) ;
+        yylval->unsignedIntValue = val ;
+        return INT_VALUE ;
+}
+
+\n {
+        s_current_line += 1 ;
 }
 
 \" {
@@ -157,3 +180,16 @@ isReservedWord(int * rwordid, const char * str)
         return false ;
 }
 
+static uint64_t
+stringToInt(const char * src)
+{
+        char * endptr ;
+        uint64_t val = strtoull(yytext, &endptr, 10) ;
+        if(endptr != NULL){
+                if(*endptr == '\0'){
+                        return val ;
+                }
+        }
+        CNInterface()->printf("[Error] Failed to convert to int: \"%s\"\n", src) ;
+        return 0 ;
+}

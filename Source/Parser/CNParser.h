@@ -26,4 +26,7 @@ CNSetSourceCodeToLexicalParser(struct CNValueList * statementList) ;
 void
 CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * vpool) ;
 
+unsigned int
+CNGetCurrentParsingLine(void) ;
+
 #endif /* CNParser_h */

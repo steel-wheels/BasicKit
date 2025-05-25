@@ -91,7 +91,7 @@ CNDumpByteCodeInValueList(struct CNValueList * src)
 void
 CNDumpByteCodeInArrayValue(struct CNArrayValue * src)
 {
-        unsigned int elmnum = (unsigned int) src->elementNum ;
+        unsigned int elmnum = CNNumberOfValuesInArrayValue(src) ;
         for(unsigned int i=0 ; i<elmnum ; i++){
                 struct CNCodeValue * code = CNCastToCodeValue(CNValueInArray(src, i)) ;
                 if(code != NULL){
