@@ -10,7 +10,6 @@
 void
 CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, index_t startidx)
 {
-        struct CNValuePool *    vpool  = regfile->valuePool ;
         index_t                 curidx = startidx ;
         bool                    dostop = false ;
         while(!dostop){

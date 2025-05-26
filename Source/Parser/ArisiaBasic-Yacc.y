@@ -29,7 +29,7 @@ CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * v
 %locations
 
 %token  IDENTIFIER LET PRINT STRING
-%token  INT_VALUE _FALSE _TRUE
+%token  INT_VALUE FLOAT_VALUE _FALSE _TRUE
 
 %%
 
@@ -65,6 +65,12 @@ expression: IDENTIFIER
                 struct CNUnsignedIntValue * intval ;
                 intval = CNAllocateUnsignedIntValue(s_value_pool, $1.unsignedIntValue) ;
                 $$.variable = allocateStoreStatement(CNSuperClassOfUnsignedIntValue(intval)) ;
+        }
+        | FLOAT_VALUE
+        {
+                struct CNFloatValue * fltval ;
+                fltval = CNAllocateFloatValue(s_value_pool, $1.floatValue) ;
+                $$.variable = allocateStoreStatement(CNSuperClassOfFloatValue(fltval)) ;
         }
         | STRING
         {

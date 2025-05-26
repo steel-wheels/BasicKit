@@ -35,6 +35,7 @@ typedef union {
         struct CNVariable       variable ;
         struct CNStringValue *  identifier ;
         uint64_t                unsignedIntValue ;
+        double                  floatValue ;
         struct CNStringValue *  string ;
 } CNToken ;
 #define YYSTYPE CNToken

@@ -80,6 +80,8 @@ isReservedWord(int * rwordid, const char * str) ;
 
 static uint64_t
 stringToInt(const char * src) ;
+static double
+stringToFloat(const char * src) ;
 
 #define YY_INPUT(buf,result,max_size) \
     { \
@@ -102,7 +104,7 @@ NONZERO_DIGIT   [1-9]
 %%
 
 {SPACE}+
-;
+        ;
 
 {IDENTIFIER}  {
         int rwordid ;
@@ -121,6 +123,12 @@ NONZERO_DIGIT   [1-9]
         uint64_t val = stringToInt(yytext) ;
         yylval->unsignedIntValue = val ;
         return INT_VALUE ;
+}
+
+{NONZERO_DIGIT}{DIGIT}*\.{DIGIT}+ {
+        double val = stringToFloat(yytext) ;
+        yylval->floatValue = val ;
+        return FLOAT_VALUE ;
 }
 
 \n {
@@ -147,6 +155,10 @@ NONZERO_DIGIT   [1-9]
         struct CNStringValue * str = CNAllocateStringValue(s_value_pool, (unsigned int) strlen(buf), buf) ;
         yylval->string = str ;
         return STRING ;
+}
+
+. {
+        return yytext[0] ;
 }
 
 %%
@@ -192,4 +204,18 @@ stringToInt(const char * src)
         }
         CNInterface()->printf("[Error] Failed to convert to int: \"%s\"\n", src) ;
         return 0 ;
+}
+
+static double
+stringToFloat(const char * src)
+{
+        char * endptr ;
+        double val = strtod(yytext, &endptr) ;
+        if(endptr != NULL){
+                if(*endptr == '\0'){
+                        return val ;
+                }
+        }
+        CNInterface()->printf("[Error] Failed to convert to float: \"%s\"\n", src) ;
+        return 0.0 ;
 }
