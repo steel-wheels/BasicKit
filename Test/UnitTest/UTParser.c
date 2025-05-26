@@ -64,9 +64,15 @@ testParser(const char * lines[], struct CNValuePool * vpool)
         struct CNArrayValue * codes ;
         codes = CNGenerateCode(CNCodeListInCompiler(&compiler)) ;
         CNDumpByteCodeInArrayValue(codes) ;
-        CNReleaseValue(vpool, CNSuperClassOfArrayValue(codes)) ;
+
+        CNInterface()->printf("(%s) Execute code\n", __func__) ;
+        struct CNRegisterFile regfile ;
+        CNInitRegisterFile(&regfile, vpool) ;
+        CNExecuteByteCode(codes, &regfile, 0) ;
+        CNDeinitRegisterFile(&regfile) ;
 
         CNInterface()->printf("(%s) Free parser\n", __func__) ;
+        CNReleaseValue(vpool, CNSuperClassOfArrayValue(codes)) ;
         CNDeinitCompiler(&compiler) ;
         CNDeinitValueList(&codelist) ;
         return checkMemoryUsage(vpool) ;

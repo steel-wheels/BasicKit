@@ -17,15 +17,6 @@ CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, 
                 struct CNCodeValue * code = CNCastToCodeValue(CNValueInArray(codes, curidx)) ;
                 struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(code->atttribute) ;
 
-                /*
-                 typedef enum {
-                         CNNopCode,
-                         CNStopCode,
-                         CNLoadCode,
-                         CNPrintCode
-                 } CNOpCode ;
-                 */
-
                 index_t nextidx = curidx + 1 ;
                 switch((CNOpCode) attr.code){
                         case CNNopCode: {
@@ -37,26 +28,22 @@ CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, 
                         } break ;
                         case CNLoadCode: {
                                 const struct CNLoadOperand * operand = &(code->loadOperand) ;
-                                uint64_t         dstregid = operand->destinationRegId ;
+                                index_t          dstregid = (index_t) operand->destinationRegId ;
                                 struct CNValue * srcval   = operand->sourceValue ;
-                                CNSetValueToArray(vpool, codes, (unsigned int) dstregid, srcval) ;
-                                CNReleaseValue(vpool, srcval) ;
+                                CNSetValueToRegisterFile(regfile, dstregid, srcval) ;
                         } break ;
                         case CNPrintCode: {
                                 const struct CNCalcOperand * operand = &(code->calcOperand) ;
                                 index_t srcregid = (index_t) operand->source0RegId ;
-                                const struct CNValue * val ;
+                                struct CNValue * val ;
                                 if((val = CNValueInRegisterFile(regfile, srcregid))){
-
+                                        CNPrintValue(val) ;
+                                        CNInterface()->printf("\n") ;
                                 } else {
-
+                                        CNInterface()->printf("[Error] Undefined value") ;
                                 }
-
-                                //struct CNValue *
-                                //CNValueInRegisterFile(struct CNRegisterFile * src, uint32_t idx) ;
                         } break ;
                 }
-
 
                 /* update program counter */
                 curidx = nextidx ;
