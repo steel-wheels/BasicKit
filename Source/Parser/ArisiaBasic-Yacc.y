@@ -40,7 +40,21 @@ statement_list
         | statement_list statement
         ;
 
-statement: PRINT expression
+statement: LET IDENTIFIER '=' expression
+        {
+                struct CNStringValue * ident = $2.identifier ;
+                struct CNVariable      src   = $4.variable ;
+                uint64_t                dstid ;
+                if(!CNHasRegisterIdForIdentifier(&dstid, s_compiler, ident)){
+                        /* the identifier is not in register table */
+                        dstid = CNAllocateFreeRegisterId(s_compiler) ;
+                }
+                struct CNCodeValue * code = CNAllocateMoveCode(s_value_pool, dstid, src.registerId) ;
+                CNAppendCodeToCompiler(s_compiler, code) ;
+                CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+                CNReleaseValue(s_value_pool, CNSuperClassOfStringValue(ident)) ;
+        }
+        | PRINT expression
         {
                 struct CNVariable src = $2.variable ;
                 struct CNCodeValue * code = CNAllocatePrintCode(s_value_pool, src.registerId) ;

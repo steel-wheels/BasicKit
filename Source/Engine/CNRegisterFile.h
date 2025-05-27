@@ -37,6 +37,7 @@ CNGetFreeRegisterIdInRegisterFile(struct CNRegisterFile * src)
 void
 CNSetValueToRegisterFile(struct CNRegisterFile * src, index_t idx, struct CNValue * val) ;
 
+/* The return value will be NULL */
 struct CNValue *
 CNValueInRegisterFile(struct CNRegisterFile * src, index_t idx) ;
 

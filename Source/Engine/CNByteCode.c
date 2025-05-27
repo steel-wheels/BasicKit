@@ -33,6 +33,11 @@ CNPrintByteCode(const struct CNCodeValue * src)
                         dstnum  = 0 ;
                         srcnum  = 0 ;
                 } break ;
+                case CNMoveCode: {
+                        opname  = "move" ;
+                        dstnum  = 1 ;
+                        srcnum  = 1 ;
+                } break ;
                 case CNLoadCode: {
                         opname  = "load" ;
                         dstnum  = 1 ;

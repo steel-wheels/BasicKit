@@ -51,7 +51,7 @@ CNValueInRegisterFile(struct CNRegisterFile * src, index_t regid)
                 result = CNValueInArray(src->registerPages[pagenum], regoff) ;
         } else {
                 CNInterface()->error("[Error] Register ID overflow at %s\n", __func__) ;
-                result = CNSuperClassOfNullValue(CNAllocateNullValue()) ;
+                result = NULL ;
         }
         return result ;
 }

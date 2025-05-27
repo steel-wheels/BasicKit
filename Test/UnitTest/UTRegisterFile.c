@@ -62,11 +62,13 @@ static uint64_t
 getValue(struct CNRegisterFile * src, index_t idx)
 {
         struct CNValue * val = CNValueInRegisterFile(src, idx) ;
-
-        struct CNUnsignedIntValue * uval ;
-        if((uval = CNCastToUnsignedIntValue(val)) != NULL){
-                return uval->value ;
-        } else {
-                return (uint64_t) - 1 ;
+        if(val != NULL){
+                struct CNUnsignedIntValue * uval ;
+                uval = CNCastToUnsignedIntValue(val) ;
+                if(uval != NULL){
+                        return uval->value ;
+                }
         }
+        CNInterface()->printf("(%s) [Error] Unexpected index: %u\n", __func__, idx) ;
+        return -1 ;
 }

@@ -27,6 +27,7 @@ UTParser(struct CNValuePool * vpool)
                 "print \"A\"\n",
                 "print 1234\n",
                 "print 12.034\n",
+                "let a = 100\n",
                 ""
         } ;
 
