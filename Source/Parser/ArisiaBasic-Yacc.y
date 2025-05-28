@@ -1,10 +1,16 @@
 %{
 
+/*
+ * Reference: https://www.lysator.liu.se/c/ANSI-C-grammar-y.html
+ */
+
 #include "ArisiaBasic.h"
 #include "CNParser.h"
 #include "CNByteCode.h"
 #include "CNNumberValue.h"
+#include "CNStringValue.h"
 #include <stdio.h>
+#include <string.h>
 
 static void yyerror(const char * message) ;
 
@@ -13,9 +19,6 @@ static struct CNCompiler *      s_compiler   = NULL ;
 
 static struct CNVariable
 allocateStoreStatement(struct CNValue * src) ;
-
-static void
-undefinedVariableReferenceError(struct CNStringValue * ident, int lineno) ;
 
 void
 CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * vpool)
@@ -28,7 +31,9 @@ CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * v
 
 %locations
 
-%token  IDENTIFIER LET PRINT STRING
+%token  IDENTIFIER
+%token  LET PRINT STRING
+%token  OP_AND OP_OR
 %token  INT_VALUE FLOAT_VALUE _FALSE _TRUE
 
 %%
@@ -63,14 +68,25 @@ statement: LET IDENTIFIER '=' expression
         }
         ;
 
-expression: IDENTIFIER
+expression
+        : logical_and_expression
+        {
+                $$ = $1 ;
+        }
+        | expression OP_OR logical_and_expression
+        ;
+
+logical_and_expression
+        : IDENTIFIER
         {
                 struct CNStringValue *  ident = $1.identifier ;
                 uint64_t                regid ;
                 if(CNHasRegisterIdForIdentifier(&regid, s_compiler, ident)){
                         $$.variable = CNMakeVariable(CNStringType, regid) ;
                 } else {
-                        undefinedVariableReferenceError(ident, yyloc.first_line) ;
+                        unsigned int line = CNGetCurrentParsingLine() ;
+                        struct CNParseError error = CNMakeUndefinedVariableError(ident, line) ;
+                        CNPutParseErrorToCompiler(s_compiler, &error) ;
                 }
                 CNReleaseValue(s_value_pool, CNSuperClassOfStringValue(ident)) ;
         }
@@ -90,7 +106,6 @@ expression: IDENTIFIER
         {
                 $$.variable = allocateStoreStatement(CNSuperClassOfStringValue($1.string)) ;
         }
-        ;
 
 %%
 
@@ -112,14 +127,10 @@ allocateStoreStatement(struct CNValue * src)
 
 static void yyerror(const char * message)
 {
-        unsigned int line = CNGetCurrentParsingLine() ;
-        CNInterface()->error("[Error] %s at line %u\n", message, line) ;
-}
+        struct CNValuePool * vpool = s_compiler->valuePool ;
+        struct CNStringValue * str = CNAllocateStringValue(vpool, strlen(message), message) ;
 
-static void
-undefinedVariableReferenceError(struct CNStringValue * ident, int lineno)
-{
-        CNInterface()->printf("[Error] Undefined identifier \"") ;
-        CNPrintValue(CNSuperClassOfStringValue(ident)) ;
-        CNInterface()->printf("\" declared at line %d\n", lineno) ;
+        unsigned int line = CNGetCurrentParsingLine() ;
+        struct CNParseError error = CNMakeSyntaxError(str, line) ;
+        CNPutParseErrorToCompiler(s_compiler, &error) ;
 }

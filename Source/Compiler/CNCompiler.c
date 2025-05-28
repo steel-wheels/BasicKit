@@ -53,3 +53,11 @@ CNAppendCodeToCompiler(struct CNCompiler * dst, struct CNCodeValue * code)
 {
         CNAppendValueToValueList(&(dst->codeList), CNSuperClassOfCodeValue(code)) ;
 }
+
+void
+CNPutParseErrorToCompiler(struct CNCompiler * dst, struct CNParseError * src)
+{
+        CNPrintParseError(src) ;
+        CNDeinitParseError(dst->valuePool, src) ;
+}
+

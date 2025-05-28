@@ -13,6 +13,7 @@
 #import <BasicKit/CNStringValue.h>
 #import <BasicKit/CNCodeValue.h>
 #import <BasicKit/CNByteCode.h>
+#import <BasicKit/CNParseError.h>
 
 struct CNCompiler
 {
@@ -45,6 +46,9 @@ CNAllocateFreeRegisterId(struct CNCompiler * src) ;
 
 void
 CNAppendCodeToCompiler(struct CNCompiler * dst, struct CNCodeValue * code) ;
+
+void
+CNPutParseErrorToCompiler(struct CNCompiler * dst, struct CNParseError * src) ;
 
 static inline void
 CNDumpCodeInCompiler(struct CNCompiler * src)

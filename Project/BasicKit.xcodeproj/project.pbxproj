@@ -16,6 +16,10 @@
 		050C8DF82DE319F9009A693D /* CNByteExec.c in Sources */ = {isa = PBXBuildFile; fileRef = 050C8DF62DE319F9009A693D /* CNByteExec.c */; };
 		050C8DF92DE319F9009A693D /* CNByteExec.c in Sources */ = {isa = PBXBuildFile; fileRef = 050C8DF62DE319F9009A693D /* CNByteExec.c */; };
 		050C8DFA2DE319F9009A693D /* CNByteExec.h in Headers */ = {isa = PBXBuildFile; fileRef = 050C8DF52DE319F9009A693D /* CNByteExec.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		050C8DFD2DE60C58009A693D /* CNParseError.h in Headers */ = {isa = PBXBuildFile; fileRef = 050C8DFB2DE60C58009A693D /* CNParseError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		050C8DFE2DE60C58009A693D /* CNParseError.c in Sources */ = {isa = PBXBuildFile; fileRef = 050C8DFC2DE60C58009A693D /* CNParseError.c */; };
+		050C8DFF2DE60C58009A693D /* CNParseError.c in Sources */ = {isa = PBXBuildFile; fileRef = 050C8DFC2DE60C58009A693D /* CNParseError.c */; };
+		050C8E002DE60C58009A693D /* CNParseError.h in Headers */ = {isa = PBXBuildFile; fileRef = 050C8DFB2DE60C58009A693D /* CNParseError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0510FBA72D7C533600AEE906 /* BasicKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 0510FBA42D7C533600AEE906 /* BasicKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0510FBB22D7C680500AEE906 /* BasicKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 0510FBA42D7C533600AEE906 /* BasicKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		051D1A622DD7FE3700E42FBB /* CNCodeValue.c in Sources */ = {isa = PBXBuildFile; fileRef = 051D1A612DD7FE3700E42FBB /* CNCodeValue.c */; };
@@ -151,6 +155,8 @@
 		050BCF012D86D07E00C05DE3 /* CNValue.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNValue.c; sourceTree = "<group>"; };
 		050C8DF52DE319F9009A693D /* CNByteExec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNByteExec.h; sourceTree = "<group>"; };
 		050C8DF62DE319F9009A693D /* CNByteExec.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNByteExec.c; sourceTree = "<group>"; };
+		050C8DFB2DE60C58009A693D /* CNParseError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNParseError.h; sourceTree = "<group>"; };
+		050C8DFC2DE60C58009A693D /* CNParseError.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CNParseError.c; sourceTree = "<group>"; };
 		0510FBA42D7C533600AEE906 /* BasicKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BasicKit.h; sourceTree = "<group>"; };
 		051697E72D86705800628DF6 /* UnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		051D1A602DD7FE3700E42FBB /* CNCodeValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNCodeValue.h; sourceTree = "<group>"; };
@@ -316,6 +322,8 @@
 				051D1A702DD88D7800E42FBB /* ArisiaBasic.h */,
 				051D1A672DD86F0200E42FBB /* ArisiaBasic-Lex.l */,
 				051D1A6D2DD86F2300E42FBB /* ArisiaBasic-Yacc.y */,
+				050C8DFB2DE60C58009A693D /* CNParseError.h */,
+				050C8DFC2DE60C58009A693D /* CNParseError.c */,
 			);
 			path = Parser;
 			sourceTree = "<group>";
@@ -428,6 +436,7 @@
 				05B7B29B2DE0C41F00808133 /* CNParser.h in Headers */,
 				05B939592DE27EC300D4B620 /* CNCodeGenerator.h in Headers */,
 				050C8DFA2DE319F9009A693D /* CNByteExec.h in Headers */,
+				050C8E002DE60C58009A693D /* CNParseError.h in Headers */,
 				05B7B28A2DDCD8B200808133 /* CNCompiler.h in Headers */,
 				054072CB2DD03E4D009AB9C3 /* CNUtils.h in Headers */,
 				050BCF032D86D07E00C05DE3 /* CNValue.h in Headers */,
@@ -463,6 +472,7 @@
 				05B7B29A2DE0C41F00808133 /* CNParser.h in Headers */,
 				05B9395B2DE27EC300D4B620 /* CNCodeGenerator.h in Headers */,
 				050C8DF72DE319F9009A693D /* CNByteExec.h in Headers */,
+				050C8DFD2DE60C58009A693D /* CNParseError.h in Headers */,
 				05B7B28C2DDCD8B200808133 /* CNCompiler.h in Headers */,
 				054072CA2DD03E4D009AB9C3 /* CNUtils.h in Headers */,
 				051D1A722DD88D7800E42FBB /* ArisiaBasic.h in Headers */,
@@ -634,6 +644,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				050BCF022D86D07E00C05DE3 /* CNValue.c in Sources */,
+				050C8DFF2DE60C58009A693D /* CNParseError.c in Sources */,
 				053472922DCF4D8000ED4C3B /* CNDictionaryValue.c in Sources */,
 				054176C42DCCF34D00FC331F /* CNNumberValue.c in Sources */,
 				05B7B2892DDCD8B200808133 /* CNCompiler.c in Sources */,
@@ -673,6 +684,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				050BCF052D86D07E00C05DE3 /* CNValue.c in Sources */,
+				050C8DFE2DE60C58009A693D /* CNParseError.c in Sources */,
 				0534728F2DCF4D8000ED4C3B /* CNDictionaryValue.c in Sources */,
 				054176C72DCCF34D00FC331F /* CNNumberValue.c in Sources */,
 				05B7B28B2DDCD8B200808133 /* CNCompiler.c in Sources */,
