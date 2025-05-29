@@ -18,7 +18,9 @@ static struct CNValuePool *     s_value_pool = NULL ;
 static struct CNCompiler *      s_compiler   = NULL ;
 
 static struct CNVariable
-allocateStoreStatement(struct CNValue * src) ;
+allocateStoreStatement(CNValueType restype, struct CNValue * src) ;
+static struct CNVariable
+allocateCastExpression(CNValueType dsttype, const struct CNVariable * src) ;
 
 void
 CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * vpool)
@@ -74,6 +76,10 @@ expression
                 $$ = $1 ;
         }
         | expression OP_OR logical_and_expression
+        {
+                struct CNVariable lvar = allocateCastExpression(CNBooleanType, &($1.variable)) ;
+                struct CNVariable rvar = allocateCastExpression(CNBooleanType, &($3.variable)) ;
+        }
         ;
 
 logical_and_expression
@@ -87,6 +93,9 @@ logical_and_expression
                         unsigned int line = CNGetCurrentParsingLine() ;
                         struct CNParseError error = CNMakeUndefinedVariableError(ident, line) ;
                         CNPutParseErrorToCompiler(s_compiler, &error) ;
+
+                        regid = CNAllocateFreeRegisterId(s_compiler) ;
+                        $$.variable = CNMakeVariable(CNUnsignedIntType, regid) ;
                 }
                 CNReleaseValue(s_value_pool, CNSuperClassOfStringValue(ident)) ;
         }
@@ -94,17 +103,17 @@ logical_and_expression
         {
                 struct CNUnsignedIntValue * intval ;
                 intval = CNAllocateUnsignedIntValue(s_value_pool, $1.unsignedIntValue) ;
-                $$.variable = allocateStoreStatement(CNSuperClassOfUnsignedIntValue(intval)) ;
+                $$.variable = allocateStoreStatement(CNUnsignedIntType, CNSuperClassOfUnsignedIntValue(intval)) ;
         }
         | FLOAT_VALUE
         {
                 struct CNFloatValue * fltval ;
                 fltval = CNAllocateFloatValue(s_value_pool, $1.floatValue) ;
-                $$.variable = allocateStoreStatement(CNSuperClassOfFloatValue(fltval)) ;
+                $$.variable = allocateStoreStatement(CNFloatType, CNSuperClassOfFloatValue(fltval)) ;
         }
         | STRING
         {
-                $$.variable = allocateStoreStatement(CNSuperClassOfStringValue($1.string)) ;
+                $$.variable = allocateStoreStatement(CNStringType, CNSuperClassOfStringValue($1.string)) ;
         }
 
 %%
@@ -115,14 +124,29 @@ void CNStartParser(void)
 }
 
 static struct CNVariable
-allocateStoreStatement(struct CNValue * src)
+allocateStoreStatement(CNValueType vtype, struct CNValue * src)
 {
         uint64_t dstid = CNAllocateFreeRegisterId(s_compiler) ;
         struct CNCodeValue * code = CNAllocateLoadCode(s_value_pool, dstid, src) ;
         CNAppendCodeToCompiler(s_compiler, code) ;
         CNReleaseValue(s_value_pool, src) ;
         CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
-        return CNMakeVariable(CNStringType, dstid) ;
+        return CNMakeVariable(vtype, dstid) ;
+}
+
+static struct CNVariable
+allocateCastExpression(CNValueType dsttype, const struct CNVariable * src)
+{
+        CNValueType srctype = src->valueType ;
+        if(dsttype == srctype) {
+                return *src ;
+        } else {
+                /* Unexpected variable type */
+                unsigned int line = CNGetCurrentParsingLine() ;
+                struct CNParseError error = CNMakeCanNotCastError(dsttype, srctype, line) ;
+                CNPutParseErrorToCompiler(s_compiler, &error) ;
+                return *src ;
+        }
 }
 
 static void yyerror(const char * message)

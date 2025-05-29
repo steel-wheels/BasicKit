@@ -20,6 +20,7 @@ CNValueTypeName(CNValueType vtype)
         const char * result = "?" ;
         switch(vtype){
                 case CNNullType:        result = "null" ;       break ;
+                case CNBooleanType:     result = "bool" ;       break ;
                 case CNSignedIntType:   result = "int64" ;      break ;
                 case CNUnsignedIntType: result = "uint64" ;     break ;
                 case CNFloatType:       result = "double" ;     break ;

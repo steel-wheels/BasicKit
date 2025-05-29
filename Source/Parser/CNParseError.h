@@ -13,7 +13,8 @@
 typedef enum {
         CNNoParseError                  = 0,
         CNSyntaxError,
-        CNUndefinedVariableError
+        CNUndefinedVariableError,
+        CNCanNotCastError
 } CNParseErrorType ;
 
 struct CNSyntaxError {
@@ -24,12 +25,18 @@ struct CNUndefinedVariableError {
         struct CNStringValue *  identifier ;
 } ;
 
+struct CNCanNotCastError {
+        CNValueType             destinationType ;
+        CNValueType             sourceType ;
+} ;
+
 struct CNParseError {
         CNParseErrorType        type ;
         unsigned int            line ;
         union {
                 struct CNSyntaxError                    syntaxError ;
                 struct CNUndefinedVariableError         undefinedVariableError ;
+                struct CNCanNotCastError                canNotCastError ;
         } ; // no name union
 } ;
 
@@ -56,6 +63,20 @@ CNMakeUndefinedVariableError(struct CNStringValue * ident, unsigned int line)
                 .line           = line,
                 .undefinedVariableError = {
                         .identifier = ident
+                }
+        } ;
+        return result ;
+}
+
+static inline struct CNParseError
+CNMakeCanNotCastError(CNValueType dsttype, CNValueType srctype, unsigned int line)
+{
+        struct CNParseError result = {
+                .type           = CNCanNotCastError,
+                .line           = line,
+                .canNotCastError = {
+                        .destinationType        = dsttype,
+                        .sourceType             = srctype
                 }
         } ;
         return result ;

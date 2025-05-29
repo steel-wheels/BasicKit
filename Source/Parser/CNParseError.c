@@ -23,6 +23,9 @@ CNDeinitParseError(struct CNValuePool * vpool, struct CNParseError * dst)
                         CNReleaseValue(vpool,
                                        CNSuperClassOfStringValue((dst->undefinedVariableError).identifier)) ;
                 } break ;
+                case CNCanNotCastError: {
+                        /* nothing have to release */
+                } break ;
         }
 }
 
@@ -42,6 +45,12 @@ CNPrintParseError(const struct CNParseError * src)
                         CNInterface()->printf("[Error] Undefined variable \"") ;
                         CNPrintValue(CNSuperClassOfStringValue(src->undefinedVariableError.identifier)) ;
                         CNInterface()->printf("\" at line %u", src->line) ;
+                } break ;
+                case CNCanNotCastError: {
+                        const char * dstname = CNValueTypeName((src->canNotCastError).destinationType) ;
+                        const char * srcname = CNValueTypeName((src->canNotCastError).sourceType) ;
+                        CNInterface()->printf("[Error] Can not cast the value from %s to %s at libe %u",
+                                              srcname, dstname, src->line) ;
                 } break ;
         }
 }

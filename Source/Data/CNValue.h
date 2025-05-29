@@ -12,6 +12,7 @@
 
 typedef enum {
         CNNullType              = 0,
+        CNBooleanType,
         CNSignedIntType,
         CNUnsignedIntType,
         CNFloatType,

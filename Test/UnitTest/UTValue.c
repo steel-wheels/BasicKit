@@ -13,6 +13,8 @@ dumpInfo(void) ;
 static bool
 testNullValues(struct CNValuePool * vpool) ;
 static bool
+testBooleanValues(struct CNValuePool * vpool) ;
+static bool
 testIntValues(struct CNValuePool * vpool) ;
 
 bool
@@ -20,14 +22,16 @@ UTValue(struct CNValuePool * vpool)
 {
         dumpInfo() ;
         bool res0 = testNullValues(vpool) ;
-        bool res1 = testIntValues(vpool) ;
-        return res0 && res1 ;
+        bool res1 = testBooleanValues(vpool) ;
+        bool res2 = testIntValues(vpool) ;
+        return res0 && res1 && res2 ;
 }
 
 static void
 dumpInfo(void)
 {
         CNInterface()->printf("null value          : %u\n", sizeof(struct CNNullValue)) ;
+        CNInterface()->printf("boolean value       : %u\n", sizeof(struct CNBooleanValue)) ;
         CNInterface()->printf("signed int value    : %u\n", sizeof(struct CNSignedIntValue)) ;
         CNInterface()->printf("unsigned int value  : %u\n", sizeof(struct CNUnsignedIntValue)) ;
         CNInterface()->printf("float value         : %u\n", sizeof(struct CNFloatValue)) ;
@@ -45,6 +49,16 @@ testNullValues(struct CNValuePool * vpool)
         CNPrintValueAttribute(CNSuperClassOfNullValue(nval)) ;
         CNReleaseValue(vpool, CNSuperClassOfNullValue(nval)) ;
         CNRetainValue(CNSuperClassOfNullValue(nval)) ;
+        return checkMemoryUsage(vpool) ;
+}
+
+static bool
+testBooleanValues(struct CNValuePool * vpool)
+{
+        CNInterface()->printf("(%s) Boolean value test\n", __func__) ;
+        struct CNBooleanValue * bval = CNAllocateBooleanValue(vpool, true) ;
+        CNPrintValueAttribute(CNSuperClassOfBooleanValue(bval)) ;
+        CNReleaseValue(vpool, CNSuperClassOfBooleanValue(bval)) ;
         return checkMemoryUsage(vpool) ;
 }
 

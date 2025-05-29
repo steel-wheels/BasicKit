@@ -9,6 +9,7 @@
 #import <BasicKit/CNList.h>
 #import <BasicKit/CNValue.h>
 #import <BasicKit/CNNullValue.h>
+#import <BasicKit/CNBooleanValue.h>
 #import <BasicKit/CNNumberValue.h>
 #import <BasicKit/CNArrayValue.h>
 #import <BasicKit/CNStringValue.h>
