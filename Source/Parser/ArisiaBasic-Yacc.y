@@ -7,6 +7,7 @@
 #include "ArisiaBasic.h"
 #include "CNParser.h"
 #include "CNByteCode.h"
+#include "CNBooleanValue.h"
 #include "CNNumberValue.h"
 #include "CNStringValue.h"
 #include <stdio.h>
@@ -36,7 +37,7 @@ CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * v
 %token  IDENTIFIER
 %token  LET PRINT STRING
 %token  OP_AND OP_OR
-%token  INT_VALUE FLOAT_VALUE _FALSE _TRUE
+%token  INT_VALUE FLOAT_VALUE FALSE_VALUE TRUE_VALUE
 
 %%
 
@@ -98,6 +99,18 @@ logical_and_expression
                         $$.variable = CNMakeVariable(CNUnsignedIntType, regid) ;
                 }
                 CNReleaseValue(s_value_pool, CNSuperClassOfStringValue(ident)) ;
+        }
+        | TRUE_VALUE
+        {
+                struct CNBooleanValue * bval ;
+                bval = CNAllocateBooleanValue(s_value_pool, true) ;
+                $$.variable = allocateStoreStatement(CNBooleanType, CNSuperClassOfBooleanValue(bval)) ;
+        }
+        | FALSE_VALUE
+        {
+                struct CNBooleanValue * bval ;
+                bval = CNAllocateBooleanValue(s_value_pool, false) ;
+                $$.variable = allocateStoreStatement(CNBooleanType, CNSuperClassOfBooleanValue(bval)) ;
         }
         | INT_VALUE
         {
