@@ -79,7 +79,7 @@ static bool
 isReservedWord(int * rwordid, const char * str) ;
 
 static uint64_t
-stringToInt(const char * src) ;
+stringToInt(const char * src, int base) ;
 static double
 stringToFloat(const char * src) ;
 
@@ -98,6 +98,7 @@ SPACE           [ \t]
 IDENTIFIER      [a-zA-Z][_0-9a-zA-Z]*
 DIGIT           [0-9]
 NONZERO_DIGIT   [1-9]
+HEX             [0-9a-fA-F]
 
 %x CSTRING
 
@@ -120,7 +121,7 @@ NONZERO_DIGIT   [1-9]
 }
 
 {NONZERO_DIGIT}{DIGIT}* {
-        uint64_t val = stringToInt(yytext) ;
+        uint64_t val = stringToInt(yytext, 10) ;
         yylval->unsignedIntValue = val ;
         return INT_VALUE ;
 }
@@ -129,6 +130,12 @@ NONZERO_DIGIT   [1-9]
         double val = stringToFloat(yytext) ;
         yylval->floatValue = val ;
         return FLOAT_VALUE ;
+}
+
+0[xX]{HEX}+ {
+        uint64_t val = stringToInt(yytext, 16) ;
+        yylval->unsignedIntValue = val ;
+        return INT_VALUE ;
 }
 
 \| {
@@ -207,10 +214,10 @@ isReservedWord(int * rwordid, const char * str)
 }
 
 static uint64_t
-stringToInt(const char * src)
+stringToInt(const char * src, int base)
 {
         char * endptr ;
-        uint64_t val = strtoull(yytext, &endptr, 10) ;
+        uint64_t val = strtoull(yytext, &endptr, base) ;
         if(endptr != NULL){
                 if(*endptr == '\0'){
                         return val ;
