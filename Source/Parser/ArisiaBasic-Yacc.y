@@ -38,7 +38,7 @@ CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * v
 
 %token  IDENTIFIER
 %token  LET PRINT STRING
-%token  OP_AND OP_OR
+%token  OP_AND OP_OR OP_BIT_OR OP_BIT_AND OP_BIT_XOR
 %token  INT_VALUE FLOAT_VALUE FALSE_VALUE TRUE_VALUE
 
 %%
@@ -111,6 +111,23 @@ logical_and_expression
         ;
 
 inclusive_or_expression
+        : exclusive_or_expression
+        {
+                $$ = $1 ;
+        }
+        | inclusive_or_expression OP_BIT_OR exclusive_or_expression
+        {
+                struct CNVariable lvar = allocateCastExpression(CNUnsignedIntType, &($1.variable)) ;
+                struct CNVariable rvar = allocateCastExpression(CNUnsignedIntType, &($3.variable)) ;
+                uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+                struct CNCodeValue * code = CNAllocateBitOrCode(s_value_pool, dstid, lvar.registerId, rvar.registerId) ;
+                CNAppendCodeToCompiler(s_compiler, code) ;
+                CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+                $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
+        }
+        ;
+
+exclusive_or_expression
         : IDENTIFIER
         {
                 struct CNStringValue *  ident = $1.identifier ;

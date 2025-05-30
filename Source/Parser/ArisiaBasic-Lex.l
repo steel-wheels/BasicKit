@@ -131,6 +131,18 @@ NONZERO_DIGIT   [1-9]
         return FLOAT_VALUE ;
 }
 
+\| {
+        return OP_BIT_OR ;
+}
+
+& {
+        return OP_BIT_AND ;
+}
+
+\^ {
+        return OP_BIT_XOR ;
+}
+
 \n {
         s_current_line += 1 ;
 }

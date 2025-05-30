@@ -117,6 +117,18 @@ CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, 
                                 CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfBooleanValue(dstval)) ;
                                 CNReleaseValue(vpool, CNSuperClassOfBooleanValue(dstval)) ;
                         } break ;
+                        case CNBitOrCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNUnsignedIntValue * src0val = CNCastToUnsignedIntValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNUnsignedIntValue * src1val = CNCastToUnsignedIntValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                uint64_t result = src0val->value | src1val->value ;
+                                struct CNUnsignedIntValue * dstval  = CNAllocateUnsignedIntValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfUnsignedIntValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfUnsignedIntValue(dstval)) ;
+                        } break ;
                         case CNPrintCode: {
                                 const struct CNCalcOperand * operand = &(code->calcOperand) ;
                                 index_t srcregid = (index_t) operand->source0RegId ;

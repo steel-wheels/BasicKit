@@ -37,6 +37,12 @@ UTParser(struct CNValuePool * vpool)
                 "let b = false\n",
                 "let c = a OR b\n",
                 "let d = a AND b\n",
+                "let e = 100\n",
+                "let f = 200\n",
+                "let g = e | f\n",
+                "print c\n",
+                "print d\n",
+                "print g\n",
                 ""
         } ;
 
