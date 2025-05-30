@@ -15,6 +15,21 @@
 #import <BasicKit/CNByteCode.h>
 #import <BasicKit/CNParseError.h>
 
+struct CNVariable {
+        CNValueType     valueType ;
+        uint64_t        registerId ;
+} ;
+
+static inline struct CNVariable
+CNMakeVariable(CNValueType vtype, uint64_t regid)
+{
+        struct CNVariable result = {
+                .valueType      = vtype,
+                .registerId     = regid
+        } ;
+        return result ;
+}
+
 struct CNCompiler
 {
         struct CNValuePool *            valuePool ;
@@ -39,7 +54,10 @@ CNCodeListInCompiler(struct CNCompiler * src)
 }
 
 bool
-CNHasRegisterIdForIdentifier(uint64_t * regid, struct CNCompiler * src, struct CNStringValue * ident) ;
+CNHasRegisterIdForIdentifier(struct CNVariable * dstvar, struct CNCompiler * src, struct CNStringValue * ident) ;
+
+void
+CNSetRegisterIdForIdentifier(struct CNCompiler * dst, const struct CNVariable * srcvar, struct CNStringValue * ident) ;
 
 uint64_t
 CNAllocateFreeRegisterId(struct CNCompiler * src) ;

@@ -32,7 +32,15 @@ UTParser(struct CNValuePool * vpool)
                 ""
         } ;
 
+        const char * lines1[] = {
+                "let a = true\n",
+                "let b = false\n",
+                "let c = a OR b\n",
+                ""
+        } ;
+
         result &= testParser(lines0, vpool) ;
+        result &= testParser(lines1, vpool) ;
 
         CNDeinitLexicalParser() ;
 

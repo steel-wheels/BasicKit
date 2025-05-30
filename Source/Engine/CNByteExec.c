@@ -6,6 +6,8 @@
  */
 
 #include "CNByteExec.h"
+#include "CNBooleanValue.h"
+#include "CNNumberValue.h"
 
 void
 CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, index_t startidx)
@@ -15,6 +17,7 @@ CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, 
         while(!dostop){
                 struct CNCodeValue * code = CNCastToCodeValue(CNValueInArray(codes, curidx)) ;
                 struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(code->atttribute) ;
+                struct CNValuePool * vpool = regfile->valuePool ;
 
                 index_t nextidx = curidx + 1 ;
                 switch((CNOpCode) attr.code){
@@ -36,11 +39,71 @@ CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, 
                                         CNInterface()->printf("[Error] No source value") ;
                                 }
                         } break ;
+                        case CNConvU2ICode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t srcid = (index_t) operand->source0RegId ;
+                                index_t dstid = (index_t) operand->destinationRegId ;
+                                struct CNUnsignedIntValue * srcval = CNCastToUnsignedIntValue(CNValueInRegisterFile(regfile, srcid)) ;
+                                struct CNSignedIntValue *   dstval = CNAllocateSignedIntValue(vpool, (int64_t) srcval->value) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfSignedIntValue(dstval)) ;
+                        } break ;
+                        case CNConvU2FCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t srcid = (index_t) operand->source0RegId ;
+                                index_t dstid = (index_t) operand->destinationRegId ;
+                                struct CNUnsignedIntValue * srcval = CNCastToUnsignedIntValue(CNValueInRegisterFile(regfile, srcid)) ;
+                                struct CNFloatValue *   dstval = CNAllocateFloatValue(vpool, (double) srcval->value) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfFloatValue(dstval)) ;
+                        } break ;
+                        case CNConvI2UCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t srcid = (index_t) operand->source0RegId ;
+                                index_t dstid = (index_t) operand->destinationRegId ;
+                                struct CNSignedIntValue * srcval = CNCastToSignedIntValue(CNValueInRegisterFile(regfile, srcid)) ;
+                                struct CNUnsignedIntValue * dstval = CNAllocateUnsignedIntValue(vpool, (uint64_t) srcval->value) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfUnsignedIntValue(dstval)) ;
+                        } break ;
+                        case CNConvI2FCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t srcid = (index_t) operand->source0RegId ;
+                                index_t dstid = (index_t) operand->destinationRegId ;
+                                struct CNSignedIntValue * srcval = CNCastToSignedIntValue(CNValueInRegisterFile(regfile, srcid)) ;
+                                struct CNFloatValue *   dstval = CNAllocateFloatValue(vpool, (double) srcval->value) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfFloatValue(dstval)) ;
+                        } break ;
+                        case CNConvF2ICode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t srcid = (index_t) operand->source0RegId ;
+                                index_t dstid = (index_t) operand->destinationRegId ;
+                                struct CNFloatValue * srcval = CNCastToFloatValue(CNValueInRegisterFile(regfile, srcid)) ;
+                                struct CNSignedIntValue * dstval = CNAllocateSignedIntValue(vpool, (int64_t) srcval->value) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfSignedIntValue(dstval)) ;
+                        } break ;
+                        case CNConvF2UCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t srcid = (index_t) operand->source0RegId ;
+                                index_t dstid = (index_t) operand->destinationRegId ;
+                                struct CNFloatValue * srcval = CNCastToFloatValue(CNValueInRegisterFile(regfile, srcid)) ;
+                                struct CNUnsignedIntValue *   dstval = CNAllocateUnsignedIntValue(vpool, (uint64_t) srcval->value) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfUnsignedIntValue(dstval)) ;
+                        } break ;
                         case CNLoadCode: {
                                 const struct CNLoadOperand * operand = &(code->loadOperand) ;
                                 index_t          dstregid = (index_t) operand->destinationRegId ;
                                 struct CNValue * srcval   = operand->sourceValue ;
                                 CNSetValueToRegisterFile(regfile, dstregid, srcval) ;
+                        } break ;
+                        case CNLogicalOrCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNBooleanValue * src0val = CNCastToBooleanValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNBooleanValue * src1val = CNCastToBooleanValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                bool result = src0val->value || src1val->value ;
+                                struct CNBooleanValue * dstval  = CNAllocateBooleanValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfBooleanValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfBooleanValue(dstval)) ;
                         } break ;
                         case CNPrintCode: {
                                 const struct CNCalcOperand * operand = &(code->calcOperand) ;

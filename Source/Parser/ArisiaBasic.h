@@ -16,21 +16,6 @@
 
 typedef void *  yyscan_t ;
 
-struct CNVariable {
-        CNValueType     valueType ;
-        uint64_t        registerId ;
-} ;
-
-static inline struct CNVariable
-CNMakeVariable(CNValueType vtype, uint64_t regid)
-{
-        struct CNVariable result = {
-                .valueType      = vtype,
-                .registerId     = regid
-        } ;
-        return result ;
-}
-
 typedef union {
         struct CNVariable       variable ;
         struct CNStringValue *  identifier ;

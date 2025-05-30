@@ -10,6 +10,9 @@
 
 #import <BasicKit/CNType.h>
 
+/* The value type must be under 0x100 */
+#define CNValueTypeMaskBits     8
+#define CNValueTypeMask         0xff
 typedef enum {
         CNNullType              = 0,
         CNBooleanType,

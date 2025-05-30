@@ -8,6 +8,100 @@
 #import <BasicKit/CNByteCode.h>
 #import <BasicKit/CNInterface.h>
 
+struct CNCodeValue *
+CNAllocateConvertCode(struct CNValuePool * vpool, CNValueType dtype, uint64_t dstreg,
+                      CNValueType stype, uint64_t srcreg)
+{
+        CNOpCode opcode = CNNopCode ;
+        switch(dtype){
+                case CNUnsignedIntType: {
+                        switch(stype){
+                                case CNSignedIntType: {
+                                        opcode = CNConvI2UCode ;
+                                } break ;
+                                case CNFloatType: {
+                                        opcode = CNConvF2UCode ;
+                                } break ;
+                                case CNUnsignedIntType:
+                                case CNNullType:
+                                case CNBooleanType:
+                                case CNStringType:
+                                case CNArrayType:
+                                case CNDictionaryType:
+                                case CNCodeType: {
+                                        CNInterface()->error("[Error] Unexpected source type: %u\n", stype) ;
+                                        return NULL ;
+                                } break ;
+                        }
+                } break ;
+                case CNSignedIntType: {
+                        switch(stype){
+                                case CNUnsignedIntType: {
+                                        opcode = CNConvU2ICode ;
+                                } break ;
+                                case CNFloatType: {
+                                        opcode = CNConvF2ICode ;
+                                } break ;
+                                case CNSignedIntType:
+                                case CNNullType:
+                                case CNBooleanType:
+                                case CNStringType:
+                                case CNArrayType:
+                                case CNDictionaryType:
+                                case CNCodeType: {
+                                        CNInterface()->error("[Error] Unexpected source type: %u\n", stype) ;
+                                        return NULL ;
+                                } break ;
+                        }
+                } break ;
+                case CNFloatType: {
+                        switch(stype){
+                                case CNUnsignedIntType: {
+                                        opcode = CNConvU2FCode ;
+                                } break ;
+                                case CNSignedIntType: {
+                                        opcode = CNConvI2FCode ;
+                                } break ;
+                                case CNFloatType:
+                                case CNNullType:
+                                case CNBooleanType:
+                                case CNStringType:
+                                case CNArrayType:
+                                case CNDictionaryType:
+                                case CNCodeType: {
+                                        CNInterface()->error("[Error] Unexpected source type: %u\n", stype) ;
+                                        return NULL ;
+                                } break ;
+                        }
+                } break ;
+                case CNNullType:
+                case CNBooleanType:
+                case CNStringType:
+                case CNArrayType:
+                case CNDictionaryType:
+                case CNCodeType: {
+                        CNInterface()->error("[Error] Unexpected destination type: %u\n", dtype) ;
+                        return NULL ;
+                } break ;
+        }
+        /*
+         CNNullType              = 0,
+         CNBooleanType,
+         CNSignedIntType,
+         CNUnsignedIntType,
+         CNFloatType,
+         CNStringType,
+         CNArrayType,
+         CNDictionaryType,
+         CNCodeType
+         */
+
+        struct CNCodeValue * result = NULL ;
+
+
+        return result ;
+}
+
 void
 CNPrintByteCode(const struct CNCodeValue * src)
 {
@@ -42,6 +136,41 @@ CNPrintByteCode(const struct CNCodeValue * src)
                         opname  = "load" ;
                         dstnum  = 1 ;
                         srcnum  = 1 ;
+                } break ;
+                case CNConvU2ICode: {
+                        opname  = "conv_u2i" ;
+                        dstnum  = 1 ;
+                        srcnum  = 1 ;
+                } break ;
+                case CNConvU2FCode: {
+                        opname  = "conv_u2f" ;
+                        dstnum  = 1 ;
+                        srcnum  = 1 ;
+                } break ;
+                case CNConvI2UCode: {
+                        opname  = "conv_i2u" ;
+                        dstnum  = 1 ;
+                        srcnum  = 1 ;
+                } break ;
+                case CNConvI2FCode: {
+                        opname  = "conv_i2f" ;
+                        dstnum  = 1 ;
+                        srcnum  = 1 ;
+                } break ;
+                case CNConvF2ICode: {
+                        opname  = "conv_f2i" ;
+                        dstnum  = 1 ;
+                        srcnum  = 1 ;
+                } break ;
+                case CNConvF2UCode: {
+                        opname  = "conv_f2u" ;
+                        dstnum  = 1 ;
+                        srcnum  = 1 ;
+                } break ;
+                case CNLogicalOrCode: {
+                        opname  = "logical_or" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
                 } break ;
                 case CNPrintCode: {
                         opname  = "print" ;
