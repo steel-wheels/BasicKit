@@ -16,14 +16,23 @@
 typedef enum {
         CNNullType              = 0,
         CNBooleanType,
-        CNSignedIntType,
         CNUnsignedIntType,
+        CNSignedIntType,
         CNFloatType,
         CNStringType,
         CNArrayType,
         CNDictionaryType,
         CNCodeType
 } CNValueType ;
+
+static inline bool
+CNIsNumberValueType(CNValueType vtype)
+{
+        return (vtype == CNSignedIntType) || (vtype == CNUnsignedIntType) || (vtype == CNFloatType) ;
+}
+
+bool
+CNUnionValueType(CNValueType * dst, CNValueType src0, CNValueType src1) ;
 
 struct CNValueAttribute {
         bool            isFixed ;               // [63:63]

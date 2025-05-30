@@ -172,6 +172,11 @@ CNPrintByteCode(const struct CNCodeValue * src)
                         dstnum  = 1 ;
                         srcnum  = 2 ;
                 } break ;
+                case CNLogicalAndCode: {
+                        opname  = "logical_and" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
                 case CNPrintCode: {
                         opname  = "print" ;
                         dstnum  = 0 ;

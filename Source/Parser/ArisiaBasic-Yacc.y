@@ -94,6 +94,23 @@ expression
         ;
 
 logical_and_expression
+        : inclusive_or_expression
+        {
+                $$ = $1 ;
+        }
+        | logical_and_expression OP_AND inclusive_or_expression
+        {
+                struct CNVariable lvar = allocateCastExpression(CNBooleanType, &($1.variable)) ;
+                struct CNVariable rvar = allocateCastExpression(CNBooleanType, &($3.variable)) ;
+                uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+                struct CNCodeValue * code = CNAllocateLogicalAndCode(s_value_pool, dstid, lvar.registerId, rvar.registerId) ;
+                CNAppendCodeToCompiler(s_compiler, code) ;
+                CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+                $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
+        }
+        ;
+
+inclusive_or_expression
         : IDENTIFIER
         {
                 struct CNStringValue *  ident = $1.identifier ;

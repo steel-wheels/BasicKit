@@ -14,6 +14,26 @@
 #import <BasicKit/CNDictionaryValue.h>
 #import <BasicKit/CNInterface.h>
 
+#define MAX(A, B)       ((A) >= (B) ? (A) : (B))
+
+bool
+CNUnionValueType(CNValueType * dst, CNValueType src0, CNValueType src1)
+{
+        if(src0 == src1){
+                *dst = src0 ;
+                return true ;
+        }
+        if(src0 == CNStringType || src1 == CNStringType){
+                *dst = CNStringType ;
+                return true ;
+        }
+        if(CNIsNumberValueType(src0) || CNIsNumberValueType(src1)) {
+                *dst = MAX(src0, src1) ;
+                return true ;
+        }
+        return false ;
+}
+
 const char *
 CNValueTypeName(CNValueType vtype)
 {

@@ -105,6 +105,18 @@ CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, 
                                 CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfBooleanValue(dstval)) ;
                                 CNReleaseValue(vpool, CNSuperClassOfBooleanValue(dstval)) ;
                         } break ;
+                        case CNLogicalAndCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNBooleanValue * src0val = CNCastToBooleanValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNBooleanValue * src1val = CNCastToBooleanValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                bool result = src0val->value && src1val->value ;
+                                struct CNBooleanValue * dstval  = CNAllocateBooleanValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfBooleanValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfBooleanValue(dstval)) ;
+                        } break ;
                         case CNPrintCode: {
                                 const struct CNCalcOperand * operand = &(code->calcOperand) ;
                                 index_t srcregid = (index_t) operand->source0RegId ;
