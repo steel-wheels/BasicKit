@@ -6,11 +6,7 @@
 ## Overview
 * Based on BASIC programming language
 
-## Constant variables
-
-|Name           |Type   |description                    |
-|---            |---    |---                            |
-|newline        |string |Newline (line feed) code       |
+## Data types
 
 ## Immediate variable
 |Type           |Description    |

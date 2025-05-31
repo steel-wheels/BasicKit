@@ -39,6 +39,9 @@ struct CNCompiler
 
         /* List of */
         struct CNValueList              codeList ;
+
+        /* Error */
+        unsigned int                    errorCount ;
 } ;
 
 void

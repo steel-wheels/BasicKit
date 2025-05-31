@@ -40,6 +40,7 @@ UTParser(struct CNValuePool * vpool)
                 "let e = 0x100\n",
                 "let f = 0x200\n",
                 "let g = e | f\n",
+                "let h = e ^ f\n",
                 "print c\n",
                 "print d\n",
                 "print g\n",
@@ -57,6 +58,8 @@ UTParser(struct CNValuePool * vpool)
 static bool
 testParser(const char * lines[], struct CNValuePool * vpool)
 {
+        bool result = true ;
+
         CNInterface()->printf("(%s) Test parser\n", __func__) ;
         dumpMemoryUsage(vpool) ;
         struct CNValueList codelist ;
@@ -78,22 +81,28 @@ testParser(const char * lines[], struct CNValuePool * vpool)
         CNInterface()->printf("(%s) Dump program\n", __func__) ;
         CNDumpCodeInCompiler(&compiler) ;
 
-        CNInterface()->printf("(%s) Generate code\n", __func__) ;
-        struct CNArrayValue * codes ;
-        codes = CNGenerateCode(CNCodeListInCompiler(&compiler)) ;
-        CNDumpByteCodeInArrayValue(codes) ;
+        if(compiler.errorCount == 0){
+                CNInterface()->printf("(%s) Generate code\n", __func__) ;
+                struct CNArrayValue * codes ;
+                codes = CNGenerateCode(CNCodeListInCompiler(&compiler)) ;
+                CNDumpByteCodeInArrayValue(codes) ;
 
-        CNInterface()->printf("(%s) Execute code\n", __func__) ;
-        struct CNRegisterFile regfile ;
-        CNInitRegisterFile(&regfile, vpool) ;
-        CNExecuteByteCode(codes, &regfile, 0) ;
-        CNDeinitRegisterFile(&regfile) ;
+                CNInterface()->printf("(%s) Execute code\n", __func__) ;
+                struct CNRegisterFile regfile ;
+                CNInitRegisterFile(&regfile, vpool) ;
+                CNExecuteByteCode(codes, &regfile, 0) ;
+                CNDeinitRegisterFile(&regfile) ;
+
+                CNReleaseValue(vpool, CNSuperClassOfArrayValue(codes)) ;
+        } else {
+                CNInterface()->printf("(%s) [Error] Failed to compile\n", __func__) ;
+                result = false ;
+        }
 
         CNInterface()->printf("(%s) Free parser\n", __func__) ;
-        CNReleaseValue(vpool, CNSuperClassOfArrayValue(codes)) ;
         CNDeinitCompiler(&compiler) ;
         CNDeinitValueList(&codelist) ;
-        return checkMemoryUsage(vpool) ;
+        return checkMemoryUsage(vpool) && result ;
 }
 
 static void

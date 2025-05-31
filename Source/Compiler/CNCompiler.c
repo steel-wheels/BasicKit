@@ -18,6 +18,7 @@ CNInitCompiler(struct CNCompiler * dst, struct CNValuePool * vpool)
         dst->next_free_regid    = 0 ;
         dst->identifierTable    = CNAllocateDictionaryValue(vpool) ;
         CNInitValueList(&(dst->codeList), vpool) ;
+        dst->errorCount         = 0 ;
 }
 
 void
@@ -82,6 +83,7 @@ CNAppendCodeToCompiler(struct CNCompiler * dst, struct CNCodeValue * code)
 void
 CNPutParseErrorToCompiler(struct CNCompiler * dst, struct CNParseError * src)
 {
+        dst->errorCount += 1 ;
         CNPrintParseError(src) ;
         CNDeinitParseError(dst->valuePool, src) ;
 }
