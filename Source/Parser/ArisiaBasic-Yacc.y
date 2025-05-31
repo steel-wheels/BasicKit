@@ -145,6 +145,23 @@ exclusive_or_expression
         ;
 
 and_expression
+        : equarilty_expression
+        {
+                $$ = $1 ;
+        }
+        | and_expression OP_BIT_AND equarilty_expression
+        {
+                struct CNVariable lvar = allocateCastExpression(CNUnsignedIntType, &($1.variable)) ;
+                struct CNVariable rvar = allocateCastExpression(CNUnsignedIntType, &($3.variable)) ;
+                uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+                struct CNCodeValue * code = CNAllocateBitAndCode(s_value_pool, dstid, lvar.registerId, rvar.registerId) ;
+                CNAppendCodeToCompiler(s_compiler, code) ;
+                CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+                $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
+        }
+        ;
+
+equarilty_expression
         : IDENTIFIER
         {
                 struct CNStringValue *  ident = $1.identifier ;

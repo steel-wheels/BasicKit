@@ -177,6 +177,11 @@ CNPrintByteCode(const struct CNCodeValue * src)
                         dstnum  = 1 ;
                         srcnum  = 2 ;
                 } break ;
+                case CNBitAndCode: {
+                        opname  = "bit_and" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
                 case CNBitOrCode: {
                         opname  = "bit_or" ;
                         dstnum  = 1 ;

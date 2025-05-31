@@ -39,11 +39,15 @@ UTParser(struct CNValuePool * vpool)
                 "let d = a AND b\n",
                 "let e = 0x100\n",
                 "let f = 0x200\n",
+                "let j = 0b00100001\n",
                 "let g = e | f\n",
                 "let h = e ^ f\n",
+                "let i = e & f\n",
                 "print c\n",
                 "print d\n",
                 "print g\n",
+                "print h\n",
+                "print i\n",
                 ""
         } ;
 

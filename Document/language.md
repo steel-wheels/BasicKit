@@ -9,11 +9,11 @@
 ## Data types
 
 ## Immediate variable
-|Type           |Description    |
+|Format         |Description    |
 |---            |---            |
 |Decimal        |100            |
 |Hex            |0x64           |
-
+|Binary         |0b1010         |
 
 ## Statement
 

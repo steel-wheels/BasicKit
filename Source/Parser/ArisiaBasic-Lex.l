@@ -80,6 +80,8 @@ isReservedWord(int * rwordid, const char * str) ;
 
 static uint64_t
 stringToInt(const char * src, int base) ;
+static uint64_t
+binaryToInt(const char * src) ;
 static double
 stringToFloat(const char * src) ;
 
@@ -99,6 +101,7 @@ IDENTIFIER      [a-zA-Z][_0-9a-zA-Z]*
 DIGIT           [0-9]
 NONZERO_DIGIT   [1-9]
 HEX             [0-9a-fA-F]
+BINARY          [0-1]
 
 %x CSTRING
 
@@ -134,6 +137,12 @@ HEX             [0-9a-fA-F]
 
 0[xX]{HEX}+ {
         uint64_t val = stringToInt(yytext, 16) ;
+        yylval->unsignedIntValue = val ;
+        return INT_VALUE ;
+}
+
+0[bB]{BINARY}+ {
+        uint64_t val = binaryToInt(yytext) ;
         yylval->unsignedIntValue = val ;
         return INT_VALUE ;
 }
@@ -225,6 +234,18 @@ stringToInt(const char * src, int base)
         }
         CNInterface()->printf("[Error] Failed to convert to int: \"%s\"\n", src) ;
         return 0 ;
+}
+
+static uint64_t
+binaryToInt(const char * src)
+{
+        uint64_t result = 0 ;
+        const char * ptr = src + 2 ; // skip "0b"
+        char c ;
+        for( ; (c = *ptr) != '\0' ; ptr++){
+                result = (result << 1) | (c - '0') ;
+        }
+        return result ;
 }
 
 static double
