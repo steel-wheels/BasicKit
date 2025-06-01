@@ -84,22 +84,37 @@ CNAllocateConvertCode(struct CNValuePool * vpool, CNValueType dtype, uint64_t ds
                         return NULL ;
                 } break ;
         }
-        /*
-         CNNullType              = 0,
-         CNBooleanType,
-         CNSignedIntType,
-         CNUnsignedIntType,
-         CNFloatType,
-         CNStringType,
-         CNArrayType,
-         CNDictionaryType,
-         CNCodeType
-         */
+        return CNAllocateCalcCodeValue(vpool, opcode, dstreg, srcreg, 0) ;
+}
 
-        struct CNCodeValue * result = NULL ;
-
-
-        return result ;
+struct CNCodeValue *
+CNAllocateEqualCode(struct CNValuePool * vpool, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg)
+{
+        CNOpCode opcode = CNNopCode ;
+        switch(srctype){
+                case CNBooleanType: {
+                        opcode = CNEqualBoolCode ;
+                } break ;
+                case CNUnsignedIntType: {
+                        opcode = CNEqualUnsignedIntCode ;
+                } break ;
+                case CNSignedIntType: {
+                        opcode = CNEqualSignedIntCode ;
+                } break ;
+                case CNFloatType: {
+                        opcode = CNEqualFloatCode ;
+                } break ;
+                case CNStringType: {
+                        opcode = CNEqualStringCode ;
+                } break ;
+                case CNNullType:
+                case CNArrayType:
+                case CNDictionaryType:
+                case CNCodeType: {
+                        return NULL ;
+                } break ;
+        }
+        return CNAllocateCalcCodeValue(vpool, opcode, dstreg, src0reg, src1reg) ;
 }
 
 void
@@ -189,6 +204,31 @@ CNPrintByteCode(const struct CNCodeValue * src)
                 } break ;
                 case CNBitXorCode: {
                         opname  = "bit_xor" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNEqualBoolCode: {
+                        opname  = "equal_bool" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNEqualSignedIntCode: {
+                        opname  = "equal_int" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNEqualUnsignedIntCode: {
+                        opname  = "equal_uint" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNEqualFloatCode: {
+                        opname  = "equal_float" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNEqualStringCode: {
+                        opname  = "equal_str" ;
                         dstnum  = 1 ;
                         srcnum  = 2 ;
                 } break ;

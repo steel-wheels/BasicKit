@@ -147,6 +147,10 @@ BINARY          [0-1]
         return INT_VALUE ;
 }
 
+== {
+        return OP_EQUAL ;
+}
+
 \| {
         return OP_BIT_OR ;
 }

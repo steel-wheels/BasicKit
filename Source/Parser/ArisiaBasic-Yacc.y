@@ -25,6 +25,10 @@ allocateCastExpression(CNValueType dsttype, const struct CNVariable * src) ;
 static struct CNVariable
 allocateConvertStatement(CNValueType dsttype, const struct CNVariable * src) ;
 
+static bool
+unionValueType(struct CNVariable * dst0, struct CNVariable * dst1,
+               const struct CNVariable * src0, const struct CNVariable * src1) ;
+
 void
 CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * vpool)
 {
@@ -38,7 +42,7 @@ CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * v
 
 %token  IDENTIFIER
 %token  LET PRINT STRING
-%token  OP_AND OP_OR OP_BIT_OR OP_BIT_AND OP_BIT_XOR
+%token  OP_AND OP_OR OP_BIT_OR OP_BIT_AND OP_BIT_XOR OP_EQUAL OP_NOT_EQUAL
 %token  INT_VALUE FLOAT_VALUE FALSE_VALUE TRUE_VALUE
 
 %%
@@ -162,6 +166,28 @@ and_expression
         ;
 
 equarilty_expression
+        : relational_expression
+        {
+                $$ = $1 ;
+        }
+        | equarilty_expression OP_EQUAL relational_expression
+        {
+                struct CNVariable lvar, rvar ;
+                if(unionValueType(&lvar, &rvar, &($1.variable), &($3.variable))){
+                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
+                        struct CNCodeValue * code = CNAllocateEqualCode(s_value_pool, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
+                        CNAppendCodeToCompiler(s_compiler, code) ;
+                        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+                        $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
+                } else {
+                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+                        $$.variable = CNMakeVariable($1.variable.valueType, dstid) ;
+                }
+        }
+        | equarilty_expression OP_NOT_EQUAL relational_expression
+        ;
+
+relational_expression
         : IDENTIFIER
         {
                 struct CNStringValue *  ident = $1.identifier ;
@@ -332,6 +358,7 @@ allocateCastExpression(CNValueType dsttype, const struct CNVariable * src)
                                 case CNUnsignedIntType:
                                 case CNSignedIntType:
                                 case CNStringType: {
+                                        CNInterface()->printf("****** %s\n", __func__) ;
                                         result = allocateConvertStatement(dsttype, src) ;
                                         succeeded = true ;
                                 } break ;
@@ -421,11 +448,29 @@ static struct CNVariable
 allocateConvertStatement(CNValueType dsttype, const struct CNVariable * src)
 {
         uint64_t dstreg = CNAllocateFreeRegisterId(s_compiler) ;
-        struct CNCodeValue * code = CNAllocateConvertCode(s_value_pool, dsttype, dstreg,
-                              src->valueType, src->registerId) ;
+        struct CNCodeValue * code = CNAllocateConvertCode(s_value_pool, dsttype, dstreg, src->valueType, src->registerId) ;
         CNAppendCodeToCompiler(s_compiler, code) ;
         CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
         return CNMakeVariable(dsttype, dstreg) ;
+}
+
+static bool
+unionValueType(struct CNVariable * dst0, struct CNVariable * dst1,
+               const struct CNVariable * src0, const struct CNVariable * src1)
+{
+        CNValueType utype ;
+        CNValueType ltype = src0->valueType ;
+        CNValueType rtype = src1->valueType ;
+        if(CNUnionValueType(&utype, ltype, rtype)){
+                *dst0 = allocateCastExpression(utype, src0) ;
+                *dst1 = allocateCastExpression(utype, src1) ;
+                return true ;
+        } else {
+                unsigned int line = CNGetCurrentParsingLine() ;
+                struct CNParseError error = CNMakeUnmatchedTypesError(ltype, rtype, line) ;
+                CNPutParseErrorToCompiler(s_compiler, &error) ;
+                return false ;
+        }
 }
 
 static void yyerror(const char * message)

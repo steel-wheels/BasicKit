@@ -23,7 +23,8 @@ CNDeinitParseError(struct CNValuePool * vpool, struct CNParseError * dst)
                         CNReleaseValue(vpool,
                                        CNSuperClassOfStringValue((dst->undefinedVariableError).identifier)) ;
                 } break ;
-                case CNCanNotCastError: {
+                case CNCanNotCastError:
+                case CNUnmatchedTypesError: {
                         /* nothing have to release */
                 } break ;
         }
@@ -39,18 +40,24 @@ CNPrintParseError(const struct CNParseError * src)
                 case CNSyntaxError: {
                         CNInterface()->printf("[Error] ") ;
                         CNPrintValue(CNSuperClassOfStringValue(src->syntaxError.message)) ;
-                        CNInterface()->printf("\" at line %u", src->line) ;
+                        CNInterface()->printf("\" at line %u\n", src->line) ;
                 } break ;
                 case CNUndefinedVariableError: {
                         CNInterface()->printf("[Error] Undefined variable \"") ;
                         CNPrintValue(CNSuperClassOfStringValue(src->undefinedVariableError.identifier)) ;
-                        CNInterface()->printf("\" at line %u", src->line) ;
+                        CNInterface()->printf("\" at line %u\n", src->line) ;
                 } break ;
                 case CNCanNotCastError: {
                         const char * dstname = CNValueTypeName((src->canNotCastError).destinationType) ;
                         const char * srcname = CNValueTypeName((src->canNotCastError).sourceType) ;
-                        CNInterface()->printf("[Error] Can not cast the value from %s to %s at libe %u",
+                        CNInterface()->printf("[Error] Can not cast the value from %s to %s at libe %u\n",
                                               srcname, dstname, src->line) ;
+                } break ;
+                case CNUnmatchedTypesError: {
+                        const char * leftname  = CNValueTypeName((src->unmatchedTypesError).leftType) ;
+                        const char * rightname = CNValueTypeName((src->unmatchedTypesError).rightType) ;
+                        CNInterface()->printf("[Error] Unmatch data type for binary operation left:%s, right:%s at libe %u\n",
+                                              leftname, rightname, src->line) ;
                 } break ;
         }
 }

@@ -21,8 +21,6 @@ UTParser(struct CNValuePool * vpool)
         bool result = true ;
         CNInterface()->printf("(%s) Parser test\n", __func__) ;
 
-        CNInitLexicalParser(vpool) ;
-
         const char * lines0[] = {
                 "print \"A\"\n",
                 "print 1234\n",
@@ -51,10 +49,20 @@ UTParser(struct CNValuePool * vpool)
                 ""
         } ;
 
+        const char * lines2[] = {
+                "let a = 100\n",
+                "let b = 100\n",
+                "let c = a == b\n",
+                "print c\n",
+                "let d = 10.2\n",
+                "let e = a == d\n",
+                "print e\n",
+                ""
+        } ;
+
         result &= testParser(lines0, vpool) ;
         result &= testParser(lines1, vpool) ;
-
-        CNDeinitLexicalParser() ;
+        result &= testParser(lines2, vpool) ;
 
         return checkMemoryUsage(vpool) && result ;
 }
@@ -63,6 +71,8 @@ static bool
 testParser(const char * lines[], struct CNValuePool * vpool)
 {
         bool result = true ;
+
+        CNInitLexicalParser(vpool) ;
 
         CNInterface()->printf("(%s) Test parser\n", __func__) ;
         dumpMemoryUsage(vpool) ;
@@ -106,7 +116,15 @@ testParser(const char * lines[], struct CNValuePool * vpool)
         CNInterface()->printf("(%s) Free parser\n", __func__) ;
         CNDeinitCompiler(&compiler) ;
         CNDeinitValueList(&codelist) ;
-        return checkMemoryUsage(vpool) && result ;
+
+        CNDeinitLexicalParser() ;
+
+        if(checkMemoryUsage(vpool)) {
+                return result ;
+        } else {
+                CNDumpValuePool(0, vpool) ;
+                return false ;
+        }
 }
 
 static void

@@ -8,6 +8,9 @@
 #import <BasicKit/CNScalarPool.h>
 #import <BasicKit/CNInterface.h>
 #import "CNUtils.h"
+#include <string.h>
+
+#define MIN(A, B)       ((A) <= (B) ? (A) : (B))
 
 static struct CNList *
 allocateScalars(struct CNScalarPool * dst) ;
@@ -72,7 +75,11 @@ allocateScalars(struct CNScalarPool * dst)
         size_t       elmsize = dst->elementSize ;
         uint8_t *    page    = CNAllocatePage(&(dst->pagePool), elmsize * elmnum) ;
         struct CNList * result = NULL ;
+        size_t fillsize = MIN(sizeof(uint64_t), elmsize) ;
         for(unsigned int i=0 ;  i<elmnum ; i++, page+=elmsize) {
+                /* fill 1st 8 bytes */
+                memset(page, 0, fillsize) ;
+                /* make list */
                 struct CNList * list = CNAllocateList((dst->pagePool).listPool) ;
                 list->attribute = elmsize ;
                 list->next      = result ;

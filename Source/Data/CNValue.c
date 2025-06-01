@@ -23,11 +23,7 @@ CNUnionValueType(CNValueType * dst, CNValueType src0, CNValueType src1)
                 *dst = src0 ;
                 return true ;
         }
-        if(src0 == CNStringType || src1 == CNStringType){
-                *dst = CNStringType ;
-                return true ;
-        }
-        if(CNIsNumberValueType(src0) || CNIsNumberValueType(src1)) {
+        if(CNIsNumberValueType(src0) && CNIsNumberValueType(src1)) {
                 *dst = MAX(src0, src1) ;
                 return true ;
         }
