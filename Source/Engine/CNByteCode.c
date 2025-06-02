@@ -96,30 +96,50 @@ CNAllocateCompareCode(struct CNValuePool * vpool, CNCompareType ctype, uint64_t 
                         switch(ctype){
                                 case CNCompareEqual:            opcode = CNEqualBoolCode ;              break ;
                                 case CNCompareNotEqual:         opcode = CNNotEqualBoolCode ;           break ;
+                                case CNCompareLessThan:         opcode = CNLessThanBoolCode ;           break ;
+                                case CNCompareLessEqual:        opcode = CNLessEqualBoolCode ;          break ;
+                                case CNCompareGreaterThan:      opcode = CNGreaterThanBoolCode ;        break ;
+                                case CNCompareGreateEqual:      opcode = CNGreateEqualBoolCode ;        break ;
                         }
                 } break ;
                 case CNUnsignedIntType: {
                         switch(ctype){
-                                case CNCompareEqual:            opcode = CNEqualUnsignedIntCode ;       break ;
-                                case CNCompareNotEqual:         opcode = CNNotEqualUnsignedIntCode ;    break ;
+                                case CNCompareEqual:            opcode = CNEqualUnsignedIntCode ;               break ;
+                                case CNCompareNotEqual:         opcode = CNNotEqualUnsignedIntCode ;            break ;
+                                case CNCompareLessThan:         opcode = CNLessThanUnsignedIntCode ;           break ;
+                                case CNCompareLessEqual:        opcode = CNLessEqualUnsignedIntCode ;          break ;
+                                case CNCompareGreaterThan:      opcode = CNGreaterThanUnsignedIntCode ;        break ;
+                                case CNCompareGreateEqual:      opcode = CNGreateEqualUnsignedIntCode ;        break ;
                         }
                 } break ;
                 case CNSignedIntType: {
                         switch(ctype){
-                                case CNCompareEqual:            opcode = CNEqualSignedIntCode ;         break ;
-                                case CNCompareNotEqual:         opcode = CNNotEqualSignedIntCode ;      break ;
+                                case CNCompareEqual:            opcode = CNEqualSignedIntCode ;                 break ;
+                                case CNCompareNotEqual:         opcode = CNNotEqualSignedIntCode ;              break ;
+                                case CNCompareLessThan:         opcode = CNLessThanSignedIntCode ;              break ;
+                                case CNCompareLessEqual:        opcode = CNLessEqualSignedIntCode ;             break ;
+                                case CNCompareGreaterThan:      opcode = CNGreaterThanSignedIntCode ;           break ;
+                                case CNCompareGreateEqual:      opcode = CNGreateEqualSignedIntCode ;           break ;
                         }
                 } break ;
                 case CNFloatType: {
                         switch(ctype){
-                                case CNCompareEqual:            opcode = CNEqualFloatCode ;             break ;
-                                case CNCompareNotEqual:         opcode = CNNotEqualFloatCode ;          break ;
+                                case CNCompareEqual:            opcode = CNEqualFloatCode ;                     break ;
+                                case CNCompareNotEqual:         opcode = CNNotEqualFloatCode ;                  break ;
+                                case CNCompareLessThan:         opcode = CNLessThanFloatCode ;                  break ;
+                                case CNCompareLessEqual:        opcode = CNLessEqualFloatCode ;                 break ;
+                                case CNCompareGreaterThan:      opcode = CNGreaterThanFloatCode ;               break ;
+                                case CNCompareGreateEqual:      opcode = CNGreateEqualFloatCode ;               break ;
                         }
                 } break ;
                 case CNStringType: {
                         switch(ctype){
-                                case CNCompareEqual:            opcode = CNEqualStringCode ;            break ;
-                                case CNCompareNotEqual:         opcode = CNNotEqualStringCode ;         break ;
+                                case CNCompareEqual:            opcode = CNEqualStringCode ;                    break ;
+                                case CNCompareNotEqual:         opcode = CNNotEqualStringCode ;                 break ;
+                                case CNCompareLessThan:         opcode = CNLessThanStringCode ;                 break ;
+                                case CNCompareLessEqual:        opcode = CNLessEqualStringCode ;                break ;
+                                case CNCompareGreaterThan:      opcode = CNGreaterThanStringCode ;              break ;
+                                case CNCompareGreateEqual:      opcode = CNGreateEqualStringCode ;              break ;
                         }
                 } break ;
                 case CNNullType:
@@ -269,6 +289,106 @@ CNPrintByteCode(const struct CNCodeValue * src)
                 } break ;
                 case CNNotEqualStringCode: {
                         opname  = "not_equal_str" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNLessThanBoolCode: {
+                        opname  = "less_than_bool" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNLessThanUnsignedIntCode: {
+                        opname  = "less_than_uint" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNLessThanSignedIntCode: {
+                        opname  = "less_than_int" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNLessThanFloatCode: {
+                        opname  = "less_than_float" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNLessThanStringCode: {
+                        opname  = "less_than_str" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNLessEqualBoolCode: {
+                        opname  = "less_equal_bool" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNLessEqualUnsignedIntCode: {
+                        opname  = "less_equal_uint" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNLessEqualSignedIntCode: {
+                        opname  = "less_equal_int" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNLessEqualFloatCode: {
+                        opname  = "less_equal_float" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNLessEqualStringCode: {
+                        opname  = "less_equal_str" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNGreaterThanBoolCode: {
+                        opname  = "greater_than_bool" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNGreaterThanUnsignedIntCode: {
+                        opname  = "greater_than_uint" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNGreaterThanSignedIntCode: {
+                        opname  = "greater_than_int" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNGreaterThanFloatCode: {
+                        opname  = "greater_than_float" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNGreaterThanStringCode: {
+                        opname  = "greater_than_str" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNGreateEqualBoolCode: {
+                        opname  = "greate_equal_bool" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNGreateEqualUnsignedIntCode: {
+                        opname  = "greate_equal_uint" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNGreateEqualSignedIntCode: {
+                        opname  = "greate_equal_int" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNGreateEqualFloatCode: {
+                        opname  = "greate_equal_float" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNGreateEqualStringCode: {
+                        opname  = "greate_equal_str" ;
                         dstnum  = 1 ;
                         srcnum  = 2 ;
                 } break ;

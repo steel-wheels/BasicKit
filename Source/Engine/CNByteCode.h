@@ -38,12 +38,36 @@ typedef enum {
         CNNotEqualSignedIntCode,
         CNNotEqualFloatCode,
         CNNotEqualStringCode,
+        CNLessThanBoolCode,
+        CNLessThanUnsignedIntCode,
+        CNLessThanSignedIntCode,
+        CNLessThanFloatCode,
+        CNLessThanStringCode,
+        CNLessEqualBoolCode,
+        CNLessEqualUnsignedIntCode,
+        CNLessEqualSignedIntCode,
+        CNLessEqualFloatCode,
+        CNLessEqualStringCode,
+        CNGreaterThanBoolCode,
+        CNGreaterThanUnsignedIntCode,
+        CNGreaterThanSignedIntCode,
+        CNGreaterThanFloatCode,
+        CNGreaterThanStringCode,
+        CNGreateEqualBoolCode,
+        CNGreateEqualUnsignedIntCode,
+        CNGreateEqualSignedIntCode,
+        CNGreateEqualFloatCode,
+        CNGreateEqualStringCode,
         CNPrintCode
 } CNOpCode ;
 
 typedef enum {
         CNCompareEqual,
-        CNCompareNotEqual
+        CNCompareNotEqual,
+        CNCompareLessThan,
+        CNCompareLessEqual,
+        CNCompareGreaterThan,
+        CNCompareGreateEqual
 } CNCompareType ;
 
 static inline struct CNCodeValue *

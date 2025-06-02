@@ -53,11 +53,20 @@ UTParser(struct CNValuePool * vpool)
                 "let a = 100\n",
                 "let b = 100\n",
                 "let c = a == b\n",
-                "print c\n",
+                "print c\n",            // true
                 "let d = 10.2\n",
-                "let e = a == d\n",
-                "let f = a != d\n",
+                "let e = a == d\n",     // false
+                "let f = a != d\n",     // true
+                "let g = a < d\n",      // false
+                "let h = a <= d\n",     // false
+                "let i = a > d\n",      // true
+                "let j = a >= d\n",     // true
                 "print e\n",
+                "print f\n",
+                "print g\n",
+                "print h\n",
+                "print i\n",
+                "print j\n",
                 ""
         } ;
 

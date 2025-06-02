@@ -103,6 +103,11 @@ NONZERO_DIGIT   [1-9]
 HEX             [0-9a-fA-F]
 BINARY          [0-1]
 
+LESS_THAN       <
+LESS_EQUAL      <=
+GREATER_THAN    >
+GREATE_EQUAL    >=
+
 %x CSTRING
 
 %%
@@ -153,6 +158,22 @@ BINARY          [0-1]
 
 != {
         return OP_NOT_EQUAL ;
+}
+
+{LESS_EQUAL} {
+        return OP_LESS_EQUAL ;
+}
+
+{GREATE_EQUAL} {
+        return OP_GREATE_EQUAL ;
+}
+
+{LESS_THAN} {
+        return OP_LESS_THAN ;
+}
+
+{GREATER_THAN} {
+        return OP_GREATER_THAN ;
 }
 
 \| {

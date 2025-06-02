@@ -42,7 +42,7 @@ CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * v
 
 %token  IDENTIFIER
 %token  LET PRINT STRING
-%token  OP_AND OP_OR OP_BIT_OR OP_BIT_AND OP_BIT_XOR OP_EQUAL OP_NOT_EQUAL
+%token  OP_AND OP_OR OP_BIT_OR OP_BIT_AND OP_BIT_XOR OP_EQUAL OP_NOT_EQUAL OP_LESS_THAN OP_LESS_EQUAL OP_GREATER_THAN OP_GREATE_EQUAL
 %token  INT_VALUE FLOAT_VALUE FALSE_VALUE TRUE_VALUE
 
 %%
@@ -201,6 +201,69 @@ equarilty_expression
         ;
 
 relational_expression
+        : shift_expression
+        {
+                $$ = $1 ;
+        }
+        | relational_expression OP_LESS_THAN shift_expression
+        {
+                struct CNVariable lvar, rvar ;
+                if(unionValueType(&lvar, &rvar, &($1.variable), &($3.variable))){
+                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
+                        struct CNCodeValue * code = CNAllocateCompareCode(s_value_pool, CNCompareLessThan, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
+                        CNAppendCodeToCompiler(s_compiler, code) ;
+                        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+                        $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
+                } else {
+                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+                        $$.variable = CNMakeVariable($1.variable.valueType, dstid) ;
+                }
+        }
+        | relational_expression OP_LESS_EQUAL shift_expression
+        {
+                struct CNVariable lvar, rvar ;
+                if(unionValueType(&lvar, &rvar, &($1.variable), &($3.variable))){
+                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
+                        struct CNCodeValue * code = CNAllocateCompareCode(s_value_pool, CNCompareLessEqual, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
+                        CNAppendCodeToCompiler(s_compiler, code) ;
+                        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+                        $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
+                } else {
+                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+                        $$.variable = CNMakeVariable($1.variable.valueType, dstid) ;
+                }
+        }
+        | relational_expression OP_GREATER_THAN shift_expression
+        {
+                struct CNVariable lvar, rvar ;
+                if(unionValueType(&lvar, &rvar, &($1.variable), &($3.variable))){
+                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
+                        struct CNCodeValue * code = CNAllocateCompareCode(s_value_pool, CNCompareGreaterThan, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
+                        CNAppendCodeToCompiler(s_compiler, code) ;
+                        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+                        $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
+                } else {
+                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+                        $$.variable = CNMakeVariable($1.variable.valueType, dstid) ;
+                }
+        }
+        | relational_expression OP_GREATE_EQUAL shift_expression
+        {
+                struct CNVariable lvar, rvar ;
+                if(unionValueType(&lvar, &rvar, &($1.variable), &($3.variable))){
+                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
+                        struct CNCodeValue * code = CNAllocateCompareCode(s_value_pool, CNCompareGreateEqual, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
+                        CNAppendCodeToCompiler(s_compiler, code) ;
+                        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+                        $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
+                } else {
+                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+                        $$.variable = CNMakeVariable($1.variable.valueType, dstid) ;
+                }
+        }
+        ;
+
+shift_expression
         : IDENTIFIER
         {
                 struct CNStringValue *  ident = $1.identifier ;
