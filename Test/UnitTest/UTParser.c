@@ -56,6 +56,7 @@ UTParser(struct CNValuePool * vpool)
                 "print c\n",
                 "let d = 10.2\n",
                 "let e = a == d\n",
+                "let f = a != d\n",
                 "print e\n",
                 ""
         } ;

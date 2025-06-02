@@ -151,6 +151,10 @@ BINARY          [0-1]
         return OP_EQUAL ;
 }
 
+!= {
+        return OP_NOT_EQUAL ;
+}
+
 \| {
         return OP_BIT_OR ;
 }

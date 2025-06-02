@@ -175,7 +175,7 @@ equarilty_expression
                 struct CNVariable lvar, rvar ;
                 if(unionValueType(&lvar, &rvar, &($1.variable), &($3.variable))){
                         uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
-                        struct CNCodeValue * code = CNAllocateEqualCode(s_value_pool, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
+                        struct CNCodeValue * code = CNAllocateCompareCode(s_value_pool, CNCompareEqual, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
                         CNAppendCodeToCompiler(s_compiler, code) ;
                         CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
                         $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
@@ -185,6 +185,19 @@ equarilty_expression
                 }
         }
         | equarilty_expression OP_NOT_EQUAL relational_expression
+        {
+                struct CNVariable lvar, rvar ;
+                if(unionValueType(&lvar, &rvar, &($1.variable), &($3.variable))){
+                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
+                        struct CNCodeValue * code = CNAllocateCompareCode(s_value_pool, CNCompareNotEqual, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
+                        CNAppendCodeToCompiler(s_compiler, code) ;
+                        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+                        $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
+                } else {
+                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+                        $$.variable = CNMakeVariable($1.variable.valueType, dstid) ;
+                }
+        }
         ;
 
 relational_expression

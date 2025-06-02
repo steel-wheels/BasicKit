@@ -33,8 +33,18 @@ typedef enum {
         CNEqualSignedIntCode,
         CNEqualFloatCode,
         CNEqualStringCode,
+        CNNotEqualBoolCode,
+        CNNotEqualUnsignedIntCode,
+        CNNotEqualSignedIntCode,
+        CNNotEqualFloatCode,
+        CNNotEqualStringCode,
         CNPrintCode
 } CNOpCode ;
+
+typedef enum {
+        CNCompareEqual,
+        CNCompareNotEqual
+} CNCompareType ;
 
 static inline struct CNCodeValue *
 CNAllocateNopCode(struct CNValuePool * vpool)
@@ -95,7 +105,10 @@ CNAllocateBitXorCode(struct CNValuePool * vpool, uint64_t dstreg, uint64_t src0r
 }
 
 struct CNCodeValue *
-CNAllocateEqualCode(struct CNValuePool * vpool, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg) ;
+CNAllocateCompareCode(struct CNValuePool * vpool, CNCompareType ctype, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg) ;
+
+struct CNCodeValue *
+CNAllocateNotEqualCode(struct CNValuePool * vpool, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg) ;
 
 static inline struct CNCodeValue *
 CNAllocatePrintCode(struct CNValuePool * vpool, uint64_t regid)

@@ -88,24 +88,39 @@ CNAllocateConvertCode(struct CNValuePool * vpool, CNValueType dtype, uint64_t ds
 }
 
 struct CNCodeValue *
-CNAllocateEqualCode(struct CNValuePool * vpool, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg)
+CNAllocateCompareCode(struct CNValuePool * vpool, CNCompareType ctype, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg)
 {
         CNOpCode opcode = CNNopCode ;
         switch(srctype){
                 case CNBooleanType: {
-                        opcode = CNEqualBoolCode ;
+                        switch(ctype){
+                                case CNCompareEqual:            opcode = CNEqualBoolCode ;              break ;
+                                case CNCompareNotEqual:         opcode = CNNotEqualBoolCode ;           break ;
+                        }
                 } break ;
                 case CNUnsignedIntType: {
-                        opcode = CNEqualUnsignedIntCode ;
+                        switch(ctype){
+                                case CNCompareEqual:            opcode = CNEqualUnsignedIntCode ;       break ;
+                                case CNCompareNotEqual:         opcode = CNNotEqualUnsignedIntCode ;    break ;
+                        }
                 } break ;
                 case CNSignedIntType: {
-                        opcode = CNEqualSignedIntCode ;
+                        switch(ctype){
+                                case CNCompareEqual:            opcode = CNEqualSignedIntCode ;         break ;
+                                case CNCompareNotEqual:         opcode = CNNotEqualSignedIntCode ;      break ;
+                        }
                 } break ;
                 case CNFloatType: {
-                        opcode = CNEqualFloatCode ;
+                        switch(ctype){
+                                case CNCompareEqual:            opcode = CNEqualFloatCode ;             break ;
+                                case CNCompareNotEqual:         opcode = CNNotEqualFloatCode ;          break ;
+                        }
                 } break ;
                 case CNStringType: {
-                        opcode = CNEqualStringCode ;
+                        switch(ctype){
+                                case CNCompareEqual:            opcode = CNEqualStringCode ;            break ;
+                                case CNCompareNotEqual:         opcode = CNNotEqualStringCode ;         break ;
+                        }
                 } break ;
                 case CNNullType:
                 case CNArrayType:
@@ -229,6 +244,31 @@ CNPrintByteCode(const struct CNCodeValue * src)
                 } break ;
                 case CNEqualStringCode: {
                         opname  = "equal_str" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNNotEqualBoolCode: {
+                        opname  = "not_equal_bool" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNNotEqualSignedIntCode: {
+                        opname  = "not_equal_int" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNNotEqualUnsignedIntCode: {
+                        opname  = "not_equal_uint" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNNotEqualFloatCode: {
+                        opname  = "not_equal_float" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNNotEqualStringCode: {
+                        opname  = "not_equal_str" ;
                         dstnum  = 1 ;
                         srcnum  = 2 ;
                 } break ;

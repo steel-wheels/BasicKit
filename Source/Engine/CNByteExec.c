@@ -219,6 +219,66 @@ CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, 
                                 CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfBooleanValue(dstval)) ;
                                 CNReleaseValue(vpool, CNSuperClassOfBooleanValue(dstval)) ;
                         } break ;
+                        case CNNotEqualBoolCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNBooleanValue * src0val = CNCastToBooleanValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNBooleanValue * src1val = CNCastToBooleanValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                bool result = src0val->value != src1val->value ;
+                                struct CNBooleanValue * dstval  = CNAllocateBooleanValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfBooleanValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfBooleanValue(dstval)) ;
+                        } break ;
+                        case CNNotEqualUnsignedIntCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNUnsignedIntValue * src0val = CNCastToUnsignedIntValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNUnsignedIntValue * src1val = CNCastToUnsignedIntValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                bool result = src0val->value != src1val->value ;
+                                struct CNBooleanValue * dstval  = CNAllocateBooleanValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfBooleanValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfBooleanValue(dstval)) ;
+                        } break ;
+                        case CNNotEqualSignedIntCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNSignedIntValue * src0val = CNCastToSignedIntValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNSignedIntValue * src1val = CNCastToSignedIntValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                bool result = src0val->value != src1val->value ;
+                                struct CNBooleanValue * dstval  = CNAllocateBooleanValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfBooleanValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfBooleanValue(dstval)) ;
+                        } break ;
+                        case CNNotEqualFloatCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNFloatValue * src0val = CNCastToFloatValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNFloatValue * src1val = CNCastToFloatValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                bool result = src0val->value != src1val->value ;
+                                struct CNBooleanValue * dstval  = CNAllocateBooleanValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfBooleanValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfBooleanValue(dstval)) ;
+                        } break ;
+                        case CNNotEqualStringCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNStringValue * src0val = CNCastToStringValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNStringValue * src1val = CNCastToStringValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                bool result = CNCompareStringValue(src0val, src1val) != 0 ;
+                                struct CNBooleanValue * dstval  = CNAllocateBooleanValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfBooleanValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfBooleanValue(dstval)) ;
+                        } break ;
                         case CNPrintCode: {
                                 const struct CNCalcOperand * operand = &(code->calcOperand) ;
                                 index_t srcregid = (index_t) operand->source0RegId ;
