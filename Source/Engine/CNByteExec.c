@@ -539,6 +539,89 @@ CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, 
                                 CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfBooleanValue(dstval)) ;
                                 CNReleaseValue(vpool, CNSuperClassOfBooleanValue(dstval)) ;
                         } break ;
+                        case CNAddUnsignedIntCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNUnsignedIntValue * src0val = CNCastToUnsignedIntValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNUnsignedIntValue * src1val = CNCastToUnsignedIntValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                uint64_t result = src0val->value + src1val->value ;
+                                struct CNUnsignedIntValue * dstval  = CNAllocateUnsignedIntValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfUnsignedIntValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfUnsignedIntValue(dstval)) ;
+                        } break ;
+                        case CNAddSignedIntCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNSignedIntValue * src0val = CNCastToSignedIntValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNSignedIntValue * src1val = CNCastToSignedIntValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                int64_t result = src0val->value + src1val->value ;
+                                struct CNSignedIntValue * dstval  = CNAllocateSignedIntValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfSignedIntValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfSignedIntValue(dstval)) ;
+                        } break ;
+                        case CNAddFloatCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNFloatValue * src0val = CNCastToFloatValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNFloatValue * src1val = CNCastToFloatValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                double result = src0val->value + src1val->value ;
+                                struct CNFloatValue * dstval  = CNAllocateFloatValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfFloatValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfFloatValue(dstval)) ;
+                        } break ;
+                        case CNAddStringCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNStringValue * src0val = CNCastToStringValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNStringValue * src1val = CNCastToStringValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                struct CNStringValue * dstval  = CNAddStringValue(vpool, src0val, src1val) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfStringValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfStringValue(dstval)) ;
+                        } break ;
+                        case CNSubUnsignedIntCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNUnsignedIntValue * src0val = CNCastToUnsignedIntValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNUnsignedIntValue * src1val = CNCastToUnsignedIntValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                uint64_t result = src0val->value - src1val->value ;
+                                struct CNUnsignedIntValue * dstval  = CNAllocateUnsignedIntValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfUnsignedIntValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfUnsignedIntValue(dstval)) ;
+                        } break ;
+                        case CNSubSignedIntCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNSignedIntValue * src0val = CNCastToSignedIntValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNSignedIntValue * src1val = CNCastToSignedIntValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                int64_t result = src0val->value - src1val->value ;
+                                struct CNSignedIntValue * dstval  = CNAllocateSignedIntValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfSignedIntValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfSignedIntValue(dstval)) ;
+                        } break ;
+                        case CNSubFloatCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNFloatValue * src0val = CNCastToFloatValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNFloatValue * src1val = CNCastToFloatValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                double result = src0val->value - src1val->value ;
+                                struct CNFloatValue * dstval  = CNAllocateFloatValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfFloatValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfFloatValue(dstval)) ;
+                        } break ;
                         case CNPrintCode: {
                                 const struct CNCalcOperand * operand = &(code->calcOperand) ;
                                 index_t srcregid = (index_t) operand->source0RegId ;

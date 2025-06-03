@@ -23,6 +23,7 @@ CNDeinitParseError(struct CNValuePool * vpool, struct CNParseError * dst)
                         CNReleaseValue(vpool,
                                        CNSuperClassOfStringValue((dst->undefinedVariableError).identifier)) ;
                 } break ;
+                case CNUnexpectedTypeError:
                 case CNCanNotCastError:
                 case CNUnmatchedTypesError: {
                         /* nothing have to release */
@@ -46,6 +47,11 @@ CNPrintParseError(const struct CNParseError * src)
                         CNInterface()->printf("[Error] Undefined variable \"") ;
                         CNPrintValue(CNSuperClassOfStringValue(src->undefinedVariableError.identifier)) ;
                         CNInterface()->printf("\" at line %u\n", src->line) ;
+                } break ;
+                case CNUnexpectedTypeError: {
+                        const char * typename = CNValueTypeName((src->unexpectedTypeError).type) ;
+                        CNInterface()->printf("[Error] Data type \"%s\" is unexpected for the expression ", typename) ;
+                        CNInterface()->printf("at line %u\n", src->line) ;
                 } break ;
                 case CNCanNotCastError: {
                         const char * dstname = CNValueTypeName((src->canNotCastError).destinationType) ;

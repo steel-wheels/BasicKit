@@ -36,16 +36,20 @@ UTParser(struct CNValuePool * vpool)
                 "let c = a OR b\n",
                 "let d = a AND b\n",
                 "let e = 0x100\n",
-                "let f = 0x200\n",
+                "let f = 0x2\n",
                 "let j = 0b00100001\n",
                 "let g = e | f\n",
                 "let h = e ^ f\n",
                 "let i = e & f\n",
+                "let j = e << f\n",
+                "let k = e >> f\n",
                 "print c\n",
                 "print d\n",
                 "print g\n",
                 "print h\n",
                 "print i\n",
+                "print j\n",
+                "print k\n",
                 ""
         } ;
 
@@ -70,9 +74,21 @@ UTParser(struct CNValuePool * vpool)
                 ""
         } ;
 
+        const char * lines3[] = {
+                "let a = 100\n",
+                "let b = 100\n",
+                "let c = 1.2\n",
+                "let d = a + b\n",
+                "let e = a - c\n",
+                "print d\n",
+                "print e\n",
+                ""
+        } ;
+
         result &= testParser(lines0, vpool) ;
         result &= testParser(lines1, vpool) ;
         result &= testParser(lines2, vpool) ;
+        result &= testParser(lines3, vpool) ;
 
         return checkMemoryUsage(vpool) && result ;
 }

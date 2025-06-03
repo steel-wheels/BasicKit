@@ -67,6 +67,28 @@ releaseContents(struct CNValuePool * vpool, struct CNValue * val)
         CNFreeArrayData(&(vpool->arrayPool), srcsize, str->string) ;
 }
 
+struct CNStringValue *
+CNAddStringValue(struct CNValuePool * vpool, struct CNStringValue * s0, struct CNStringValue * s1)
+{
+        uint64_t len0   = CNLengthOfStringValue(s0) ;
+        uint64_t len1   = CNLengthOfStringValue(s1) ;
+        uint64_t length = len0 + len1 ;
+
+        struct CNVirtualValueFunctions * vfunc = CNVirtualFunctionsForStringValue() ;
+        struct CNStringValue * newval ;
+        newval = (struct CNStringValue *) CNAllocateValue(vpool, CNStringType, vfunc) ;
+        newval->length = length ;
+
+        size_t srcsize = lengthToSize(length + 1) ;
+        char * buffer = (char *) CNAllocateArrayData(&(vpool->arrayPool), srcsize) ;
+
+        memcpy(buffer,        s0->string, len0) ;
+        memcpy(buffer + len1, s1->string, len1) ;
+
+        newval->string = buffer ;
+        return newval ;
+}
+
 static void
 printValues(struct CNValue * val)
 {

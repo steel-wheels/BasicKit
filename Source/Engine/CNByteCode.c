@@ -88,6 +88,17 @@ CNAllocateConvertCode(struct CNValuePool * vpool, CNValueType dtype, uint64_t ds
 }
 
 struct CNCodeValue *
+CNAllocateLogicalOperationCode(struct CNValuePool * vpool, CNLogicalOperationType op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg)
+{
+        CNOpCode opcode = CNNopCode ;
+        switch(op){
+                case CNLogicalOrOperation:      opcode = CNLogicalOrCode ;      break ;
+                case CNLogicalAndOperation:     opcode = CNLogicalAndCode ;     break ;
+        }
+        return CNAllocateCalcCodeValue(vpool, opcode, dstreg, src0reg, src1reg) ;
+}
+
+struct CNCodeValue *
 CNAllocateBitOperationCode(struct CNValuePool * vpool, CNBitOperationType op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg)
 {
         CNOpCode opcode = CNNopCode ;
@@ -102,7 +113,7 @@ CNAllocateBitOperationCode(struct CNValuePool * vpool, CNBitOperationType op, ui
 }
 
 struct CNCodeValue *
-CNAllocateCompareCode(struct CNValuePool * vpool, CNCompareType ctype, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg)
+CNAllocateCompareCode(struct CNValuePool * vpool, CNCompareOperation ctype, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg)
 {
         CNOpCode opcode = CNNopCode ;
         switch(srctype){
@@ -157,6 +168,53 @@ CNAllocateCompareCode(struct CNValuePool * vpool, CNCompareType ctype, uint64_t 
                         }
                 } break ;
                 case CNNullType:
+                case CNArrayType:
+                case CNDictionaryType:
+                case CNCodeType: {
+                        return NULL ;
+                } break ;
+        }
+        return CNAllocateCalcCodeValue(vpool, opcode, dstreg, src0reg, src1reg) ;
+}
+
+struct CNCodeValue *
+CNAllocateArithmeticCode(struct CNValuePool * vpool, CNArithmeticOperation op, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg)
+{
+        CNOpCode opcode = CNNopCode ;
+        switch(srctype){
+                case CNUnsignedIntType: {
+                        switch(op){
+                                case CNAddOperation: {
+                                        opcode = CNAddUnsignedIntCode ;
+                                } break ;
+                                case CNSubOperation: {
+                                        opcode = CNSubUnsignedIntCode ;
+                                } break ;
+                        }
+                } break ;
+                case CNSignedIntType: {
+                        switch(op){
+                                case CNAddOperation: {
+                                        opcode = CNAddSignedIntCode ;
+                                } break ;
+                                case CNSubOperation: {
+                                        opcode = CNSubSignedIntCode ;
+                                } break ;
+                        }
+                } break ;
+                case CNFloatType: {
+                        switch(op){
+                                case CNAddOperation: {
+                                        opcode = CNAddFloatCode ;
+                                } break ;
+                                case CNSubOperation: {
+                                        opcode = CNSubFloatCode ;
+                                } break ;
+                        }
+                } break ;
+                case CNNullType:
+                case CNBooleanType:
+                case CNStringType:
                 case CNArrayType:
                 case CNDictionaryType:
                 case CNCodeType: {
@@ -413,6 +471,41 @@ CNPrintByteCode(const struct CNCodeValue * src)
                 } break ;
                 case CNGreateEqualStringCode: {
                         opname  = "greate_equal_str" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNAddUnsignedIntCode: {
+                        opname  = "add_uint" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNAddSignedIntCode: {
+                        opname  = "add_int" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNAddFloatCode: {
+                        opname  = "add_float" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNAddStringCode: {
+                        opname  = "add_str" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNSubUnsignedIntCode: {
+                        opname  = "sub_uint" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNSubSignedIntCode: {
+                        opname  = "sub_int" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNSubFloatCode: {
+                        opname  = "sub_float" ;
                         dstnum  = 1 ;
                         srcnum  = 2 ;
                 } break ;

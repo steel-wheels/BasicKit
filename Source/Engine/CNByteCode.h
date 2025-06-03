@@ -60,8 +60,20 @@ typedef enum {
         CNGreateEqualSignedIntCode,
         CNGreateEqualFloatCode,
         CNGreateEqualStringCode,
+        CNAddUnsignedIntCode,
+        CNAddSignedIntCode,
+        CNAddFloatCode,
+        CNAddStringCode,
+        CNSubUnsignedIntCode,
+        CNSubSignedIntCode,
+        CNSubFloatCode,
         CNPrintCode
 } CNOpCode ;
+
+typedef enum {
+        CNLogicalAndOperation,
+        CNLogicalOrOperation
+} CNLogicalOperationType ;
 
 typedef enum {
         CNBitAndOperation,
@@ -78,7 +90,12 @@ typedef enum {
         CNCompareLessEqual,
         CNCompareGreaterThan,
         CNCompareGreateEqual
-} CNCompareType ;
+} CNCompareOperation ;
+
+typedef enum {
+        CNAddOperation,
+        CNSubOperation
+} CNArithmeticOperation ;
 
 static inline struct CNCodeValue *
 CNAllocateNopCode(struct CNValuePool * vpool)
@@ -108,26 +125,17 @@ struct CNCodeValue *
 CNAllocateConvertCode(struct CNValuePool * vpool, CNValueType dtype, uint64_t dstreg,
                       CNValueType stype, uint64_t srcreg) ;
 
-static inline struct CNCodeValue *
-CNAllocateLogicalOrCode(struct CNValuePool * vpool, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg)
-{
-        return CNAllocateCalcCodeValue(vpool, CNLogicalOrCode, dstreg, src0reg, src1reg) ;
-}
-
-static inline struct CNCodeValue *
-CNAllocateLogicalAndCode(struct CNValuePool * vpool, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg)
-{
-        return CNAllocateCalcCodeValue(vpool, CNLogicalAndCode, dstreg, src0reg, src1reg) ;
-}
+struct CNCodeValue *
+CNAllocateLogicalOperationCode(struct CNValuePool * vpool, CNLogicalOperationType op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg) ;
 
 struct CNCodeValue *
 CNAllocateBitOperationCode(struct CNValuePool * vpool, CNBitOperationType op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg) ;
 
 struct CNCodeValue *
-CNAllocateCompareCode(struct CNValuePool * vpool, CNCompareType ctype, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg) ;
+CNAllocateCompareCode(struct CNValuePool * vpool, CNCompareOperation op, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg) ;
 
 struct CNCodeValue *
-CNAllocateNotEqualCode(struct CNValuePool * vpool, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg) ;
+CNAllocateArithmeticCode(struct CNValuePool * vpool, CNArithmeticOperation op, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg) ;
 
 static inline struct CNCodeValue *
 CNAllocatePrintCode(struct CNValuePool * vpool, uint64_t regid)

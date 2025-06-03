@@ -37,6 +37,18 @@ CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * v
 }
 
 static inline struct CNVariable
+allocateBinaryLogicalCode(struct CNVariable * src0, struct CNVariable * src1, CNLogicalOperationType op)
+{
+        struct CNVariable lvar = allocateCastExpression(CNBooleanType, src0) ;
+        struct CNVariable rvar = allocateCastExpression(CNBooleanType, src1) ;
+        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+        struct CNCodeValue * code = CNAllocateLogicalOperationCode(s_value_pool, op, dstid, lvar.registerId, rvar.registerId) ;
+        CNAppendCodeToCompiler(s_compiler, code) ;
+        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+        return CNMakeVariable(CNBooleanType, dstid) ;
+}
+
+static inline struct CNVariable
 allocateBinaryBitCode(struct CNVariable * src0, struct CNVariable * src1, CNBitOperationType op)
 {
         struct CNVariable lvar = allocateCastExpression(CNUnsignedIntType, src0) ;
@@ -49,15 +61,55 @@ allocateBinaryBitCode(struct CNVariable * src0, struct CNVariable * src1, CNBitO
 }
 
 static inline struct CNVariable
-allocateCompareCode(struct CNVariable * src0, struct CNVariable * src1, CNCompareType ctype)
+allocateCompareCode(struct CNVariable * src0, struct CNVariable * src1, CNCompareOperation op)
 {
         struct CNVariable lvar, rvar, result ;
         if(unionValueType(&lvar, &rvar, src0, src1)){
                 uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
-                struct CNCodeValue * code = CNAllocateCompareCode(s_value_pool, ctype, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
+                struct CNCodeValue * code = CNAllocateCompareCode(s_value_pool, op, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
                 CNAppendCodeToCompiler(s_compiler, code) ;
                 CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
                 result = CNMakeVariable(CNBooleanType, dstid) ;
+        } else {
+                uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+                result = CNMakeVariable(src0->valueType, dstid) ;
+        }
+        return result ;
+}
+
+static inline struct CNVariable
+allocateArithmeticCode(struct CNVariable * src0, struct CNVariable * src1, CNArithmeticOperation op)
+{
+        if(!CNIsNumberValueType(src0->valueType)){
+                unsigned int line = CNGetCurrentParsingLine() ;
+                struct CNParseError error = CNMakeUnexpectedTypeError(src0->valueType, line) ;
+                CNPutParseErrorToCompiler(s_compiler, &error) ;
+                CNDeinitParseError(s_value_pool, &error) ;
+
+                uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+                return CNMakeVariable(src1->valueType, dstid) ;
+        }
+        if(!CNIsNumberValueType(src1->valueType)){
+                unsigned int line = CNGetCurrentParsingLine() ;
+                struct CNParseError error = CNMakeUnexpectedTypeError(src1->valueType, line) ;
+                CNPutParseErrorToCompiler(s_compiler, &error) ;
+                CNDeinitParseError(s_value_pool, &error) ;
+
+                uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+                return CNMakeVariable(src0->valueType, dstid) ;
+        }
+        struct CNVariable lvar, rvar, result ;
+        if(unionValueType(&lvar, &rvar, src0, src1)){
+                uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
+                struct CNCodeValue * code = CNAllocateArithmeticCode(s_value_pool, op, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
+                if(code != NULL){
+                        CNAppendCodeToCompiler(s_compiler, code) ;
+                        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+                        result = CNMakeVariable(lvar.valueType, dstid) ;
+                } else {
+                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+                        result = CNMakeVariable(lvar.valueType, dstid) ;
+                }
         } else {
                 uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
                 result = CNMakeVariable(src0->valueType, dstid) ;
@@ -117,13 +169,7 @@ expression
         }
         | expression OP_OR logical_and_expression
         {
-                struct CNVariable lvar = allocateCastExpression(CNBooleanType, &($1.variable)) ;
-                struct CNVariable rvar = allocateCastExpression(CNBooleanType, &($3.variable)) ;
-                uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
-                struct CNCodeValue * code = CNAllocateLogicalOrCode(s_value_pool, dstid, lvar.registerId, rvar.registerId) ;
-                CNAppendCodeToCompiler(s_compiler, code) ;
-                CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
-                $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
+                $$.variable = allocateBinaryLogicalCode(&($1.variable), &($3.variable), CNLogicalOrOperation) ;
         }
         ;
 
@@ -134,13 +180,7 @@ logical_and_expression
         }
         | logical_and_expression OP_AND inclusive_or_expression
         {
-                struct CNVariable lvar = allocateCastExpression(CNBooleanType, &($1.variable)) ;
-                struct CNVariable rvar = allocateCastExpression(CNBooleanType, &($3.variable)) ;
-                uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
-                struct CNCodeValue * code = CNAllocateLogicalAndCode(s_value_pool, dstid, lvar.registerId, rvar.registerId) ;
-                CNAppendCodeToCompiler(s_compiler, code) ;
-                CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
-                $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
+                $$.variable = allocateBinaryLogicalCode(&($1.variable), &($3.variable), CNLogicalAndOperation) ;
         }
         ;
 
@@ -231,6 +271,21 @@ shift_expression
         ;
 
 additive_expression
+        : multiplicative_expression
+        {
+                $$ = $1 ;
+        }
+        | additive_expression '+' multiplicative_expression
+        {
+                $$.variable = allocateArithmeticCode(&($1.variable), &($3.variable), CNAddOperation) ;
+        }
+        | additive_expression '-' multiplicative_expression
+        {
+                $$.variable = allocateArithmeticCode(&($1.variable), &($3.variable), CNSubOperation) ;
+        }
+        ;
+
+multiplicative_expression
         : IDENTIFIER
         {
                 struct CNStringValue *  ident = $1.identifier ;
@@ -241,6 +296,7 @@ additive_expression
                         unsigned int line = CNGetCurrentParsingLine() ;
                         struct CNParseError error = CNMakeUndefinedVariableError(ident, line) ;
                         CNPutParseErrorToCompiler(s_compiler, &error) ;
+                        CNDeinitParseError(s_value_pool, &error) ;
 
                         uint64_t regid = CNAllocateFreeRegisterId(s_compiler) ;
                         $$.variable = CNMakeVariable(CNNullType, regid) ;
@@ -482,6 +538,7 @@ allocateCastExpression(CNValueType dsttype, const struct CNVariable * src)
                 unsigned int line = CNGetCurrentParsingLine() ;
                 struct CNParseError error = CNMakeCanNotCastError(dsttype, src->valueType, line) ;
                 CNPutParseErrorToCompiler(s_compiler, &error) ;
+                CNDeinitParseError(s_value_pool, &error) ;
         }
         return result ;
 }
@@ -511,6 +568,7 @@ unionValueType(struct CNVariable * dst0, struct CNVariable * dst1,
                 unsigned int line = CNGetCurrentParsingLine() ;
                 struct CNParseError error = CNMakeUnmatchedTypesError(ltype, rtype, line) ;
                 CNPutParseErrorToCompiler(s_compiler, &error) ;
+                CNDeinitParseError(s_value_pool, &error) ;
                 return false ;
         }
 }
@@ -523,4 +581,6 @@ static void yyerror(const char * message)
         unsigned int line = CNGetCurrentParsingLine() ;
         struct CNParseError error = CNMakeSyntaxError(str, line) ;
         CNPutParseErrorToCompiler(s_compiler, &error) ;
+        CNDeinitParseError(s_value_pool, &error) ;
 }
+

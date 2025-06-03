@@ -14,6 +14,7 @@ typedef enum {
         CNNoParseError                  = 0,
         CNSyntaxError,
         CNUndefinedVariableError,
+        CNUnexpectedTypeError,
         CNUnmatchedTypesError,
         CNCanNotCastError
 } CNParseErrorType ;
@@ -24,6 +25,10 @@ struct CNSyntaxError {
 
 struct CNUndefinedVariableError {
         struct CNStringValue *  identifier ;
+} ;
+
+struct CNUnexpectedTypeError {
+        CNValueType             type ;
 } ;
 
 struct CNUnmatchedTypesOperationError {
@@ -42,6 +47,7 @@ struct CNParseError {
         union {
                 struct CNSyntaxError                    syntaxError ;
                 struct CNUndefinedVariableError         undefinedVariableError ;
+                struct CNUnexpectedTypeError            unexpectedTypeError ;
                 struct CNCanNotCastError                canNotCastError ;
                 struct CNUnmatchedTypesOperationError   unmatchedTypesError ;
         } ; // no name union
@@ -70,6 +76,19 @@ CNMakeUndefinedVariableError(struct CNStringValue * ident, unsigned int line)
                 .line           = line,
                 .undefinedVariableError = {
                         .identifier = ident
+                }
+        } ;
+        return result ;
+}
+
+static inline struct CNParseError
+CNMakeUnexpectedTypeError(CNValueType vtype, unsigned int line)
+{
+        struct CNParseError result = {
+                .type           = CNUnexpectedTypeError,
+                .line           = line,
+                .unexpectedTypeError = {
+                        .type   = vtype
                 }
         } ;
         return result ;
