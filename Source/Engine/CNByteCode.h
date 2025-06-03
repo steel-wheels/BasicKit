@@ -28,6 +28,8 @@ typedef enum {
         CNBitAndCode,
         CNBitOrCode,
         CNBitXorCode,
+        CNBitShiftLeftCode,
+        CNBitShiftRightCode,
         CNEqualBoolCode,
         CNEqualUnsignedIntCode,
         CNEqualSignedIntCode,
@@ -60,6 +62,14 @@ typedef enum {
         CNGreateEqualStringCode,
         CNPrintCode
 } CNOpCode ;
+
+typedef enum {
+        CNBitAndOperation,
+        CNBitOrOperation,
+        CNBitXorOperation,
+        CNBitShiftLeftOperation,
+        CNBitShiftRightOperation
+} CNBitOperationType ;
 
 typedef enum {
         CNCompareEqual,
@@ -110,23 +120,8 @@ CNAllocateLogicalAndCode(struct CNValuePool * vpool, uint64_t dstreg, uint64_t s
         return CNAllocateCalcCodeValue(vpool, CNLogicalAndCode, dstreg, src0reg, src1reg) ;
 }
 
-static inline struct CNCodeValue *
-CNAllocateBitAndCode(struct CNValuePool * vpool, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg)
-{
-        return CNAllocateCalcCodeValue(vpool, CNBitAndCode, dstreg, src0reg, src1reg) ;
-}
-
-static inline struct CNCodeValue *
-CNAllocateBitOrCode(struct CNValuePool * vpool, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg)
-{
-        return CNAllocateCalcCodeValue(vpool, CNBitOrCode, dstreg, src0reg, src1reg) ;
-}
-
-static inline struct CNCodeValue *
-CNAllocateBitXorCode(struct CNValuePool * vpool, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg)
-{
-        return CNAllocateCalcCodeValue(vpool, CNBitXorCode, dstreg, src0reg, src1reg) ;
-}
+struct CNCodeValue *
+CNAllocateBitOperationCode(struct CNValuePool * vpool, CNBitOperationType op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg) ;
 
 struct CNCodeValue *
 CNAllocateCompareCode(struct CNValuePool * vpool, CNCompareType ctype, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg) ;

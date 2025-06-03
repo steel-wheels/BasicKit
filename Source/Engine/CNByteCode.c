@@ -88,6 +88,20 @@ CNAllocateConvertCode(struct CNValuePool * vpool, CNValueType dtype, uint64_t ds
 }
 
 struct CNCodeValue *
+CNAllocateBitOperationCode(struct CNValuePool * vpool, CNBitOperationType op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg)
+{
+        CNOpCode opcode = CNNopCode ;
+        switch(op){
+                case CNBitAndOperation:             opcode = CNBitAndCode ;             break ;
+                case CNBitOrOperation:              opcode = CNBitOrCode ;              break ;
+                case CNBitXorOperation:             opcode = CNBitXorCode ;             break ;
+                case CNBitShiftLeftOperation:       opcode = CNBitShiftLeftCode ;       break ;
+                case CNBitShiftRightOperation:      opcode = CNBitShiftRightCode ;      break ;
+        }
+        return CNAllocateCalcCodeValue(vpool, opcode, dstreg, src0reg, src1reg) ;
+}
+
+struct CNCodeValue *
 CNAllocateCompareCode(struct CNValuePool * vpool, CNCompareType ctype, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg)
 {
         CNOpCode opcode = CNNopCode ;
@@ -239,6 +253,16 @@ CNPrintByteCode(const struct CNCodeValue * src)
                 } break ;
                 case CNBitXorCode: {
                         opname  = "bit_xor" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNBitShiftLeftCode: {
+                        opname  = "bit_shift_left" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNBitShiftRightCode: {
+                        opname  = "bit_shift_right" ;
                         dstnum  = 1 ;
                         srcnum  = 2 ;
                 } break ;

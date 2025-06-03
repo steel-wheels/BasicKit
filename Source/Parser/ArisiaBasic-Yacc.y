@@ -36,6 +36,35 @@ CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * v
         s_compiler      = compiler ;
 }
 
+static inline struct CNVariable
+allocateBinaryBitCode(struct CNVariable * src0, struct CNVariable * src1, CNBitOperationType op)
+{
+        struct CNVariable lvar = allocateCastExpression(CNUnsignedIntType, src0) ;
+        struct CNVariable rvar = allocateCastExpression(CNUnsignedIntType, src1) ;
+        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+        struct CNCodeValue * code = CNAllocateBitOperationCode(s_value_pool, op, dstid, lvar.registerId, rvar.registerId) ;
+        CNAppendCodeToCompiler(s_compiler, code) ;
+        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+        return CNMakeVariable(CNBooleanType, dstid) ;
+}
+
+static inline struct CNVariable
+allocateCompareCode(struct CNVariable * src0, struct CNVariable * src1, CNCompareType ctype)
+{
+        struct CNVariable lvar, rvar, result ;
+        if(unionValueType(&lvar, &rvar, src0, src1)){
+                uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
+                struct CNCodeValue * code = CNAllocateCompareCode(s_value_pool, ctype, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
+                CNAppendCodeToCompiler(s_compiler, code) ;
+                CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+                result = CNMakeVariable(CNBooleanType, dstid) ;
+        } else {
+                uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+                result = CNMakeVariable(src0->valueType, dstid) ;
+        }
+        return result ;
+}
+
 %}
 
 %locations
@@ -43,6 +72,7 @@ CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * v
 %token  IDENTIFIER
 %token  LET PRINT STRING
 %token  OP_AND OP_OR OP_BIT_OR OP_BIT_AND OP_BIT_XOR OP_EQUAL OP_NOT_EQUAL OP_LESS_THAN OP_LESS_EQUAL OP_GREATER_THAN OP_GREATE_EQUAL
+%token  OP_SHIFT_LEFT OP_SHIFT_RIGHT
 %token  INT_VALUE FLOAT_VALUE FALSE_VALUE TRUE_VALUE
 
 %%
@@ -121,13 +151,7 @@ inclusive_or_expression
         }
         | inclusive_or_expression OP_BIT_OR exclusive_or_expression
         {
-                struct CNVariable lvar = allocateCastExpression(CNUnsignedIntType, &($1.variable)) ;
-                struct CNVariable rvar = allocateCastExpression(CNUnsignedIntType, &($3.variable)) ;
-                uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
-                struct CNCodeValue * code = CNAllocateBitOrCode(s_value_pool, dstid, lvar.registerId, rvar.registerId) ;
-                CNAppendCodeToCompiler(s_compiler, code) ;
-                CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
-                $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
+                $$.variable = allocateBinaryBitCode(&($1.variable), &($3.variable), CNBitOrOperation) ;
         }
         ;
 
@@ -138,13 +162,7 @@ exclusive_or_expression
         }
         | exclusive_or_expression OP_BIT_XOR and_expression
         {
-                struct CNVariable lvar = allocateCastExpression(CNUnsignedIntType, &($1.variable)) ;
-                struct CNVariable rvar = allocateCastExpression(CNUnsignedIntType, &($3.variable)) ;
-                uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
-                struct CNCodeValue * code = CNAllocateBitXorCode(s_value_pool, dstid, lvar.registerId, rvar.registerId) ;
-                CNAppendCodeToCompiler(s_compiler, code) ;
-                CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
-                $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
+                $$.variable = allocateBinaryBitCode(&($1.variable), &($3.variable), CNBitXorOperation) ;
         }
         ;
 
@@ -155,13 +173,7 @@ and_expression
         }
         | and_expression OP_BIT_AND equarilty_expression
         {
-                struct CNVariable lvar = allocateCastExpression(CNUnsignedIntType, &($1.variable)) ;
-                struct CNVariable rvar = allocateCastExpression(CNUnsignedIntType, &($3.variable)) ;
-                uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
-                struct CNCodeValue * code = CNAllocateBitAndCode(s_value_pool, dstid, lvar.registerId, rvar.registerId) ;
-                CNAppendCodeToCompiler(s_compiler, code) ;
-                CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
-                $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
+                $$.variable = allocateBinaryBitCode(&($1.variable), &($3.variable), CNBitAndOperation) ;
         }
         ;
 
@@ -172,31 +184,11 @@ equarilty_expression
         }
         | equarilty_expression OP_EQUAL relational_expression
         {
-                struct CNVariable lvar, rvar ;
-                if(unionValueType(&lvar, &rvar, &($1.variable), &($3.variable))){
-                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
-                        struct CNCodeValue * code = CNAllocateCompareCode(s_value_pool, CNCompareEqual, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
-                        CNAppendCodeToCompiler(s_compiler, code) ;
-                        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
-                        $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
-                } else {
-                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
-                        $$.variable = CNMakeVariable($1.variable.valueType, dstid) ;
-                }
+                $$.variable =  allocateCompareCode((&$1.variable), &($3.variable), CNCompareEqual) ;
         }
         | equarilty_expression OP_NOT_EQUAL relational_expression
         {
-                struct CNVariable lvar, rvar ;
-                if(unionValueType(&lvar, &rvar, &($1.variable), &($3.variable))){
-                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
-                        struct CNCodeValue * code = CNAllocateCompareCode(s_value_pool, CNCompareNotEqual, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
-                        CNAppendCodeToCompiler(s_compiler, code) ;
-                        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
-                        $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
-                } else {
-                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
-                        $$.variable = CNMakeVariable($1.variable.valueType, dstid) ;
-                }
+                $$.variable =  allocateCompareCode((&$1.variable), &($3.variable), CNCompareNotEqual) ;
         }
         ;
 
@@ -207,63 +199,38 @@ relational_expression
         }
         | relational_expression OP_LESS_THAN shift_expression
         {
-                struct CNVariable lvar, rvar ;
-                if(unionValueType(&lvar, &rvar, &($1.variable), &($3.variable))){
-                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
-                        struct CNCodeValue * code = CNAllocateCompareCode(s_value_pool, CNCompareLessThan, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
-                        CNAppendCodeToCompiler(s_compiler, code) ;
-                        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
-                        $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
-                } else {
-                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
-                        $$.variable = CNMakeVariable($1.variable.valueType, dstid) ;
-                }
+                $$.variable =  allocateCompareCode((&$1.variable), &($3.variable), CNCompareLessThan) ;
         }
         | relational_expression OP_LESS_EQUAL shift_expression
         {
-                struct CNVariable lvar, rvar ;
-                if(unionValueType(&lvar, &rvar, &($1.variable), &($3.variable))){
-                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
-                        struct CNCodeValue * code = CNAllocateCompareCode(s_value_pool, CNCompareLessEqual, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
-                        CNAppendCodeToCompiler(s_compiler, code) ;
-                        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
-                        $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
-                } else {
-                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
-                        $$.variable = CNMakeVariable($1.variable.valueType, dstid) ;
-                }
+                $$.variable =  allocateCompareCode((&$1.variable), &($3.variable), CNCompareLessEqual) ;
         }
         | relational_expression OP_GREATER_THAN shift_expression
         {
-                struct CNVariable lvar, rvar ;
-                if(unionValueType(&lvar, &rvar, &($1.variable), &($3.variable))){
-                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
-                        struct CNCodeValue * code = CNAllocateCompareCode(s_value_pool, CNCompareGreaterThan, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
-                        CNAppendCodeToCompiler(s_compiler, code) ;
-                        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
-                        $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
-                } else {
-                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
-                        $$.variable = CNMakeVariable($1.variable.valueType, dstid) ;
-                }
+                $$.variable =  allocateCompareCode((&$1.variable), &($3.variable), CNCompareGreaterThan) ;
         }
         | relational_expression OP_GREATE_EQUAL shift_expression
         {
-                struct CNVariable lvar, rvar ;
-                if(unionValueType(&lvar, &rvar, &($1.variable), &($3.variable))){
-                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
-                        struct CNCodeValue * code = CNAllocateCompareCode(s_value_pool, CNCompareGreateEqual, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
-                        CNAppendCodeToCompiler(s_compiler, code) ;
-                        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
-                        $$.variable = CNMakeVariable(CNBooleanType, dstid) ;
-                } else {
-                        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
-                        $$.variable = CNMakeVariable($1.variable.valueType, dstid) ;
-                }
+                $$.variable =  allocateCompareCode((&$1.variable), &($3.variable), CNCompareGreateEqual) ;
         }
         ;
 
 shift_expression
+        : additive_expression
+        {
+                $$ = $1 ;
+        }
+        | shift_expression OP_SHIFT_LEFT additive_expression
+        {
+                $$.variable = allocateBinaryBitCode(&($1.variable), &($3.variable), CNBitShiftLeftOperation) ;
+        }
+        | shift_expression OP_SHIFT_RIGHT additive_expression
+        {
+                $$.variable = allocateBinaryBitCode(&($1.variable), &($3.variable), CNBitShiftRightOperation) ;
+        }
+        ;
+
+additive_expression
         : IDENTIFIER
         {
                 struct CNStringValue *  ident = $1.identifier ;
@@ -434,7 +401,6 @@ allocateCastExpression(CNValueType dsttype, const struct CNVariable * src)
                                 case CNUnsignedIntType:
                                 case CNSignedIntType:
                                 case CNStringType: {
-                                        CNInterface()->printf("****** %s\n", __func__) ;
                                         result = allocateConvertStatement(dsttype, src) ;
                                         succeeded = true ;
                                 } break ;

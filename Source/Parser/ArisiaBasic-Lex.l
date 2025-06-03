@@ -107,6 +107,8 @@ LESS_THAN       <
 LESS_EQUAL      <=
 GREATER_THAN    >
 GREATE_EQUAL    >=
+SHIFT_LEFT      <<
+SHIFT_RIGHT     >>
 
 %x CSTRING
 
@@ -158,6 +160,14 @@ GREATE_EQUAL    >=
 
 != {
         return OP_NOT_EQUAL ;
+}
+
+{SHIFT_LEFT} {
+        return OP_SHIFT_LEFT ;
+}
+
+{SHIFT_RIGHT} {
+        return OP_SHIFT_RIGHT ;
 }
 
 {LESS_EQUAL} {
