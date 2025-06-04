@@ -124,7 +124,7 @@ allocateArithmeticCode(struct CNVariable * src0, struct CNVariable * src1, CNAri
 %token  IDENTIFIER
 %token  LET PRINT STRING
 %token  OP_AND OP_OR OP_BIT_OR OP_BIT_AND OP_BIT_XOR OP_EQUAL OP_NOT_EQUAL OP_LESS_THAN OP_LESS_EQUAL OP_GREATER_THAN OP_GREATE_EQUAL
-%token  OP_SHIFT_LEFT OP_SHIFT_RIGHT
+%token  OP_SHIFT_LEFT OP_SHIFT_RIGHT OP_DIV OP_MOD
 %token  INT_VALUE FLOAT_VALUE FALSE_VALUE TRUE_VALUE
 
 %%
@@ -286,6 +286,20 @@ additive_expression
         ;
 
 multiplicative_expression
+        : cast_expression
+        {
+                $$ = $1 ;
+        }
+        | multiplicative_expression '*'    cast_expression
+        {
+                $$.variable = allocateArithmeticCode(&($1.variable), &($3.variable), CNMultOperation) ;
+        }
+        | multiplicative_expression '/'    cast_expression
+        | multiplicative_expression OP_DIV cast_expression
+        | multiplicative_expression OP_MOD cast_expression
+        ;
+
+cast_expression
         : IDENTIFIER
         {
                 struct CNStringValue *  ident = $1.identifier ;

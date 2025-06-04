@@ -67,6 +67,9 @@ typedef enum {
         CNSubUnsignedIntCode,
         CNSubSignedIntCode,
         CNSubFloatCode,
+        CNMultUnsignedIntCode,
+        CNMultSignedIntCode,
+        CNMultFloatCode,
         CNPrintCode
 } CNOpCode ;
 
@@ -94,7 +97,8 @@ typedef enum {
 
 typedef enum {
         CNAddOperation,
-        CNSubOperation
+        CNSubOperation,
+        CNMultOperation
 } CNArithmeticOperation ;
 
 static inline struct CNCodeValue *

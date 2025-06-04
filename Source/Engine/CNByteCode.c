@@ -190,6 +190,9 @@ CNAllocateArithmeticCode(struct CNValuePool * vpool, CNArithmeticOperation op, u
                                 case CNSubOperation: {
                                         opcode = CNSubUnsignedIntCode ;
                                 } break ;
+                                case CNMultOperation: {
+                                        opcode = CNMultUnsignedIntCode ;
+                                } break ;
                         }
                 } break ;
                 case CNSignedIntType: {
@@ -200,6 +203,9 @@ CNAllocateArithmeticCode(struct CNValuePool * vpool, CNArithmeticOperation op, u
                                 case CNSubOperation: {
                                         opcode = CNSubSignedIntCode ;
                                 } break ;
+                                case CNMultOperation: {
+                                        opcode = CNMultSignedIntCode ;
+                                } break ;
                         }
                 } break ;
                 case CNFloatType: {
@@ -209,6 +215,9 @@ CNAllocateArithmeticCode(struct CNValuePool * vpool, CNArithmeticOperation op, u
                                 } break ;
                                 case CNSubOperation: {
                                         opcode = CNSubFloatCode ;
+                                } break ;
+                                case CNMultOperation: {
+                                        opcode = CNMultFloatCode ;
                                 } break ;
                         }
                 } break ;
@@ -506,6 +515,21 @@ CNPrintByteCode(const struct CNCodeValue * src)
                 } break ;
                 case CNSubFloatCode: {
                         opname  = "sub_float" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNMultUnsignedIntCode: {
+                        opname  = "mult_uint" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNMultSignedIntCode: {
+                        opname  = "mult_int" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNMultFloatCode: {
+                        opname  = "mult_float" ;
                         dstnum  = 1 ;
                         srcnum  = 2 ;
                 } break ;

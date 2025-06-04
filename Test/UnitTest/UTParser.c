@@ -80,8 +80,10 @@ UTParser(struct CNValuePool * vpool)
                 "let c = 1.2\n",
                 "let d = a + b\n",
                 "let e = a - c\n",
+                "let f = a * c\n",
                 "print d\n",
                 "print e\n",
+                "print f\n",
                 ""
         } ;
 

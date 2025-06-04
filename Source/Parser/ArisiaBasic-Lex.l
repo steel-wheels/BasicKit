@@ -245,7 +245,9 @@ isReservedWord(int * rwordid, const char * str)
         } ;
         const struct RWord words[] = {
                 { .rId = OP_AND,        .rWord = "and"         },
+                { .rId = OP_DIV,        .rWord = "div"         },
                 { .rId = LET,           .rWord = "let"         },
+                { .rId = OP_MOD,        .rWord = "mod"         },
                 { .rId = OP_OR,         .rWord = "or"          },
                 { .rId = PRINT,         .rWord = "print"       },
                 { .rId = FALSE_VALUE,   .rWord = "false"       },
