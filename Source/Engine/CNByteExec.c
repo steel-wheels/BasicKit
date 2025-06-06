@@ -9,7 +9,8 @@
 #include "CNBooleanValue.h"
 #include "CNNumberValue.h"
 #include "CNStringValue.h"
-
+#include <limits.h>
+#include <float.h>
 void
 CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, index_t startidx)
 {
@@ -654,6 +655,60 @@ CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, 
                                 struct CNFloatValue * src0val = CNCastToFloatValue(CNValueInRegisterFile(regfile, src0id)) ;
                                 struct CNFloatValue * src1val = CNCastToFloatValue(CNValueInRegisterFile(regfile, src1id)) ;
                                 double result = src0val->value * src1val->value ;
+                                struct CNFloatValue * dstval  = CNAllocateFloatValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfFloatValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfFloatValue(dstval)) ;
+                        } break ;
+                        case CNDivUnsignedIntCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNUnsignedIntValue * src0val = CNCastToUnsignedIntValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNUnsignedIntValue * src1val = CNCastToUnsignedIntValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                uint64_t result ;
+                                if(src1val->value != 0){
+                                        result = src0val->value / src1val->value ;
+                                } else {
+                                        CNInterface()->error("[Error] Divide by zero\n") ;
+                                        result = UINT_MAX ;
+                                }
+                                struct CNUnsignedIntValue * dstval  = CNAllocateUnsignedIntValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfUnsignedIntValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfUnsignedIntValue(dstval)) ;
+                        } break ;
+                        case CNDivSignedIntCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNSignedIntValue * src0val = CNCastToSignedIntValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNSignedIntValue * src1val = CNCastToSignedIntValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                int64_t result ;
+                                if(src1val->value != 0){
+                                        result = src0val->value / src1val->value ;
+                                } else {
+                                        CNInterface()->error("[Error] Divide by zero\n") ;
+                                        result = INT_MAX ;
+                                }
+                                struct CNSignedIntValue * dstval  = CNAllocateSignedIntValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfSignedIntValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfSignedIntValue(dstval)) ;
+                        } break ;
+                        case CNDivFloatCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid  = (index_t) operand->destinationRegId ;
+                                index_t src0id = (index_t) operand->source0RegId ;
+                                index_t src1id = (index_t) operand->source1RegId ;
+                                struct CNFloatValue * src0val = CNCastToFloatValue(CNValueInRegisterFile(regfile, src0id)) ;
+                                struct CNFloatValue * src1val = CNCastToFloatValue(CNValueInRegisterFile(regfile, src1id)) ;
+                                double result ;
+                                if(src1val->value != 0.0){
+                                        result = src0val->value / src1val->value ;
+                                } else {
+                                        CNInterface()->error("[Error] Divide by zero\n") ;
+                                        result = DBL_MAX ;
+                                }
                                 struct CNFloatValue * dstval  = CNAllocateFloatValue(vpool, result) ;
                                 CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfFloatValue(dstval)) ;
                                 CNReleaseValue(vpool, CNSuperClassOfFloatValue(dstval)) ;

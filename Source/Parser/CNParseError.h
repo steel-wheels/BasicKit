@@ -9,6 +9,7 @@
 #define CNParseError_h
 
 #import <BasicKit/CNStringValue.h>
+#import <BasicKit/CNByteCode.h>
 
 typedef enum {
         CNNoParseError                  = 0,
@@ -16,6 +17,7 @@ typedef enum {
         CNUndefinedVariableError,
         CNUnexpectedTypeError,
         CNUnmatchedTypesError,
+        CNFloatDataIsRequiredError,
         CNCanNotCastError
 } CNParseErrorType ;
 
@@ -36,6 +38,10 @@ struct CNUnmatchedTypesOperationError {
         CNValueType             rightType ;
 } ;
 
+struct CNFloatDataIsRequiredError {
+        CNArithmeticOperation   operation ;
+} ;
+
 struct CNCanNotCastError {
         CNValueType             destinationType ;
         CNValueType             sourceType ;
@@ -48,6 +54,7 @@ struct CNParseError {
                 struct CNSyntaxError                    syntaxError ;
                 struct CNUndefinedVariableError         undefinedVariableError ;
                 struct CNUnexpectedTypeError            unexpectedTypeError ;
+                struct CNFloatDataIsRequiredError       floatDataIsRequiredError ;
                 struct CNCanNotCastError                canNotCastError ;
                 struct CNUnmatchedTypesOperationError   unmatchedTypesError ;
         } ; // no name union
@@ -103,6 +110,19 @@ CNMakeUnmatchedTypesError(CNValueType left, CNValueType right, unsigned int line
                 .unmatchedTypesError = {
                         .leftType       = left,
                         .rightType      = right
+                }
+        } ;
+        return result ;
+}
+
+static inline struct CNParseError
+CNMakeFloatDataIsRequiredError(CNArithmeticOperation op, unsigned int line)
+{
+        struct CNParseError result = {
+                .type           = CNFloatDataIsRequiredError,
+                .line           = line,
+                .floatDataIsRequiredError = {
+                        .operation      = op
                 }
         } ;
         return result ;

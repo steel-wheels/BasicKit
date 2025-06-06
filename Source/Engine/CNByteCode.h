@@ -70,6 +70,9 @@ typedef enum {
         CNMultUnsignedIntCode,
         CNMultSignedIntCode,
         CNMultFloatCode,
+        CNDivUnsignedIntCode,
+        CNDivSignedIntCode,
+        CNDivFloatCode,
         CNPrintCode
 } CNOpCode ;
 
@@ -98,8 +101,13 @@ typedef enum {
 typedef enum {
         CNAddOperation,
         CNSubOperation,
-        CNMultOperation
+        CNMultOperation,
+        CNDivFloatOperation,
+        CNDivIntOperation
 } CNArithmeticOperation ;
+
+const char *
+CNArithmeticOperationName(CNArithmeticOperation op) ;
 
 static inline struct CNCodeValue *
 CNAllocateNopCode(struct CNValuePool * vpool)

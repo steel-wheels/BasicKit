@@ -24,6 +24,7 @@ CNDeinitParseError(struct CNValuePool * vpool, struct CNParseError * dst)
                                        CNSuperClassOfStringValue((dst->undefinedVariableError).identifier)) ;
                 } break ;
                 case CNUnexpectedTypeError:
+                case CNFloatDataIsRequiredError:
                 case CNCanNotCastError:
                 case CNUnmatchedTypesError: {
                         /* nothing have to release */
@@ -64,6 +65,10 @@ CNPrintParseError(const struct CNParseError * src)
                         const char * rightname = CNValueTypeName((src->unmatchedTypesError).rightType) ;
                         CNInterface()->printf("[Error] Unmatch data type for binary operation left:%s, right:%s at libe %u\n",
                                               leftname, rightname, src->line) ;
+                } break ;
+                case CNFloatDataIsRequiredError: {
+                        const char * opstr = CNArithmeticOperationName((src->floatDataIsRequiredError).operation) ;
+                        CNInterface()->printf("[Error] Float data is required for operation %s\n", opstr) ;
                 } break ;
         }
 }

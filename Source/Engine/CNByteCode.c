@@ -8,6 +8,20 @@
 #import <BasicKit/CNByteCode.h>
 #import <BasicKit/CNInterface.h>
 
+const char *
+CNArithmeticOperationName(CNArithmeticOperation op)
+{
+        const char * result = "?" ;
+        switch(op){
+                case CNAddOperation:            result = "+" ;   break ;
+                case CNSubOperation:            result = "-" ;   break ;
+                case CNMultOperation:           result = "*" ;   break ;
+                case CNDivFloatOperation:       result = "/" ;   break ;
+                case CNDivIntOperation:         result = "div" ; break ;
+        }
+        return result ;
+}
+
 struct CNCodeValue *
 CNAllocateConvertCode(struct CNValuePool * vpool, CNValueType dtype, uint64_t dstreg,
                       CNValueType stype, uint64_t srcreg)
@@ -193,6 +207,10 @@ CNAllocateArithmeticCode(struct CNValuePool * vpool, CNArithmeticOperation op, u
                                 case CNMultOperation: {
                                         opcode = CNMultUnsignedIntCode ;
                                 } break ;
+                                case CNDivFloatOperation:
+                                case CNDivIntOperation: {
+                                        opcode = CNDivUnsignedIntCode ;
+                                } break ;
                         }
                 } break ;
                 case CNSignedIntType: {
@@ -206,6 +224,10 @@ CNAllocateArithmeticCode(struct CNValuePool * vpool, CNArithmeticOperation op, u
                                 case CNMultOperation: {
                                         opcode = CNMultSignedIntCode ;
                                 } break ;
+                                case CNDivFloatOperation:
+                                case CNDivIntOperation: {
+                                        opcode = CNDivSignedIntCode ;
+                                } break ;
                         }
                 } break ;
                 case CNFloatType: {
@@ -218,6 +240,10 @@ CNAllocateArithmeticCode(struct CNValuePool * vpool, CNArithmeticOperation op, u
                                 } break ;
                                 case CNMultOperation: {
                                         opcode = CNMultFloatCode ;
+                                } break ;
+                                case CNDivFloatOperation:
+                                case CNDivIntOperation: {
+                                        opcode = CNDivFloatCode ;
                                 } break ;
                         }
                 } break ;
@@ -530,6 +556,21 @@ CNPrintByteCode(const struct CNCodeValue * src)
                 } break ;
                 case CNMultFloatCode: {
                         opname  = "mult_float" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNDivUnsignedIntCode: {
+                        opname  = "div_uint" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNDivSignedIntCode: {
+                        opname  = "div_int" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNDivFloatCode: {
+                        opname  = "div_float" ;
                         dstnum  = 1 ;
                         srcnum  = 2 ;
                 } break ;

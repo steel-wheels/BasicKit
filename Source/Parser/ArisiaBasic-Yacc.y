@@ -23,7 +23,7 @@ allocateStoreStatement(CNValueType restype, struct CNValue * src) ;
 static struct CNVariable
 allocateCastExpression(CNValueType dsttype, const struct CNVariable * src) ;
 static struct CNVariable
-allocateConvertStatement(CNValueType dsttype, const struct CNVariable * src) ;
+allocateConvertExpression(CNValueType dsttype, const struct CNVariable * src) ;
 
 static bool
 unionValueType(struct CNVariable * dst0, struct CNVariable * dst1,
@@ -61,7 +61,7 @@ allocateBinaryBitCode(struct CNVariable * src0, struct CNVariable * src1, CNBitO
 }
 
 static inline struct CNVariable
-allocateCompareCode(struct CNVariable * src0, struct CNVariable * src1, CNCompareOperation op)
+allocateCompareExpression(struct CNVariable * src0, struct CNVariable * src1, CNCompareOperation op)
 {
         struct CNVariable lvar, rvar, result ;
         if(unionValueType(&lvar, &rvar, src0, src1)){
@@ -78,7 +78,7 @@ allocateCompareCode(struct CNVariable * src0, struct CNVariable * src1, CNCompar
 }
 
 static inline struct CNVariable
-allocateArithmeticCode(struct CNVariable * src0, struct CNVariable * src1, CNArithmeticOperation op)
+allocateArithmeticExpression(struct CNVariable * src0, struct CNVariable * src1, CNArithmeticOperation op)
 {
         if(!CNIsNumberValueType(src0->valueType)){
                 unsigned int line = CNGetCurrentParsingLine() ;
@@ -115,6 +115,23 @@ allocateArithmeticCode(struct CNVariable * src0, struct CNVariable * src1, CNAri
                 result = CNMakeVariable(src0->valueType, dstid) ;
         }
         return result ;
+}
+
+static inline struct CNVariable
+allocateFloatBinaryExpression(struct CNVariable * src0, struct CNVariable * src1, CNArithmeticOperation op)
+{
+        if(src0->valueType == CNFloatType || src1->valueType == CNFloatType){
+                return allocateArithmeticExpression(src0, src1, op) ;
+        } else {
+                unsigned int line = CNGetCurrentParsingLine() ;
+
+                struct CNParseError error = CNMakeFloatDataIsRequiredError(op, line) ;
+                CNPutParseErrorToCompiler(s_compiler, &error) ;
+                CNDeinitParseError(s_value_pool, &error) ;
+
+                uint64_t regid = CNAllocateFreeRegisterId(s_compiler) ;
+                return CNMakeVariable(CNFloatType, regid) ;
+        }
 }
 
 %}
@@ -224,11 +241,11 @@ equarilty_expression
         }
         | equarilty_expression OP_EQUAL relational_expression
         {
-                $$.variable =  allocateCompareCode((&$1.variable), &($3.variable), CNCompareEqual) ;
+                $$.variable =  allocateCompareExpression((&$1.variable), &($3.variable), CNCompareEqual) ;
         }
         | equarilty_expression OP_NOT_EQUAL relational_expression
         {
-                $$.variable =  allocateCompareCode((&$1.variable), &($3.variable), CNCompareNotEqual) ;
+                $$.variable =  allocateCompareExpression((&$1.variable), &($3.variable), CNCompareNotEqual) ;
         }
         ;
 
@@ -239,19 +256,19 @@ relational_expression
         }
         | relational_expression OP_LESS_THAN shift_expression
         {
-                $$.variable =  allocateCompareCode((&$1.variable), &($3.variable), CNCompareLessThan) ;
+                $$.variable =  allocateCompareExpression((&$1.variable), &($3.variable), CNCompareLessThan) ;
         }
         | relational_expression OP_LESS_EQUAL shift_expression
         {
-                $$.variable =  allocateCompareCode((&$1.variable), &($3.variable), CNCompareLessEqual) ;
+                $$.variable =  allocateCompareExpression((&$1.variable), &($3.variable), CNCompareLessEqual) ;
         }
         | relational_expression OP_GREATER_THAN shift_expression
         {
-                $$.variable =  allocateCompareCode((&$1.variable), &($3.variable), CNCompareGreaterThan) ;
+                $$.variable =  allocateCompareExpression((&$1.variable), &($3.variable), CNCompareGreaterThan) ;
         }
         | relational_expression OP_GREATE_EQUAL shift_expression
         {
-                $$.variable =  allocateCompareCode((&$1.variable), &($3.variable), CNCompareGreateEqual) ;
+                $$.variable =  allocateCompareExpression((&$1.variable), &($3.variable), CNCompareGreateEqual) ;
         }
         ;
 
@@ -277,11 +294,11 @@ additive_expression
         }
         | additive_expression '+' multiplicative_expression
         {
-                $$.variable = allocateArithmeticCode(&($1.variable), &($3.variable), CNAddOperation) ;
+                $$.variable = allocateArithmeticExpression(&($1.variable), &($3.variable), CNAddOperation) ;
         }
         | additive_expression '-' multiplicative_expression
         {
-                $$.variable = allocateArithmeticCode(&($1.variable), &($3.variable), CNSubOperation) ;
+                $$.variable = allocateArithmeticExpression(&($1.variable), &($3.variable), CNSubOperation) ;
         }
         ;
 
@@ -292,9 +309,12 @@ multiplicative_expression
         }
         | multiplicative_expression '*'    cast_expression
         {
-                $$.variable = allocateArithmeticCode(&($1.variable), &($3.variable), CNMultOperation) ;
+                $$.variable = allocateArithmeticExpression(&($1.variable), &($3.variable), CNMultOperation) ;
         }
         | multiplicative_expression '/'    cast_expression
+        {
+                $$.variable = allocateFloatBinaryExpression(&($1.variable), &($3.variable), CNDivFloatOperation) ;
+        }
         | multiplicative_expression OP_DIV cast_expression
         | multiplicative_expression OP_MOD cast_expression
         ;
@@ -381,7 +401,7 @@ allocateCastExpression(CNValueType dsttype, const struct CNVariable * src)
                                         result    = *src ;      // needless to convert
                                 } break ;
                                 case CNStringType: {
-                                        result = allocateConvertStatement(dsttype, src) ;
+                                        result = allocateConvertExpression(dsttype, src) ;
                                         succeeded = true ;
                                 } break ;
                                 case CNBooleanType:
@@ -403,7 +423,7 @@ allocateCastExpression(CNValueType dsttype, const struct CNVariable * src)
                                         result    = *src ;      // needless to convert
                                 } break ;
                                 case CNStringType: {
-                                        result = allocateConvertStatement(dsttype, src) ;
+                                        result = allocateConvertExpression(dsttype, src) ;
                                         succeeded = true ;
                                 } break ;
                                 case CNNullType:
@@ -427,7 +447,7 @@ allocateCastExpression(CNValueType dsttype, const struct CNVariable * src)
                                 case CNUnsignedIntType:
                                 case CNFloatType:
                                 case CNStringType: {
-                                        result = allocateConvertStatement(dsttype, src) ;
+                                        result = allocateConvertExpression(dsttype, src) ;
                                         succeeded = true ;
                                 } break ;
                                 case CNNullType:
@@ -449,7 +469,7 @@ allocateCastExpression(CNValueType dsttype, const struct CNVariable * src)
                                 case CNSignedIntType:
                                 case CNFloatType:
                                 case CNStringType: {
-                                        result = allocateConvertStatement(dsttype, src) ;
+                                        result = allocateConvertExpression(dsttype, src) ;
                                         succeeded = true ;
                                 } break ;
                                 case CNNullType:
@@ -471,7 +491,7 @@ allocateCastExpression(CNValueType dsttype, const struct CNVariable * src)
                                 case CNUnsignedIntType:
                                 case CNSignedIntType:
                                 case CNStringType: {
-                                        result = allocateConvertStatement(dsttype, src) ;
+                                        result = allocateConvertExpression(dsttype, src) ;
                                         succeeded = true ;
                                 } break ;
                                 case CNNullType:
@@ -558,7 +578,7 @@ allocateCastExpression(CNValueType dsttype, const struct CNVariable * src)
 }
 
 static struct CNVariable
-allocateConvertStatement(CNValueType dsttype, const struct CNVariable * src)
+allocateConvertExpression(CNValueType dsttype, const struct CNVariable * src)
 {
         uint64_t dstreg = CNAllocateFreeRegisterId(s_compiler) ;
         struct CNCodeValue * code = CNAllocateConvertCode(s_value_pool, dsttype, dstreg, src->valueType, src->registerId) ;
