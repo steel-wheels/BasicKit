@@ -73,6 +73,8 @@ typedef enum {
         CNDivUnsignedIntCode,
         CNDivSignedIntCode,
         CNDivFloatCode,
+        CNModUnsignedIntCode,
+        CNModSignedIntCode,
         CNPrintCode
 } CNOpCode ;
 
@@ -103,7 +105,8 @@ typedef enum {
         CNSubOperation,
         CNMultOperation,
         CNDivFloatOperation,
-        CNDivIntOperation
+        CNDivIntOperation,
+        CNModOperation
 } CNArithmeticOperation ;
 
 const char *

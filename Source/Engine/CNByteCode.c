@@ -18,6 +18,7 @@ CNArithmeticOperationName(CNArithmeticOperation op)
                 case CNMultOperation:           result = "*" ;   break ;
                 case CNDivFloatOperation:       result = "/" ;   break ;
                 case CNDivIntOperation:         result = "div" ; break ;
+                case CNModOperation:            result = "mod" ; break ;
         }
         return result ;
 }
@@ -211,6 +212,9 @@ CNAllocateArithmeticCode(struct CNValuePool * vpool, CNArithmeticOperation op, u
                                 case CNDivIntOperation: {
                                         opcode = CNDivUnsignedIntCode ;
                                 } break ;
+                                case CNModOperation: {
+                                        opcode = CNModUnsignedIntCode ;
+                                } break ;
                         }
                 } break ;
                 case CNSignedIntType: {
@@ -228,6 +232,9 @@ CNAllocateArithmeticCode(struct CNValuePool * vpool, CNArithmeticOperation op, u
                                 case CNDivIntOperation: {
                                         opcode = CNDivSignedIntCode ;
                                 } break ;
+                                case CNModOperation: {
+                                        opcode = CNModSignedIntCode ;
+                                } break ;
                         }
                 } break ;
                 case CNFloatType: {
@@ -244,6 +251,9 @@ CNAllocateArithmeticCode(struct CNValuePool * vpool, CNArithmeticOperation op, u
                                 case CNDivFloatOperation:
                                 case CNDivIntOperation: {
                                         opcode = CNDivFloatCode ;
+                                } break ;
+                                case CNModOperation: {
+                                        return NULL ;
                                 } break ;
                         }
                 } break ;
@@ -571,6 +581,16 @@ CNPrintByteCode(const struct CNCodeValue * src)
                 } break ;
                 case CNDivFloatCode: {
                         opname  = "div_float" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNModUnsignedIntCode: {
+                        opname  = "mod_uint" ;
+                        dstnum  = 1 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNModSignedIntCode: {
+                        opname  = "mod_int" ;
                         dstnum  = 1 ;
                         srcnum  = 2 ;
                 } break ;

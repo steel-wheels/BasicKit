@@ -17,7 +17,8 @@ typedef enum {
         CNUndefinedVariableError,
         CNUnexpectedTypeError,
         CNUnmatchedTypesError,
-        CNFloatDataIsRequiredError,
+        CNIntDataRequiredError,
+        CNFloatDataRequiredError,
         CNCanNotCastError
 } CNParseErrorType ;
 
@@ -38,7 +39,11 @@ struct CNUnmatchedTypesOperationError {
         CNValueType             rightType ;
 } ;
 
-struct CNFloatDataIsRequiredError {
+struct CNIntDataRequiredError {
+        CNArithmeticOperation   operation ;
+} ;
+
+struct CNFloatDataRequiredError {
         CNArithmeticOperation   operation ;
 } ;
 
@@ -54,7 +59,8 @@ struct CNParseError {
                 struct CNSyntaxError                    syntaxError ;
                 struct CNUndefinedVariableError         undefinedVariableError ;
                 struct CNUnexpectedTypeError            unexpectedTypeError ;
-                struct CNFloatDataIsRequiredError       floatDataIsRequiredError ;
+                struct CNIntDataRequiredError           intDataRequiredError ;
+                struct CNFloatDataRequiredError         floatDataRequiredError ;
                 struct CNCanNotCastError                canNotCastError ;
                 struct CNUnmatchedTypesOperationError   unmatchedTypesError ;
         } ; // no name union
@@ -116,12 +122,25 @@ CNMakeUnmatchedTypesError(CNValueType left, CNValueType right, unsigned int line
 }
 
 static inline struct CNParseError
-CNMakeFloatDataIsRequiredError(CNArithmeticOperation op, unsigned int line)
+CNMakeIntDataRequiredError(CNArithmeticOperation op, unsigned int line)
 {
         struct CNParseError result = {
-                .type           = CNFloatDataIsRequiredError,
+                .type           = CNIntDataRequiredError,
                 .line           = line,
-                .floatDataIsRequiredError = {
+                .intDataRequiredError = {
+                        .operation      = op
+                }
+        } ;
+        return result ;
+}
+
+static inline struct CNParseError
+CNMakeFloatDataRequiredError(CNArithmeticOperation op, unsigned int line)
+{
+        struct CNParseError result = {
+                .type           = CNFloatDataRequiredError,
+                .line           = line,
+                .floatDataRequiredError = {
                         .operation      = op
                 }
         } ;

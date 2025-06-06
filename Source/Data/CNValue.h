@@ -31,6 +31,12 @@ CNIsNumberValueType(CNValueType vtype)
         return (vtype == CNSignedIntType) || (vtype == CNUnsignedIntType) || (vtype == CNFloatType) ;
 }
 
+static inline bool
+CNIsIntValueType(CNValueType vtype)
+{
+        return (vtype == CNUnsignedIntType) || (vtype == CNSignedIntType) ;
+}
+
 bool
 CNUnionValueType(CNValueType * dst, CNValueType src0, CNValueType src1) ;
 

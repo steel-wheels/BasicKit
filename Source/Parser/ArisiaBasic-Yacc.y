@@ -125,7 +125,24 @@ allocateFloatBinaryExpression(struct CNVariable * src0, struct CNVariable * src1
         } else {
                 unsigned int line = CNGetCurrentParsingLine() ;
 
-                struct CNParseError error = CNMakeFloatDataIsRequiredError(op, line) ;
+                struct CNParseError error = CNMakeFloatDataRequiredError(op, line) ;
+                CNPutParseErrorToCompiler(s_compiler, &error) ;
+                CNDeinitParseError(s_value_pool, &error) ;
+
+                uint64_t regid = CNAllocateFreeRegisterId(s_compiler) ;
+                return CNMakeVariable(CNFloatType, regid) ;
+        }
+}
+
+static inline struct CNVariable
+allocateIntBinaryExpression(struct CNVariable * src0, struct CNVariable * src1, CNArithmeticOperation op)
+{
+        if(CNIsIntValueType(src0->valueType) || CNIsIntValueType(src1->valueType)){
+                return allocateArithmeticExpression(src0, src1, op) ;
+        } else {
+                unsigned int line = CNGetCurrentParsingLine() ;
+
+                struct CNParseError error = CNMakeIntDataRequiredError(op, line) ;
                 CNPutParseErrorToCompiler(s_compiler, &error) ;
                 CNDeinitParseError(s_value_pool, &error) ;
 
@@ -316,7 +333,13 @@ multiplicative_expression
                 $$.variable = allocateFloatBinaryExpression(&($1.variable), &($3.variable), CNDivFloatOperation) ;
         }
         | multiplicative_expression OP_DIV cast_expression
+        {
+                $$.variable = allocateIntBinaryExpression(&($1.variable), &($3.variable), CNDivIntOperation) ;
+        }
         | multiplicative_expression OP_MOD cast_expression
+        {
+                $$.variable = allocateIntBinaryExpression(&($1.variable), &($3.variable), CNModOperation) ;
+        }
         ;
 
 cast_expression
