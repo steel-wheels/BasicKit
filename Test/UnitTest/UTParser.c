@@ -45,6 +45,7 @@ UTParser(struct CNValuePool * vpool)
                 "let k = e >> f\n",
                 "let l = 12.34\n",
                 "let m = (int) l\n",
+                "let n = ~0xf0f0",
                 "print c\n",
                 "print d\n",
                 "print g\n",
@@ -54,6 +55,7 @@ UTParser(struct CNValuePool * vpool)
                 "print k\n",
                 "print l\n",
                 "print m\n",
+                "print n\n",
                 ""
         } ;
 

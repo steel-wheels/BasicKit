@@ -202,6 +202,16 @@ CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, 
                                 CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfUnsignedIntValue(dstval)) ;
                                 CNReleaseValue(vpool, CNSuperClassOfUnsignedIntValue(dstval)) ;
                         } break ;
+                        case CNBitNotCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t dstid = (index_t) operand->destinationRegId ;
+                                index_t srcid = (index_t) operand->source0RegId ;
+                                struct CNUnsignedIntValue * srcval = CNCastToUnsignedIntValue(CNValueInRegisterFile(regfile, srcid)) ;
+                                uint64_t result = ~(srcval->value)  ;
+                                struct CNUnsignedIntValue * dstval  = CNAllocateUnsignedIntValue(vpool, result) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfUnsignedIntValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfUnsignedIntValue(dstval)) ;
+                        } break ;
                         case CNEqualBoolCode: {
                                 const struct CNCalcOperand * operand = &(code->calcOperand) ;
                                 index_t dstid  = (index_t) operand->destinationRegId ;

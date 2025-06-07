@@ -59,7 +59,7 @@ allocateBitBinaryExpression(struct CNVariable * src0, struct CNVariable * src1, 
         struct CNVariable lvar = allocateCastExpression(CNUnsignedIntType, src0) ;
         struct CNVariable rvar = allocateCastExpression(CNUnsignedIntType, src1) ;
         uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
-        struct CNCodeValue * code = CNAllocateBitOperationCode(s_value_pool, op, dstid, lvar.registerId, rvar.registerId) ;
+        struct CNCodeValue * code = CNAllocateBitBinaryCode(s_value_pool, op, dstid, lvar.registerId, rvar.registerId) ;
         CNAppendCodeToCompiler(s_compiler, code) ;
         CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
         return CNMakeVariable(CNBooleanType, dstid) ;
@@ -106,7 +106,7 @@ allocateNumberBinaryExpression(struct CNVariable * src0, struct CNVariable * src
 }
 
 static inline struct CNVariable
-allocateBoolBinaryExpression(struct CNVariable * src0, struct CNVariable * src1, CNLogicalBinaryOperation op)
+allocateLogicalBinaryExpression(struct CNVariable * src0, struct CNVariable * src1, CNLogicalBinaryOperation op)
 {
         struct CNVariable lvar = allocateCastExpression(CNBooleanType, src0) ;
         struct CNVariable rvar = allocateCastExpression(CNBooleanType, src1) ;
@@ -170,6 +170,16 @@ allocateNumberUnaryExpression(struct CNVariable * src, CNNumberUnaryOperation op
         return CNMakeVariable(CNBooleanType, dstid) ;
 }
 
+static inline struct CNVariable
+allocateBitUnaryExpression(struct CNVariable * src, CNBitUnaryOperation op)
+{
+        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register to store result
+        struct CNCodeValue * code = CNAllocateBitUnaryCode(s_value_pool, op, dstid, src->registerId) ;
+        CNAppendCodeToCompiler(s_compiler, code) ;
+        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+        return CNMakeVariable(CNBooleanType, dstid) ;
+}
+
 %}
 
 %locations
@@ -222,7 +232,7 @@ expression
         }
         | expression OP_OR logical_and_expression
         {
-                $$.variable = allocateBoolBinaryExpression(&($1.variable), &($3.variable), CNLogicalOrOperation) ;
+                $$.variable = allocateLogicalBinaryExpression(&($1.variable), &($3.variable), CNLogicalOrOperation) ;
         }
         ;
 
@@ -233,7 +243,7 @@ logical_and_expression
         }
         | logical_and_expression OP_AND inclusive_or_expression
         {
-                $$.variable = allocateBoolBinaryExpression(&($1.variable), &($3.variable), CNLogicalAndOperation) ;
+                $$.variable = allocateLogicalBinaryExpression(&($1.variable), &($3.variable), CNLogicalAndOperation) ;
         }
         ;
 
@@ -390,6 +400,9 @@ unary_expression
                  $$.variable = allocateNumberUnaryExpression(&srcvar, CNNegateOperation) ;
          }
         | '~' cast_expression
+        {
+                $$.variable = allocateBitUnaryExpression(&($2.variable), CNBitNotOperation) ;
+        }
         | '!' cast_expression
         ;
 

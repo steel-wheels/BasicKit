@@ -99,7 +99,7 @@ CNAllocateLogicalBinaryCode(struct CNValuePool * vpool, CNLogicalBinaryOperation
 }
 
 struct CNCodeValue *
-CNAllocateBitOperationCode(struct CNValuePool * vpool, CNBitBinaryOperation op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg)
+CNAllocateBitBinaryCode(struct CNValuePool * vpool, CNBitBinaryOperation op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg)
 {
         CNOpCode opcode = CNNopCode ;
         switch(op){
@@ -292,6 +292,18 @@ CNAllocateNumberUnaryCode(struct CNValuePool * vpool, CNNumberUnaryOperation op,
         return CNAllocateCalcCodeValue(vpool, opcode, dstreg, srcreg, 0) ;
 }
 
+struct CNCodeValue *
+CNAllocateBitUnaryCode(struct CNValuePool * vpool, CNBitUnaryOperation op, uint64_t dstreg, uint64_t srcreg)
+{
+        CNOpCode opcode = CNNopCode ;
+        switch(op){
+                case CNBitNotOperation: {
+                        opcode = CNBitNotCode ;
+                } break ;
+        }
+        return CNAllocateCalcCodeValue(vpool, opcode, dstreg, srcreg, 0) ;
+}
+
 void
 CNPrintByteCode(const struct CNCodeValue * src)
 {
@@ -401,6 +413,11 @@ CNPrintByteCode(const struct CNCodeValue * src)
                         opname  = "bit_shift_right" ;
                         dstnum  = 1 ;
                         srcnum  = 2 ;
+                } break ;
+                case CNBitNotCode: {
+                        opname  = "bit_not" ;
+                        dstnum  = 1 ;
+                        srcnum  = 1 ;
                 } break ;
                 case CNEqualBoolCode: {
                         opname  = "equal_bool" ;

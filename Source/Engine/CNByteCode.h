@@ -78,6 +78,7 @@ typedef enum {
         CNModSignedIntCode,
         CNNegateSignedIntCode,
         CNNegateFloatCode,
+        CNBitNotCode,
         CNPrintCode
 } CNOpCode ;
 
@@ -113,7 +114,7 @@ struct CNCodeValue *
 CNAllocateLogicalBinaryCode(struct CNValuePool * vpool, CNLogicalBinaryOperation op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg) ;
 
 struct CNCodeValue *
-CNAllocateBitOperationCode(struct CNValuePool * vpool, CNBitBinaryOperation op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg) ;
+CNAllocateBitBinaryCode(struct CNValuePool * vpool, CNBitBinaryOperation op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg) ;
 
 struct CNCodeValue *
 CNAllocateCompareCode(struct CNValuePool * vpool, CNCompareOperation op, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg) ;
@@ -123,6 +124,9 @@ CNAllocateNumberBinaryCode(struct CNValuePool * vpool, CNNumberBinaryOperation o
 
 struct CNCodeValue *
 CNAllocateNumberUnaryCode(struct CNValuePool * vpool, CNNumberUnaryOperation op, uint64_t dstreg, CNValueType srctype, uint64_t srcreg) ;
+
+struct CNCodeValue *
+CNAllocateBitUnaryCode(struct CNValuePool * vpool, CNBitUnaryOperation op, uint64_t dstreg, uint64_t srcreg) ;
 
 static inline struct CNCodeValue *
 CNAllocatePrintCode(struct CNValuePool * vpool, uint64_t regid)

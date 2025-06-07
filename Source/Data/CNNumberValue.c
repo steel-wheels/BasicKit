@@ -74,7 +74,7 @@ printUnsignedIntValue(struct CNValue * src)
 {
         struct CNUnsignedIntValue * ival = CNCastToUnsignedIntValue(src) ;
         if(ival != NULL){
-                CNInterface()->printf("%ld", ival->value) ;
+                CNInterface()->printf("%lu", ival->value) ;
         } else {
                 CNInterface()->printf("[error at %s]", __func__) ;
         }

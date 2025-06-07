@@ -45,6 +45,14 @@ typedef enum {
         CNCompareGreateEqual
 } CNCompareOperation ;
 
+typedef enum {
+        CNBitNotOperation
+} CNBitUnaryOperation ;
+
+typedef enum {
+        CNLogicalNotOperation
+} CNLogiclUnaryOperation ;
+
 const char *
 CNArithmeticOperationName(CNNumberBinaryOperation op) ;
 
