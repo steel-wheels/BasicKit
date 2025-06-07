@@ -278,6 +278,7 @@ isReservedWord(int * rwordid, const char * str)
                 { .rId = OP_AND,        .rWord = "and"         },
                 { .rId = OP_DIV,        .rWord = "div"         },
                 { .rId = LET,           .rWord = "let"         },
+                { .rId = OP_LOG_NOT,    .rWord = "not"         },
                 { .rId = OP_MOD,        .rWord = "mod"         },
                 { .rId = OP_OR,         .rWord = "or"          },
                 { .rId = PRINT,         .rWord = "print"       },

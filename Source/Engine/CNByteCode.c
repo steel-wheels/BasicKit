@@ -293,6 +293,28 @@ CNAllocateNumberUnaryCode(struct CNValuePool * vpool, CNNumberUnaryOperation op,
 }
 
 struct CNCodeValue *
+CNAllocateLogicalUnaryCode(struct CNValuePool * vpool, CNLogicalUnaryOperation op, uint64_t dstreg, CNValueType srctype, uint64_t srcreg)
+{
+        CNOpCode opcode = CNNopCode ;
+        switch(srctype){
+                case CNBooleanType: {
+                        opcode = CNLogicalNotCode ;
+                } break ;
+                case CNNullType:
+                case CNUnsignedIntType:
+                case CNSignedIntType:
+                case CNFloatType:
+                case CNStringType:
+                case CNArrayType:
+                case CNDictionaryType:
+                case CNCodeType: {
+                        return NULL ; // not supported
+                } break ;
+        }
+        return CNAllocateCalcCodeValue(vpool, opcode, dstreg, srcreg, 0) ;
+}
+
+struct CNCodeValue *
 CNAllocateBitUnaryCode(struct CNValuePool * vpool, CNBitUnaryOperation op, uint64_t dstreg, uint64_t srcreg)
 {
         CNOpCode opcode = CNNopCode ;
@@ -388,6 +410,11 @@ CNPrintByteCode(const struct CNCodeValue * src)
                         opname  = "logical_and" ;
                         dstnum  = 1 ;
                         srcnum  = 2 ;
+                } break ;
+                case CNLogicalNotCode: {
+                        opname  = "logical_not" ;
+                        dstnum  = 1 ;
+                        srcnum  = 1 ;
                 } break ;
                 case CNBitAndCode: {
                         opname  = "bit_and" ;

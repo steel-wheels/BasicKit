@@ -171,6 +171,16 @@ allocateNumberUnaryExpression(struct CNVariable * src, CNNumberUnaryOperation op
 }
 
 static inline struct CNVariable
+allocateLogicalUnaryExpression(struct CNVariable * src, CNLogicalUnaryOperation op)
+{
+        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register to store result
+        struct CNCodeValue * code = CNAllocateLogicalUnaryCode(s_value_pool, op, dstid, src->valueType, src->registerId) ;
+        CNAppendCodeToCompiler(s_compiler, code) ;
+        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+        return CNMakeVariable(CNBooleanType, dstid) ;
+}
+
+static inline struct CNVariable
 allocateBitUnaryExpression(struct CNVariable * src, CNBitUnaryOperation op)
 {
         uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register to store result
@@ -186,7 +196,8 @@ allocateBitUnaryExpression(struct CNVariable * src, CNBitUnaryOperation op)
 
 %token  IDENTIFIER TYPE_IDENTIFIER
 %token  LET PRINT STRING
-%token  OP_AND OP_OR OP_BIT_OR OP_BIT_AND OP_BIT_XOR OP_EQUAL OP_NOT_EQUAL OP_LESS_THAN OP_LESS_EQUAL OP_GREATER_THAN OP_GREATE_EQUAL
+%token  OP_AND OP_OR OP_BIT_OR OP_BIT_AND OP_BIT_XOR OP_LOG_NOT OP_EQUAL OP_NOT_EQUAL
+%token  OP_LESS_THAN OP_LESS_EQUAL OP_GREATER_THAN OP_GREATE_EQUAL
 %token  OP_SHIFT_LEFT OP_SHIFT_RIGHT OP_DIV OP_MOD
 %token  INT_VALUE FLOAT_VALUE FALSE_VALUE TRUE_VALUE
 
@@ -403,7 +414,10 @@ unary_expression
         {
                 $$.variable = allocateBitUnaryExpression(&($2.variable), CNBitNotOperation) ;
         }
-        | '!' cast_expression
+        | OP_LOG_NOT cast_expression
+        {
+                $$.variable = allocateLogicalUnaryExpression(&($2.variable), CNLogicalNotOperation) ;
+        }
         ;
 
 postfix_expression

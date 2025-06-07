@@ -51,7 +51,7 @@ typedef enum {
 
 typedef enum {
         CNLogicalNotOperation
-} CNLogiclUnaryOperation ;
+} CNLogicalUnaryOperation ;
 
 const char *
 CNArithmeticOperationName(CNNumberBinaryOperation op) ;

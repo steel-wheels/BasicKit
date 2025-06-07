@@ -26,6 +26,7 @@ typedef enum {
         CNLoadCode,
         CNLogicalAndCode,
         CNLogicalOrCode,
+        CNLogicalNotCode,
         CNBitAndCode,
         CNBitOrCode,
         CNBitXorCode,
@@ -127,6 +128,9 @@ CNAllocateNumberUnaryCode(struct CNValuePool * vpool, CNNumberUnaryOperation op,
 
 struct CNCodeValue *
 CNAllocateBitUnaryCode(struct CNValuePool * vpool, CNBitUnaryOperation op, uint64_t dstreg, uint64_t srcreg) ;
+
+struct CNCodeValue *
+CNAllocateLogicalUnaryCode(struct CNValuePool * vpool, CNLogicalUnaryOperation op, uint64_t dstreg, CNValueType srctype, uint64_t srcreg) ;
 
 static inline struct CNCodeValue *
 CNAllocatePrintCode(struct CNValuePool * vpool, uint64_t regid)
