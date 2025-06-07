@@ -37,9 +37,9 @@ CNValueTypeName(CNValueType vtype)
         switch(vtype){
                 case CNNullType:        result = "null" ;       break ;
                 case CNBooleanType:     result = "bool" ;       break ;
-                case CNSignedIntType:   result = "int64" ;      break ;
-                case CNUnsignedIntType: result = "uint64" ;     break ;
-                case CNFloatType:       result = "double" ;     break ;
+                case CNSignedIntType:   result = "int" ;        break ;
+                case CNUnsignedIntType: result = "uint" ;       break ;
+                case CNFloatType:       result = "float" ;      break ;
                 case CNStringType:      result = "string" ;     break ;
                 case CNArrayType:       result = "array" ;      break ;
                 case CNDictionaryType:  result = "dict" ;       break ;
