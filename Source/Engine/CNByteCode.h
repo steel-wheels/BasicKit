@@ -11,6 +11,7 @@
 #import <BasicKit/CNCodeValue.h>
 #import <BasicKit/CNValueList.h>
 #import <BasicKit/CNArrayValue.h>
+#import <BasicKit/CNOperation.h>
 
 typedef enum {
         CNNopCode,
@@ -75,42 +76,10 @@ typedef enum {
         CNDivFloatCode,
         CNModUnsignedIntCode,
         CNModSignedIntCode,
+        CNNegateSignedIntCode,
+        CNNegateFloatCode,
         CNPrintCode
 } CNOpCode ;
-
-typedef enum {
-        CNLogicalAndOperation,
-        CNLogicalOrOperation
-} CNLogicalOperationType ;
-
-typedef enum {
-        CNBitAndOperation,
-        CNBitOrOperation,
-        CNBitXorOperation,
-        CNBitShiftLeftOperation,
-        CNBitShiftRightOperation
-} CNBitOperationType ;
-
-typedef enum {
-        CNCompareEqual,
-        CNCompareNotEqual,
-        CNCompareLessThan,
-        CNCompareLessEqual,
-        CNCompareGreaterThan,
-        CNCompareGreateEqual
-} CNCompareOperation ;
-
-typedef enum {
-        CNAddOperation,
-        CNSubOperation,
-        CNMultOperation,
-        CNDivFloatOperation,
-        CNDivIntOperation,
-        CNModOperation
-} CNArithmeticOperation ;
-
-const char *
-CNArithmeticOperationName(CNArithmeticOperation op) ;
 
 static inline struct CNCodeValue *
 CNAllocateNopCode(struct CNValuePool * vpool)
@@ -141,16 +110,19 @@ CNAllocateConvertCode(struct CNValuePool * vpool, CNValueType dtype, uint64_t ds
                       CNValueType stype, uint64_t srcreg) ;
 
 struct CNCodeValue *
-CNAllocateLogicalOperationCode(struct CNValuePool * vpool, CNLogicalOperationType op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg) ;
+CNAllocateLogicalBinaryCode(struct CNValuePool * vpool, CNLogicalBinaryOperation op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg) ;
 
 struct CNCodeValue *
-CNAllocateBitOperationCode(struct CNValuePool * vpool, CNBitOperationType op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg) ;
+CNAllocateBitOperationCode(struct CNValuePool * vpool, CNBitBinaryOperation op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg) ;
 
 struct CNCodeValue *
 CNAllocateCompareCode(struct CNValuePool * vpool, CNCompareOperation op, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg) ;
 
 struct CNCodeValue *
-CNAllocateArithmeticCode(struct CNValuePool * vpool, CNArithmeticOperation op, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg) ;
+CNAllocateNumberBinaryCode(struct CNValuePool * vpool, CNNumberBinaryOperation op, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg) ;
+
+struct CNCodeValue *
+CNAllocateNumberUnaryCode(struct CNValuePool * vpool, CNNumberUnaryOperation op, uint64_t dstreg, CNValueType srctype, uint64_t srcreg) ;
 
 static inline struct CNCodeValue *
 CNAllocatePrintCode(struct CNValuePool * vpool, uint64_t regid)

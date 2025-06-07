@@ -40,11 +40,11 @@ struct CNUnmatchedTypesOperationError {
 } ;
 
 struct CNIntDataRequiredError {
-        CNArithmeticOperation   operation ;
+        CNNumberBinaryOperation   operation ;
 } ;
 
 struct CNFloatDataRequiredError {
-        CNArithmeticOperation   operation ;
+        CNNumberBinaryOperation   operation ;
 } ;
 
 struct CNCanNotCastError {
@@ -122,7 +122,7 @@ CNMakeUnmatchedTypesError(CNValueType left, CNValueType right, unsigned int line
 }
 
 static inline struct CNParseError
-CNMakeIntDataRequiredError(CNArithmeticOperation op, unsigned int line)
+CNMakeIntDataRequiredError(CNNumberBinaryOperation op, unsigned int line)
 {
         struct CNParseError result = {
                 .type           = CNIntDataRequiredError,
@@ -135,7 +135,7 @@ CNMakeIntDataRequiredError(CNArithmeticOperation op, unsigned int line)
 }
 
 static inline struct CNParseError
-CNMakeFloatDataRequiredError(CNArithmeticOperation op, unsigned int line)
+CNMakeFloatDataRequiredError(CNNumberBinaryOperation op, unsigned int line)
 {
         struct CNParseError result = {
                 .type           = CNFloatDataRequiredError,

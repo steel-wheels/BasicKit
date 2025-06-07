@@ -8,21 +8,6 @@
 #import <BasicKit/CNByteCode.h>
 #import <BasicKit/CNInterface.h>
 
-const char *
-CNArithmeticOperationName(CNArithmeticOperation op)
-{
-        const char * result = "?" ;
-        switch(op){
-                case CNAddOperation:            result = "+" ;   break ;
-                case CNSubOperation:            result = "-" ;   break ;
-                case CNMultOperation:           result = "*" ;   break ;
-                case CNDivFloatOperation:       result = "/" ;   break ;
-                case CNDivIntOperation:         result = "div" ; break ;
-                case CNModOperation:            result = "mod" ; break ;
-        }
-        return result ;
-}
-
 struct CNCodeValue *
 CNAllocateConvertCode(struct CNValuePool * vpool, CNValueType dtype, uint64_t dstreg,
                       CNValueType stype, uint64_t srcreg)
@@ -103,7 +88,7 @@ CNAllocateConvertCode(struct CNValuePool * vpool, CNValueType dtype, uint64_t ds
 }
 
 struct CNCodeValue *
-CNAllocateLogicalOperationCode(struct CNValuePool * vpool, CNLogicalOperationType op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg)
+CNAllocateLogicalBinaryCode(struct CNValuePool * vpool, CNLogicalBinaryOperation op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg)
 {
         CNOpCode opcode = CNNopCode ;
         switch(op){
@@ -114,7 +99,7 @@ CNAllocateLogicalOperationCode(struct CNValuePool * vpool, CNLogicalOperationTyp
 }
 
 struct CNCodeValue *
-CNAllocateBitOperationCode(struct CNValuePool * vpool, CNBitOperationType op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg)
+CNAllocateBitOperationCode(struct CNValuePool * vpool, CNBitBinaryOperation op, uint64_t dstreg, uint64_t src0reg, uint64_t src1reg)
 {
         CNOpCode opcode = CNNopCode ;
         switch(op){
@@ -193,7 +178,7 @@ CNAllocateCompareCode(struct CNValuePool * vpool, CNCompareOperation ctype, uint
 }
 
 struct CNCodeValue *
-CNAllocateArithmeticCode(struct CNValuePool * vpool, CNArithmeticOperation op, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg)
+CNAllocateNumberBinaryCode(struct CNValuePool * vpool, CNNumberBinaryOperation op, uint64_t dstreg, CNValueType srctype, uint64_t src0reg, uint64_t src1reg)
 {
         CNOpCode opcode = CNNopCode ;
         switch(srctype){
@@ -269,6 +254,44 @@ CNAllocateArithmeticCode(struct CNValuePool * vpool, CNArithmeticOperation op, u
         return CNAllocateCalcCodeValue(vpool, opcode, dstreg, src0reg, src1reg) ;
 }
 
+struct CNCodeValue *
+CNAllocateNumberUnaryCode(struct CNValuePool * vpool, CNNumberUnaryOperation op, uint64_t dstreg, CNValueType srctype, uint64_t srcreg)
+{
+        CNOpCode opcode = CNNopCode ;
+        switch(srctype){
+                case CNUnsignedIntType: {
+                        switch(op){
+                                case CNNegateOperation: {
+                                        return NULL ; // not supported
+                                } break ;
+                        }
+                } break ;
+                case CNSignedIntType: {
+                        switch(op){
+                                case CNNegateOperation: {
+                                        opcode = CNNegateSignedIntCode ;
+                                } break ;
+                        }
+                } break ;
+                case CNFloatType: {
+                        switch(op){
+                                case CNNegateOperation: {
+                                        opcode = CNNegateFloatCode ;
+                                } break ;
+                        }
+                } break ;
+                case CNBooleanType:
+                case CNNullType:
+                case CNStringType:
+                case CNArrayType:
+                case CNDictionaryType:
+                case CNCodeType: {
+                        return NULL ; // not supported
+                } break ;
+        }
+        return CNAllocateCalcCodeValue(vpool, opcode, dstreg, srcreg, 0) ;
+}
+
 void
 CNPrintByteCode(const struct CNCodeValue * src)
 {
@@ -331,6 +354,16 @@ CNPrintByteCode(const struct CNCodeValue * src)
                 } break ;
                 case CNConvF2UCode: {
                         opname  = "conv_f2u" ;
+                        dstnum  = 1 ;
+                        srcnum  = 1 ;
+                } break ;
+                case CNNegateSignedIntCode: {
+                        opname  = "neg_int" ;
+                        dstnum  = 1 ;
+                        srcnum  = 1 ;
+                } break ;
+                case CNNegateFloatCode: {
+                        opname  = "neg_float" ;
                         dstnum  = 1 ;
                         srcnum  = 1 ;
                 } break ;

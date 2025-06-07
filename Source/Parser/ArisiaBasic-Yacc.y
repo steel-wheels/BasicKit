@@ -37,30 +37,6 @@ CNSetCompilerToSyntaxParser(struct CNCompiler * compiler, struct CNValuePool * v
 }
 
 static inline struct CNVariable
-allocateBinaryLogicalCode(struct CNVariable * src0, struct CNVariable * src1, CNLogicalOperationType op)
-{
-        struct CNVariable lvar = allocateCastExpression(CNBooleanType, src0) ;
-        struct CNVariable rvar = allocateCastExpression(CNBooleanType, src1) ;
-        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
-        struct CNCodeValue * code = CNAllocateLogicalOperationCode(s_value_pool, op, dstid, lvar.registerId, rvar.registerId) ;
-        CNAppendCodeToCompiler(s_compiler, code) ;
-        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
-        return CNMakeVariable(CNBooleanType, dstid) ;
-}
-
-static inline struct CNVariable
-allocateBinaryBitCode(struct CNVariable * src0, struct CNVariable * src1, CNBitOperationType op)
-{
-        struct CNVariable lvar = allocateCastExpression(CNUnsignedIntType, src0) ;
-        struct CNVariable rvar = allocateCastExpression(CNUnsignedIntType, src1) ;
-        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
-        struct CNCodeValue * code = CNAllocateBitOperationCode(s_value_pool, op, dstid, lvar.registerId, rvar.registerId) ;
-        CNAppendCodeToCompiler(s_compiler, code) ;
-        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
-        return CNMakeVariable(CNBooleanType, dstid) ;
-}
-
-static inline struct CNVariable
 allocateCompareExpression(struct CNVariable * src0, struct CNVariable * src1, CNCompareOperation op)
 {
         struct CNVariable lvar, rvar, result ;
@@ -78,7 +54,19 @@ allocateCompareExpression(struct CNVariable * src0, struct CNVariable * src1, CN
 }
 
 static inline struct CNVariable
-allocateArithmeticExpression(struct CNVariable * src0, struct CNVariable * src1, CNArithmeticOperation op)
+allocateBitBinaryExpression(struct CNVariable * src0, struct CNVariable * src1, CNBitBinaryOperation op)
+{
+        struct CNVariable lvar = allocateCastExpression(CNUnsignedIntType, src0) ;
+        struct CNVariable rvar = allocateCastExpression(CNUnsignedIntType, src1) ;
+        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+        struct CNCodeValue * code = CNAllocateBitOperationCode(s_value_pool, op, dstid, lvar.registerId, rvar.registerId) ;
+        CNAppendCodeToCompiler(s_compiler, code) ;
+        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+        return CNMakeVariable(CNBooleanType, dstid) ;
+}
+
+static inline struct CNVariable
+allocateNumberBinaryExpression(struct CNVariable * src0, struct CNVariable * src1, CNNumberBinaryOperation op)
 {
         if(!CNIsNumberValueType(src0->valueType)){
                 unsigned int line = CNGetCurrentParsingLine() ;
@@ -101,7 +89,7 @@ allocateArithmeticExpression(struct CNVariable * src0, struct CNVariable * src1,
         struct CNVariable lvar, rvar, result ;
         if(unionValueType(&lvar, &rvar, src0, src1)){
                 uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
-                struct CNCodeValue * code = CNAllocateArithmeticCode(s_value_pool, op, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
+                struct CNCodeValue * code = CNAllocateNumberBinaryCode(s_value_pool, op, dstid, lvar.valueType, lvar.registerId, rvar.registerId) ;
                 if(code != NULL){
                         CNAppendCodeToCompiler(s_compiler, code) ;
                         CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
@@ -118,10 +106,22 @@ allocateArithmeticExpression(struct CNVariable * src0, struct CNVariable * src1,
 }
 
 static inline struct CNVariable
-allocateFloatBinaryExpression(struct CNVariable * src0, struct CNVariable * src1, CNArithmeticOperation op)
+allocateBoolBinaryExpression(struct CNVariable * src0, struct CNVariable * src1, CNLogicalBinaryOperation op)
+{
+        struct CNVariable lvar = allocateCastExpression(CNBooleanType, src0) ;
+        struct CNVariable rvar = allocateCastExpression(CNBooleanType, src1) ;
+        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+        struct CNCodeValue * code = CNAllocateLogicalBinaryCode(s_value_pool, op, dstid, lvar.registerId, rvar.registerId) ;
+        CNAppendCodeToCompiler(s_compiler, code) ;
+        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+        return CNMakeVariable(CNBooleanType, dstid) ;
+}
+
+static inline struct CNVariable
+allocateFloatBinaryExpression(struct CNVariable * src0, struct CNVariable * src1, CNNumberBinaryOperation op)
 {
         if(src0->valueType == CNFloatType || src1->valueType == CNFloatType){
-                return allocateArithmeticExpression(src0, src1, op) ;
+                return allocateNumberBinaryExpression(src0, src1, op) ;
         } else {
                 unsigned int line = CNGetCurrentParsingLine() ;
 
@@ -135,10 +135,10 @@ allocateFloatBinaryExpression(struct CNVariable * src0, struct CNVariable * src1
 }
 
 static inline struct CNVariable
-allocateIntBinaryExpression(struct CNVariable * src0, struct CNVariable * src1, CNArithmeticOperation op)
+allocateIntBinaryExpression(struct CNVariable * src0, struct CNVariable * src1, CNNumberBinaryOperation op)
 {
         if(CNIsIntValueType(src0->valueType) || CNIsIntValueType(src1->valueType)){
-                return allocateArithmeticExpression(src0, src1, op) ;
+                return allocateNumberBinaryExpression(src0, src1, op) ;
         } else {
                 unsigned int line = CNGetCurrentParsingLine() ;
 
@@ -149,6 +149,25 @@ allocateIntBinaryExpression(struct CNVariable * src0, struct CNVariable * src1, 
                 uint64_t regid = CNAllocateFreeRegisterId(s_compiler) ;
                 return CNMakeVariable(CNFloatType, regid) ;
         }
+}
+
+static inline struct CNVariable
+allocateNumberUnaryExpression(struct CNVariable * src, CNNumberUnaryOperation op)
+{
+        if(!CNIsNumberValueType(src->valueType)){
+                unsigned int line = CNGetCurrentParsingLine() ;
+                struct CNParseError error = CNMakeUnexpectedTypeError(src->valueType, line) ;
+                CNPutParseErrorToCompiler(s_compiler, &error) ;
+                CNDeinitParseError(s_value_pool, &error) ;
+
+                uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ;
+                return CNMakeVariable(src->valueType, dstid) ;
+        }
+        uint64_t dstid  = CNAllocateFreeRegisterId(s_compiler) ; // allocate register after cast operation
+        struct CNCodeValue * code = CNAllocateNumberUnaryCode(s_value_pool, op, dstid, src->valueType, src->registerId) ;
+        CNAppendCodeToCompiler(s_compiler, code) ;
+        CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+        return CNMakeVariable(CNBooleanType, dstid) ;
 }
 
 %}
@@ -203,7 +222,7 @@ expression
         }
         | expression OP_OR logical_and_expression
         {
-                $$.variable = allocateBinaryLogicalCode(&($1.variable), &($3.variable), CNLogicalOrOperation) ;
+                $$.variable = allocateBoolBinaryExpression(&($1.variable), &($3.variable), CNLogicalOrOperation) ;
         }
         ;
 
@@ -214,7 +233,7 @@ logical_and_expression
         }
         | logical_and_expression OP_AND inclusive_or_expression
         {
-                $$.variable = allocateBinaryLogicalCode(&($1.variable), &($3.variable), CNLogicalAndOperation) ;
+                $$.variable = allocateBoolBinaryExpression(&($1.variable), &($3.variable), CNLogicalAndOperation) ;
         }
         ;
 
@@ -225,7 +244,7 @@ inclusive_or_expression
         }
         | inclusive_or_expression OP_BIT_OR exclusive_or_expression
         {
-                $$.variable = allocateBinaryBitCode(&($1.variable), &($3.variable), CNBitOrOperation) ;
+                $$.variable = allocateBitBinaryExpression(&($1.variable), &($3.variable), CNBitOrOperation) ;
         }
         ;
 
@@ -236,7 +255,7 @@ exclusive_or_expression
         }
         | exclusive_or_expression OP_BIT_XOR and_expression
         {
-                $$.variable = allocateBinaryBitCode(&($1.variable), &($3.variable), CNBitXorOperation) ;
+                $$.variable = allocateBitBinaryExpression(&($1.variable), &($3.variable), CNBitXorOperation) ;
         }
         ;
 
@@ -247,7 +266,7 @@ and_expression
         }
         | and_expression OP_BIT_AND equarilty_expression
         {
-                $$.variable = allocateBinaryBitCode(&($1.variable), &($3.variable), CNBitAndOperation) ;
+                $$.variable = allocateBitBinaryExpression(&($1.variable), &($3.variable), CNBitAndOperation) ;
         }
         ;
 
@@ -296,11 +315,11 @@ shift_expression
         }
         | shift_expression OP_SHIFT_LEFT additive_expression
         {
-                $$.variable = allocateBinaryBitCode(&($1.variable), &($3.variable), CNBitShiftLeftOperation) ;
+                $$.variable = allocateBitBinaryExpression(&($1.variable), &($3.variable), CNBitShiftLeftOperation) ;
         }
         | shift_expression OP_SHIFT_RIGHT additive_expression
         {
-                $$.variable = allocateBinaryBitCode(&($1.variable), &($3.variable), CNBitShiftRightOperation) ;
+                $$.variable = allocateBitBinaryExpression(&($1.variable), &($3.variable), CNBitShiftRightOperation) ;
         }
         ;
 
@@ -311,11 +330,11 @@ additive_expression
         }
         | additive_expression '+' multiplicative_expression
         {
-                $$.variable = allocateArithmeticExpression(&($1.variable), &($3.variable), CNAddOperation) ;
+                $$.variable = allocateNumberBinaryExpression(&($1.variable), &($3.variable), CNAddOperation) ;
         }
         | additive_expression '-' multiplicative_expression
         {
-                $$.variable = allocateArithmeticExpression(&($1.variable), &($3.variable), CNSubOperation) ;
+                $$.variable = allocateNumberBinaryExpression(&($1.variable), &($3.variable), CNSubOperation) ;
         }
         ;
 
@@ -326,7 +345,7 @@ multiplicative_expression
         }
         | multiplicative_expression '*'    cast_expression
         {
-                $$.variable = allocateArithmeticExpression(&($1.variable), &($3.variable), CNMultOperation) ;
+                $$.variable = allocateNumberBinaryExpression(&($1.variable), &($3.variable), CNMultOperation) ;
         }
         | multiplicative_expression '/'    cast_expression
         {
@@ -354,6 +373,27 @@ cast_expression
         ;
 
 unary_expression
+        : postfix_expression
+         {
+                 $$ = $1 ;
+         }
+        | '+' cast_expression
+         {
+                 $$ = $1 ;
+         }
+        | '-' cast_expression
+         {
+                 struct CNVariable srcvar = $2.variable ;
+                 if(srcvar.valueType == CNSignedIntType){
+                         srcvar = allocateCastExpression(CNUnsignedIntType, &srcvar) ;
+                 }
+                 $$.variable = allocateNumberUnaryExpression(&srcvar, CNNegateOperation) ;
+         }
+        | '~' cast_expression
+        | '!' cast_expression
+        ;
+
+postfix_expression
         : IDENTIFIER
         {
                 struct CNStringValue *  ident = $1.identifier ;

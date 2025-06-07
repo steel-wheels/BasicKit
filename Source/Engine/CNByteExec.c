@@ -94,6 +94,24 @@ CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, 
                                 CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfUnsignedIntValue(dstval)) ;
                                 CNReleaseValue(vpool, CNSuperClassOfUnsignedIntValue(dstval)) ;
                         } break ;
+                        case CNNegateSignedIntCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t srcid = (index_t) operand->source0RegId ;
+                                index_t dstid = (index_t) operand->destinationRegId ;
+                                struct CNSignedIntValue * srcval = CNCastToSignedIntValue(CNValueInRegisterFile(regfile, srcid)) ;
+                                struct CNSignedIntValue * dstval = CNAllocateSignedIntValue(vpool, -srcval->value) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfSignedIntValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfSignedIntValue(dstval)) ;
+                        } break ;
+                        case CNNegateFloatCode: {
+                                const struct CNCalcOperand * operand = &(code->calcOperand) ;
+                                index_t srcid = (index_t) operand->source0RegId ;
+                                index_t dstid = (index_t) operand->destinationRegId ;
+                                struct CNFloatValue * srcval = CNCastToFloatValue(CNValueInRegisterFile(regfile, srcid)) ;
+                                struct CNFloatValue * dstval = CNAllocateFloatValue(vpool, -srcval->value) ;
+                                CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfFloatValue(dstval)) ;
+                                CNReleaseValue(vpool, CNSuperClassOfFloatValue(dstval)) ;
+                        } break ;
                         case CNLoadCode: {
                                 const struct CNLoadOperand * operand = &(code->loadOperand) ;
                                 index_t          dstregid = (index_t) operand->destinationRegId ;
