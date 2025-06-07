@@ -17,6 +17,7 @@
 typedef void *  yyscan_t ;
 
 typedef union {
+        CNValueType             valueType ;
         struct CNVariable       variable ;
         struct CNStringValue *  identifier ;
         uint64_t                unsignedIntValue ;

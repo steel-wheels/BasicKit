@@ -76,6 +76,8 @@ appendStringToBuffer(const char * str)
 }
 
 static bool
+isTypeIdentifier(CNValueType * dst, const char * str) ;
+static bool
 isReservedWord(int * rwordid, const char * str) ;
 
 static uint64_t
@@ -118,8 +120,12 @@ SHIFT_RIGHT     >>
         ;
 
 {IDENTIFIER}  {
-        int rwordid ;
-        if(isReservedWord(&rwordid, yytext)){
+        CNValueType     vtype ;
+        int             rwordid ;
+        if(isTypeIdentifier(&vtype, yytext)) {
+                yylval->valueType = vtype ;
+                return TYPE_IDENTIFIER ;
+        } else if(isReservedWord(&rwordid, yytext)){
                 yylval->variable = CNMakeVariable(CNNullType, 0) ;
                 return rwordid ;
         } else {
@@ -237,12 +243,37 @@ getChar(void)
 }
 
 static bool
+isTypeIdentifier(CNValueType * dst, const char * str)
+{
+        static const CNValueType s_types[] = {
+                CNBooleanType,
+                CNUnsignedIntType,
+                CNSignedIntType,
+                CNFloatType,
+                CNStringType,
+                //CNArrayType,
+                //CNDictionaryType,
+                //CNCodeType
+                CNNullType
+        } ;
+        for(unsigned int i=0 ; s_types[i] != CNNullType ; i++){
+                const char * name = CNValueTypeName(s_types[i]) ;
+                if(strcasecmp(name, str) == 0){
+                        *dst = s_types[i] ;
+                        return true ;
+                }
+        }
+        return false ;
+}
+
+static bool
 isReservedWord(int * rwordid, const char * str)
 {
         struct RWord {
                 int             rId ;
                 const char *    rWord ;
         } ;
+
         const struct RWord words[] = {
                 { .rId = OP_AND,        .rWord = "and"         },
                 { .rId = OP_DIV,        .rWord = "div"         },

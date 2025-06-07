@@ -155,7 +155,7 @@ allocateIntBinaryExpression(struct CNVariable * src0, struct CNVariable * src1, 
 
 %locations
 
-%token  IDENTIFIER
+%token  IDENTIFIER TYPE_IDENTIFIER
 %token  LET PRINT STRING
 %token  OP_AND OP_OR OP_BIT_OR OP_BIT_AND OP_BIT_XOR OP_EQUAL OP_NOT_EQUAL OP_LESS_THAN OP_LESS_EQUAL OP_GREATER_THAN OP_GREATE_EQUAL
 %token  OP_SHIFT_LEFT OP_SHIFT_RIGHT OP_DIV OP_MOD
@@ -343,6 +343,17 @@ multiplicative_expression
         ;
 
 cast_expression
+        : unary_expression
+        {
+                $$ = $1 ;
+        }
+        | '(' TYPE_IDENTIFIER ')' cast_expression
+        {
+                $$.variable = allocateCastExpression($2.valueType, &($4.variable)) ;
+        }
+        ;
+
+unary_expression
         : IDENTIFIER
         {
                 struct CNStringValue *  ident = $1.identifier ;
