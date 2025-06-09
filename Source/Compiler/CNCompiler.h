@@ -11,24 +11,10 @@
 #import <BasicKit/CNValuePool.h>
 #import <BasicKit/CNValueList.h>
 #import <BasicKit/CNStringValue.h>
+#import <BasicKit/CNVariable.h>
 #import <BasicKit/CNCodeValue.h>
 #import <BasicKit/CNByteCode.h>
 #import <BasicKit/CNParseError.h>
-
-struct CNVariable {
-        CNValueType     valueType ;
-        uint64_t        registerId ;
-} ;
-
-static inline struct CNVariable
-CNMakeVariable(CNValueType vtype, uint64_t regid)
-{
-        struct CNVariable result = {
-                .valueType      = vtype,
-                .registerId     = regid
-        } ;
-        return result ;
-}
 
 struct CNCompiler
 {
