@@ -80,6 +80,9 @@ typedef enum {
         CNNegateSignedIntCode,
         CNNegateFloatCode,
         CNBitNotCode,
+        CNJumpCode,
+        CNBranchThenCode,
+        CNBranchElseCode,
         CNPrintCode
 } CNOpCode ;
 
@@ -131,6 +134,15 @@ CNAllocateBitUnaryCode(struct CNValuePool * vpool, CNBitUnaryOperation op, uint6
 
 struct CNCodeValue *
 CNAllocateLogicalUnaryCode(struct CNValuePool * vpool, CNLogicalUnaryOperation op, uint64_t dstreg, CNValueType srctype, uint64_t srcreg) ;
+
+struct CNCodeValue *
+CNAllocateJumpCode(struct CNValuePool * vpool, uint32_t label) ;
+
+struct CNCodeValue *
+CNAllocateBranchThenCode(struct CNValuePool * vpool, uint64_t regid, uint32_t label) ;
+
+struct CNCodeValue *
+CNAllocateBranchElseCode(struct CNValuePool * vpool, uint64_t regid, uint32_t label) ;
 
 static inline struct CNCodeValue *
 CNAllocatePrintCode(struct CNValuePool * vpool, uint64_t regid)

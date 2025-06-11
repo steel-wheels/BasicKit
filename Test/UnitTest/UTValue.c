@@ -38,6 +38,7 @@ dumpInfo(void)
         CNInterface()->printf("string value        : %u\n", sizeof(struct CNStringValue)) ;
         CNInterface()->printf("array value         : %u\n", sizeof(struct CNArrayValue)) ;
         CNInterface()->printf("dictionary value    : %u\n", sizeof(struct CNDictionaryValue)) ;
+        CNInterface()->printf("code value          : %u\n", sizeof(struct CNCodeValue)) ;
 }
 
 static bool

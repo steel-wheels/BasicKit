@@ -43,7 +43,7 @@ CNAllocateCalcCodeValue(struct CNValuePool * vpool, uint32_t code,
         struct CNVirtualValueFunctions * vfunc = CNVirtualFunctionsForCodeValue() ;
         struct CNCodeValue * newval ;
         newval = (struct CNCodeValue *) CNAllocateValue(vpool, CNCodeType, vfunc) ;
-        newval->atttribute  = CNCodeValueAttributeToInt(&attr) ;
+        newval->codeAttribute  = CNCodeValueAttributeToInt(&attr) ;
         newval->calcOperand = operand ;
         return newval ;
 }
@@ -68,8 +68,32 @@ CNAllocateLoadCodeValue(struct CNValuePool * vpool, uint32_t code,
         struct CNVirtualValueFunctions * vfunc = CNVirtualFunctionsForCodeValue() ;
         struct CNCodeValue * newval ;
         newval = (struct CNCodeValue *) CNAllocateValue(vpool, CNCodeType, vfunc) ;
-        newval->atttribute  = CNCodeValueAttributeToInt(&attr) ;
+        newval->codeAttribute  = CNCodeValueAttributeToInt(&attr) ;
         newval->loadOperand = operand ;
+        return newval ;
+}
+
+struct CNCodeValue *
+CNAllocateBranchCodeValue(struct CNValuePool * vpool, uint32_t code,
+                          uint64_t condregid, uint32_t label)
+{
+        struct CNCodeValueAttribute attr = {
+                .label          = CNNoLabel,
+                .code           = code,
+                .operand        = CNBranchOperandType
+        } ;
+
+        struct CNBranchOperand operand = {
+                .conditionRegId = condregid,
+                .targetLabel    = label,
+                .targetOffset   = 0
+        } ;
+
+        struct CNVirtualValueFunctions * vfunc = CNVirtualFunctionsForCodeValue() ;
+        struct CNCodeValue * newval ;
+        newval = (struct CNCodeValue *) CNAllocateValue(vpool, CNCodeType, vfunc) ;
+        newval->codeAttribute     = CNCodeValueAttributeToInt(&attr) ;
+        newval->branchOperand = operand ;
         return newval ;
 }
 
@@ -77,9 +101,10 @@ static void
 releaseContents(struct CNValuePool * vpool, struct CNValue * val)
 {
         struct CNCodeValue * codevalue = CNCastToCodeValue(val) ;
-        struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(codevalue->atttribute) ;
+        struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(codevalue->codeAttribute) ;
         switch(attr.operand){
-                case CNCalcOperandType: {
+                case CNCalcOperandType:
+                case CNBranchOperandType: {
                         /* nothing have to do */
                 } break ;
                 case CNLoadOperandType: {
@@ -88,13 +113,29 @@ releaseContents(struct CNValuePool * vpool, struct CNValue * val)
         }
 }
 
+void
+CNSetTargetLabelToBrachCodeValue(struct CNCodeValue * dst, uint32_t label)
+{
+        struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(dst->codeAttribute) ;
+        switch(attr.operand){
+                case CNCalcOperandType:
+                case CNLoadOperandType: {
+                        CNInterface()->error("[Error] Unexpected code type at %s\n", __func__) ;
+                } break ;
+                case CNBranchOperandType: {
+                        struct CNBranchOperand * bop = &(dst->branchOperand) ;
+                        bop->targetLabel = label ;
+                } break ;
+        }
+}
+
 static void
 printValues(struct CNValue * val)
 {
         struct CNCodeValue * codevalue = CNCastToCodeValue(val) ;
-        struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(codevalue->atttribute) ;
+        struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(codevalue->codeAttribute) ;
 
-        CNInterface()->printf("{code:0x%lx ", attr.code) ;
+        CNInterface()->printf("{code:0x%lx label:%u ", attr.code, attr.label) ;
         switch(attr.operand){
                 case CNCalcOperandType: {
                         struct CNCalcOperand * cop = &(codevalue->calcOperand) ;
@@ -107,6 +148,12 @@ printValues(struct CNValue * val)
                         CNInterface()->printf("dst:%lx ", lop->destinationRegId) ;
                         CNInterface()->printf("src:") ;
                         CNPrintValue(lop->sourceValue) ;
+                } break ;
+                case CNBranchOperandType: {
+                        struct CNBranchOperand * bop = &(codevalue->branchOperand) ;
+                        CNInterface()->printf("cond:%lx ", bop->conditionRegId) ;
+                        CNInterface()->printf("target-label:%lu ", bop->targetLabel) ;
+                        CNInterface()->printf("target-offset:%ld", bop->targetOffset) ;
                 } break ;
         }
         CNInterface()->printf("}") ;

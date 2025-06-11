@@ -12,7 +12,8 @@
 
 typedef enum {
         CNCalcOperandType,
-        CNLoadOperandType
+        CNLoadOperandType,
+        CNBranchOperandType
 } CNOperandType ;
 
 struct CNCodeValueAttribute {
@@ -59,12 +60,19 @@ struct CNLoadOperand {
         struct CNValue *                sourceValue ;
 } ;
 
+struct CNBranchOperand {
+        uint64_t                        conditionRegId ;
+        uint32_t                        targetLabel ;
+        int32_t                         targetOffset ;
+} ;
+
 struct CNCodeValue {
         struct CNValue                  superClass ;
-        int64_t                         atttribute ;
+        int64_t                         codeAttribute ;
         union {
                 struct CNCalcOperand    calcOperand ;
                 struct CNLoadOperand    loadOperand ;
+                struct CNBranchOperand  branchOperand ;
         } ;
 } ;
 
@@ -79,20 +87,19 @@ struct CNCodeValue *
 CNAllocateLoadCodeValue(struct CNValuePool * vpool, uint32_t code,
                         uint64_t dstregid, struct CNValue * srcval) ;
 
+struct CNCodeValue *
+CNAllocateBranchCodeValue(struct CNValuePool * vpool, uint32_t code,
+        uint64_t condregid, uint32_t label) ;
+
 static inline uint32_t
 CNLabelOfCodeValue(const struct CNCodeValue * src)
 {
-        struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(src->atttribute) ;
+        struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(src->codeAttribute) ;
         return attr.label ;
 }
 
-static inline void
-CNSetLabelToCodeValue(struct CNCodeValue * dst, uint32_t label)
-{
-        struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(dst->atttribute) ;
-        attr.label = label ;
-        dst->atttribute = CNCodeValueAttributeToInt(&attr) ;
-}
+void
+CNSetTargetLabelToBrachCodeValue(struct CNCodeValue * dst, uint32_t label) ;
 
 static inline struct CNCodeValue *
 CNCastToCodeValue(struct CNValue * src)

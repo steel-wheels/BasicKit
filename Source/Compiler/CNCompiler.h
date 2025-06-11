@@ -26,6 +26,9 @@ struct CNCompiler
         /* List of */
         struct CNValueList              codeList ;
 
+        /* Label */
+        uint32_t                        currentLabel ;
+
         /* Error */
         unsigned int                    errorCount ;
 } ;
@@ -56,6 +59,19 @@ CNAppendCodeToCompiler(struct CNCompiler * dst, struct CNCodeValue * code) ;
 
 void
 CNPutParseErrorToCompiler(struct CNCompiler * dst, struct CNParseError * src) ;
+
+static inline uint32_t
+CNCurrentLabelInCompiler(const struct CNCompiler * src)
+{
+        return src->currentLabel ;
+}
+
+static inline uint32_t
+CNUpdateLabelInCompiler(struct CNCompiler * src)
+{
+        src->currentLabel += 1 ;
+        return src->currentLabel ;
+}
 
 static inline void
 CNDumpCodeInCompiler(struct CNCompiler * src)

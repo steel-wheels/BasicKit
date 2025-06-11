@@ -10,6 +10,7 @@
 #include "CNBooleanValue.h"
 #include "CNNumberValue.h"
 #include "CNStringValue.h"
+#include "CNCodeValue.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -195,7 +196,7 @@ allocateBitUnaryExpression(struct CNVariable * src, CNBitUnaryOperation op)
 %locations
 
 %token  IDENTIFIER TYPE_IDENTIFIER
-%token  LET PRINT STRING
+%token  IF ELSE ENDIF LET PRINT STRING THEN
 %token  OP_AND OP_OR OP_BIT_OR OP_BIT_AND OP_BIT_XOR OP_LOG_NOT OP_EQUAL OP_NOT_EQUAL
 %token  OP_LESS_THAN OP_LESS_EQUAL OP_GREATER_THAN OP_GREATE_EQUAL
 %token  OP_SHIFT_LEFT OP_SHIFT_RIGHT OP_DIV OP_MOD
@@ -208,6 +209,11 @@ allocateBitUnaryExpression(struct CNVariable * src, CNBitUnaryOperation op)
 statement_list
         : statement
         | statement_list statement
+        ;
+
+statement_list_opt
+        : /* empty */
+        | statement_list_opt statement
         ;
 
 statement: LET IDENTIFIER '=' expression
@@ -227,12 +233,46 @@ statement: LET IDENTIFIER '=' expression
                 CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
                 CNReleaseValue(s_value_pool, CNSuperClassOfStringValue(ident)) ;
         }
+        | IF expression THEN
+          {
+          }
+          statement_list_opt
+          {
+                  /* append jump statement to end of if statement */
+                  uint32_t label = CNUpdateLabelInCompiler(s_compiler) ;
+                  struct CNCodeValue * code = CNAllocateJumpCode(s_value_pool, label) ;
+                  CNAppendCodeToCompiler(s_compiler, code) ;
+                  CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+          }
+          else_statement_opt ENDIF
+          {
+                  /* add nop code with target label */
+                  struct CNCodeValue * nopcode = CNAllocateNopCode((s_value_pool)) ;
+
+                  struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(nopcode->codeAttribute) ;
+                  attr.label = CNCurrentLabelInCompiler(s_compiler) ;
+                  nopcode->codeAttribute = CNCodeValueAttributeToInt(&attr) ;
+
+                  CNAppendCodeToCompiler(s_compiler, nopcode) ;
+                  CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(nopcode)) ;
+          }
         | PRINT expression
         {
                 struct CNVariable src = $2.variable ;
                 struct CNCodeValue * code = CNAllocatePrintCode(s_value_pool, src.registerId) ;
                 CNAppendCodeToCompiler(s_compiler, code) ;
                 CNReleaseValue(s_value_pool, CNSuperClassOfCodeValue(code)) ;
+        }
+        ;
+
+else_statement_opt
+        : /* empty */
+        {
+                $$.unsignedIntValue = 0 ; // no else part
+        }
+        | ELSE statement_list_opt
+        {
+                $$.unsignedIntValue = 1 ; // has else part
         }
         ;
 
@@ -421,7 +461,18 @@ unary_expression
         ;
 
 postfix_expression
-        : IDENTIFIER
+        : primary_expression
+        {
+                $$ = $1 ;
+        }
+        ;
+
+primary_expression
+        : '(' expression ')'
+          {
+                  $$ = $2 ;
+          }
+        | IDENTIFIER
         {
                 struct CNStringValue *  ident = $1.identifier ;
                 struct CNVariable       srcvar ;

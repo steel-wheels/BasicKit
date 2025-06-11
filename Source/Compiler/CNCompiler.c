@@ -17,6 +17,7 @@ CNInitCompiler(struct CNCompiler * dst, struct CNValuePool * vpool)
         dst->valuePool          = vpool ;
         dst->next_free_regid    = 0 ;
         dst->identifierTable    = CNAllocateDictionaryValue(vpool) ;
+        dst->currentLabel       = 0 ;
         CNInitValueList(&(dst->codeList), vpool) ;
         dst->errorCount         = 0 ;
 }

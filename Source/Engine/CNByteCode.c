@@ -326,14 +326,32 @@ CNAllocateBitUnaryCode(struct CNValuePool * vpool, CNBitUnaryOperation op, uint6
         return CNAllocateCalcCodeValue(vpool, opcode, dstreg, srcreg, 0) ;
 }
 
+struct CNCodeValue *
+CNAllocateJumpCode(struct CNValuePool * vpool, uint32_t label)
+{
+        return CNAllocateBranchCodeValue(vpool, CNJumpCode, 0, label) ;
+}
+
+struct CNCodeValue *
+CNAllocateBranchThenCode(struct CNValuePool * vpool, uint64_t regid, uint32_t label)
+{
+        return CNAllocateBranchCodeValue(vpool, CNBranchThenCode, regid, label) ;
+}
+
+struct CNCodeValue *
+CNAllocateBranchElseCode(struct CNValuePool * vpool, uint64_t regid, uint32_t label)
+{
+        return CNAllocateBranchCodeValue(vpool, CNBranchElseCode, regid, label) ;
+}
+
 void
 CNPrintByteCode(const struct CNCodeValue * src)
 {
-        struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(src->atttribute) ;
+        struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(src->codeAttribute) ;
 
         uint32_t label ;
         if((label = attr.label) != CNNoLabel) {
-                CNInterface()->printf("l%x:\t") ;
+                CNInterface()->printf("l%u:\t", label) ;
         } else {
                 CNInterface()->printf("\t") ;
         }
@@ -671,6 +689,21 @@ CNPrintByteCode(const struct CNCodeValue * src)
                         dstnum  = 1 ;
                         srcnum  = 2 ;
                 } break ;
+                case CNJumpCode: {
+                        opname  = "jump" ;
+                        dstnum  = 0 ;
+                        srcnum  = 1 ;
+                } break ;
+                case CNBranchThenCode: {
+                        opname  = "branch_then" ;
+                        dstnum  = 0 ;
+                        srcnum  = 2 ;
+                } break ;
+                case CNBranchElseCode: {
+                        opname  = "branch_else" ;
+                        dstnum  = 0 ;
+                        srcnum  = 2 ;
+                } break ;
                 case CNPrintCode: {
                         opname  = "print" ;
                         dstnum  = 0 ;
@@ -707,6 +740,13 @@ CNPrintByteCode(const struct CNCodeValue * src)
                                 CNInterface()->printf("%c", delimiter) ;
                                 CNPrintValue(operand->sourceValue) ;
                         }
+                } break ;
+                case CNBranchOperandType: {
+                        const struct CNBranchOperand * operand = &(src->branchOperand) ;
+                        if(srcnum >= 2){
+                                CNInterface()->printf(" r%lu,", operand->conditionRegId) ;
+                        }
+                        CNInterface()->printf(" l%u(%d)", operand->targetLabel, operand->targetOffset) ;
                 } break ;
         }
 }

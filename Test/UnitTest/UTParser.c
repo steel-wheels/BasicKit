@@ -103,10 +103,20 @@ UTParser(struct CNValuePool * vpool)
                 ""
         } ;
 
+        const char * lines4[] = {
+                "let a =  0\n",
+                "let b = 10\n",
+                "if a < b then\n",
+                "  print a\n",
+                "endif\n",
+                ""
+        } ;
+
         result &= testParser(lines0, vpool) ;
         result &= testParser(lines1, vpool) ;
         result &= testParser(lines2, vpool) ;
         result &= testParser(lines3, vpool) ;
+        result &= testParser(lines4, vpool) ;
 
         return checkMemoryUsage(vpool) && result ;
 }

@@ -11,6 +11,24 @@
 #include "CNStringValue.h"
 #include <limits.h>
 #include <float.h>
+
+
+#define INDEX(V)        ((index_t) V)
+
+static inline index_t
+updateIndex(index_t current, int32_t offset)
+{
+        index_t next = current ;
+        if(offset > 0) {
+                next += INDEX(offset) ;
+        } else if(offset < 0) {
+                next -= INDEX(-offset) ;
+        } else {
+                next += 1 ;
+        }
+        return next ;
+}
+
 void
 CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, index_t startidx)
 {
@@ -18,7 +36,7 @@ CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, 
         bool                    dostop = false ;
         while(!dostop){
                 struct CNCodeValue * code = CNCastToCodeValue(CNValueInArray(codes, curidx)) ;
-                struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(code->atttribute) ;
+                struct CNCodeValueAttribute attr = CNIntToCodeValueAttribute(code->codeAttribute) ;
                 struct CNValuePool * vpool = regfile->valuePool ;
 
                 index_t nextidx = curidx + 1 ;
@@ -774,6 +792,26 @@ CNExecuteByteCode(struct CNArrayValue * codes, struct CNRegisterFile * regfile, 
                                 struct CNSignedIntValue * dstval  = CNAllocateSignedIntValue(vpool, result) ;
                                 CNSetValueToRegisterFile(regfile, dstid, CNSuperClassOfSignedIntValue(dstval)) ;
                                 CNReleaseValue(vpool, CNSuperClassOfSignedIntValue(dstval)) ;
+                        } break ;
+                        case CNJumpCode: {
+                                const struct CNBranchOperand * operand = &(code->branchOperand) ;
+                                nextidx = updateIndex(curidx, operand->targetOffset) ;
+                        } break ;
+                        case CNBranchThenCode: {
+                                const struct CNBranchOperand * operand = &(code->branchOperand) ;
+                                index_t condid = (index_t) operand->conditionRegId ;
+                                struct CNBooleanValue * condval = CNCastToBooleanValue(CNValueInRegisterFile(regfile, condid)) ;
+                                if(condval->value){
+                                        nextidx = updateIndex(curidx, operand->targetOffset) ;
+                                }
+                        } break ;
+                        case CNBranchElseCode: {
+                                const struct CNBranchOperand * operand = &(code->branchOperand) ;
+                                index_t condid = (index_t) operand->conditionRegId ;
+                                struct CNBooleanValue * condval = CNCastToBooleanValue(CNValueInRegisterFile(regfile, condid)) ;
+                                if(!condval->value){
+                                        nextidx = updateIndex(curidx, operand->targetOffset) ;
+                                }
                         } break ;
                         case CNPrintCode: {
                                 const struct CNCalcOperand * operand = &(code->calcOperand) ;

@@ -160,6 +160,11 @@ SHIFT_RIGHT     >>
         return INT_VALUE ;
 }
 
+0 {
+        yylval->unsignedIntValue = 0 ;
+        return INT_VALUE ;
+}
+
 == {
         return OP_EQUAL ;
 }
@@ -277,12 +282,16 @@ isReservedWord(int * rwordid, const char * str)
         const struct RWord words[] = {
                 { .rId = OP_AND,        .rWord = "and"         },
                 { .rId = OP_DIV,        .rWord = "div"         },
+                { .rId = ELSE,          .rWord = "else"        },
+                { .rId = ENDIF,         .rWord = "endif"       },
+                { .rId = IF,            .rWord = "if"          },
                 { .rId = LET,           .rWord = "let"         },
                 { .rId = OP_LOG_NOT,    .rWord = "not"         },
                 { .rId = OP_MOD,        .rWord = "mod"         },
                 { .rId = OP_OR,         .rWord = "or"          },
                 { .rId = PRINT,         .rWord = "print"       },
                 { .rId = FALSE_VALUE,   .rWord = "false"       },
+                { .rId = THEN,          .rWord = "then"        },
                 { .rId = TRUE_VALUE,    .rWord = "true"        },
                 { .rId = -1,            .rWord = ""            }  // Terminal word
         } ;
